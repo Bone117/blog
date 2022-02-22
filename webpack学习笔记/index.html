@@ -1,0 +1,852 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="robots" content="noodp" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge, chrome=1">
+        <title>webpack学习笔记 - mine blog</title><meta name="Description" content="这是我的全新 Hugo 网站"><meta property="og:title" content="webpack学习笔记" />
+<meta property="og:description" content="一、简介 webpack:JavaScript应用的静态模块打包工具 grunt/gulp（其它打包工具） grunt/gulp的核心是配置一系列" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="http://101.35.190.67/webpack%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/" />
+<meta property="og:image" content="https://blogimg-1256896917.cos.ap-shanghai.myqcloud.com/blog/2022-02-22-favicon.ico"/>
+<meta property="article:published_time" content="2019-10-23T15:05:00+00:00" />
+<meta property="article:modified_time" content="2019-10-23T15:05:00+00:00" />
+<meta name="twitter:card" content="summary_large_image"/>
+<meta name="twitter:image" content="https://blogimg-1256896917.cos.ap-shanghai.myqcloud.com/blog/2022-02-22-favicon.ico"/>
+
+<meta name="twitter:title" content="webpack学习笔记"/>
+<meta name="twitter:description" content="一、简介 webpack:JavaScript应用的静态模块打包工具 grunt/gulp（其它打包工具） grunt/gulp的核心是配置一系列"/>
+<meta name="application-name" content="mine blog">
+<meta name="apple-mobile-web-app-title" content="mine blog"><link rel="shortcut icon" type="image/x-icon" href="/favicon.ico" />
+        <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+        <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png"><link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"><link rel="manifest" href="/site.webmanifest"><link rel="canonical" href="http://101.35.190.67/webpack%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/" /><link rel="prev" href="http://101.35.190.67/%E4%B8%80%E6%AC%A1%E4%BD%BF%E7%94%A8scrapy%E7%9A%84%E9%97%AE%E9%A2%98%E8%AE%B0%E5%BD%95/" /><link rel="next" href="http://101.35.190.67/docker%E7%AE%80%E5%8D%95%E4%BD%BF%E7%94%A8/" /><link rel="stylesheet" href="/lib/normalize/normalize.min.css"><link rel="stylesheet" href="/css/style.min.css"><link rel="stylesheet" href="/lib/fontawesome-free/all.min.css"><link rel="stylesheet" href="/lib/animate/animate.min.css"><script type="application/ld+json">
+    {
+        "@context": "http://schema.org",
+        "@type": "BlogPosting",
+        "headline": "webpack学习笔记",
+        "inLanguage": "zh-CN",
+        "mainEntityOfPage": {
+            "@type": "WebPage",
+            "@id": "http:\/\/101.35.190.67\/webpack%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0\/"
+        },"genre": "posts","keywords": "webpack","wordcount":  2782 ,
+        "url": "http:\/\/101.35.190.67\/webpack%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0\/","datePublished": "2019-10-23T15:05:00+00:00","dateModified": "2019-10-23T15:05:00+00:00","publisher": {
+            "@type": "Organization",
+            "name": ""},"author": {
+                "@type": "Person",
+                "name": "bone"
+            },"description": ""
+    }
+    </script></head>
+    <body header-desktop="fixed" header-mobile="auto"><script type="text/javascript">(window.localStorage && localStorage.getItem('theme') ? localStorage.getItem('theme') === 'dark' : ('dark' === 'auto' ? window.matchMedia('(prefers-color-scheme: dark)').matches : 'dark' === 'dark')) && document.body.setAttribute('theme', 'dark');</script>
+
+        <div id="mask"></div><div class="wrapper"><header class="desktop" id="header-desktop">
+    <div class="header-wrapper">
+        <div class="header-title">
+            <a href="/" title="mine blog"><img
+        class="lazyload logo"
+        src="/svg/loading.min.svg"
+        data-src="https://blogimg-1256896917.cos.ap-shanghai.myqcloud.com/blog/2022-02-22-favicon.ico"
+        data-srcset="https://blogimg-1256896917.cos.ap-shanghai.myqcloud.com/blog/2022-02-22-favicon.ico, https://blogimg-1256896917.cos.ap-shanghai.myqcloud.com/blog/2022-02-22-favicon.ico 1.5x, https://blogimg-1256896917.cos.ap-shanghai.myqcloud.com/blog/2022-02-22-favicon.ico 2x"
+        data-sizes="auto"
+        alt="https://blogimg-1256896917.cos.ap-shanghai.myqcloud.com/blog/2022-02-22-favicon.ico"
+        title="https://blogimg-1256896917.cos.ap-shanghai.myqcloud.com/blog/2022-02-22-favicon.ico" /><span id="id-1" class="typeit"></span></a>
+        </div>
+        <div class="menu">
+            <div class="menu-inner"><a class="menu-item" href="/posts/"> 文章 </a><a class="menu-item" href="/tags/"> 标签 </a><a class="menu-item" href="/categories/"> 分类 </a><a class="menu-item" href="/about/"> 关于 </a><span class="menu-item delimiter"></span><span class="menu-item search" id="search-desktop">
+                        <input type="text" placeholder="搜索文章标题或内容..." id="search-input-desktop">
+                        <a href="javascript:void(0);" class="search-button search-toggle" id="search-toggle-desktop" title="搜索">
+                            <i class="fas fa-search fa-fw"></i>
+                        </a>
+                        <a href="javascript:void(0);" class="search-button search-clear" id="search-clear-desktop" title="清空">
+                            <i class="fas fa-times-circle fa-fw"></i>
+                        </a>
+                        <span class="search-button search-loading" id="search-loading-desktop">
+                            <i class="fas fa-spinner fa-fw fa-spin"></i>
+                        </span>
+                    </span><a href="javascript:void(0);" class="menu-item theme-switch" title="切换主题">
+                    <i class="fas fa-adjust fa-fw"></i>
+                </a>
+            </div>
+        </div>
+    </div>
+</header><header class="mobile" id="header-mobile">
+    <div class="header-container">
+        <div class="header-wrapper">
+            <div class="header-title">
+                <a href="/" title="mine blog"><img
+        class="lazyload logo"
+        src="/svg/loading.min.svg"
+        data-src="https://blogimg-1256896917.cos.ap-shanghai.myqcloud.com/blog/2022-02-22-favicon.ico"
+        data-srcset="https://blogimg-1256896917.cos.ap-shanghai.myqcloud.com/blog/2022-02-22-favicon.ico, https://blogimg-1256896917.cos.ap-shanghai.myqcloud.com/blog/2022-02-22-favicon.ico 1.5x, https://blogimg-1256896917.cos.ap-shanghai.myqcloud.com/blog/2022-02-22-favicon.ico 2x"
+        data-sizes="auto"
+        alt="https://blogimg-1256896917.cos.ap-shanghai.myqcloud.com/blog/2022-02-22-favicon.ico"
+        title="https://blogimg-1256896917.cos.ap-shanghai.myqcloud.com/blog/2022-02-22-favicon.ico" /><span id="id-2" class="typeit"></span></a>
+            </div>
+            <div class="menu-toggle" id="menu-toggle-mobile">
+                <span></span><span></span><span></span>
+            </div>
+        </div>
+        <div class="menu" id="menu-mobile"><div class="search-wrapper">
+                    <div class="search mobile" id="search-mobile">
+                        <input type="text" placeholder="搜索文章标题或内容..." id="search-input-mobile">
+                        <a href="javascript:void(0);" class="search-button search-toggle" id="search-toggle-mobile" title="搜索">
+                            <i class="fas fa-search fa-fw"></i>
+                        </a>
+                        <a href="javascript:void(0);" class="search-button search-clear" id="search-clear-mobile" title="清空">
+                            <i class="fas fa-times-circle fa-fw"></i>
+                        </a>
+                        <span class="search-button search-loading" id="search-loading-mobile">
+                            <i class="fas fa-spinner fa-fw fa-spin"></i>
+                        </span>
+                    </div>
+                    <a href="javascript:void(0);" class="search-cancel" id="search-cancel-mobile">
+                        取消
+                    </a>
+                </div><a class="menu-item" href="/posts/" title="">文章</a><a class="menu-item" href="/tags/" title="">标签</a><a class="menu-item" href="/categories/" title="">分类</a><a class="menu-item" href="/about/" title="">关于</a><a href="javascript:void(0);" class="menu-item theme-switch" title="切换主题">
+                <i class="fas fa-adjust fa-fw"></i>
+            </a></div>
+    </div>
+</header>
+<div class="search-dropdown desktop">
+    <div id="search-dropdown-desktop"></div>
+</div>
+<div class="search-dropdown mobile">
+    <div id="search-dropdown-mobile"></div>
+</div>
+<main class="main">
+                <div class="container"><div class="toc" id="toc-auto">
+            <h2 class="toc-title">目录</h2>
+            <div class="toc-content" id="toc-content-auto"></div>
+        </div><article class="page single"><h1 class="single-title animated flipInX">webpack学习笔记</h1><div class="post-meta">
+            <div class="post-meta-line"><span class="post-author"><a href="/" title="Author" rel=" author" class="author"><i class="fas fa-user-circle fa-fw"></i>bone</a></span>&nbsp;<span class="post-category">收录于 <a href="/categories/%E5%89%8D%E7%AB%AF/"><i class="far fa-folder fa-fw"></i>前端</a></span></div>
+            <div class="post-meta-line"><i class="far fa-calendar-alt fa-fw"></i>&nbsp;<time datetime="2019-10-23">2019-10-23</time>&nbsp;<i class="fas fa-pencil-alt fa-fw"></i>&nbsp;约 2782 字&nbsp;
+                <i class="far fa-clock fa-fw"></i>&nbsp;预计阅读 6 分钟&nbsp;<span id="/webpack%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/" class="leancloud_visitors" data-flag-title="webpack学习笔记">
+                        <i class="far fa-eye fa-fw"></i>&nbsp;<span class=leancloud-visitors-count></span>&nbsp;次阅读
+                    </span>&nbsp;</div>
+        </div><div class="details toc" id="toc-static"  kept="">
+                <div class="details-summary toc-title">
+                    <span>目录</span>
+                    <span><i class="details-icon fas fa-angle-right"></i></span>
+                </div>
+                <div class="details-content toc-content" id="toc-content-static"><nav id="TableOfContents">
+  <ul>
+    <li><a href="#一简介">一、简介</a></li>
+    <li><a href="#二简单使用">二、简单使用</a></li>
+    <li><a href="#三webpack配置">三、webpack配置</a></li>
+    <li><a href="#四loader">四、loader</a>
+      <ul>
+        <li>
+          <ul>
+            <li><a href="#1简单使用">1.简单使用</a>
+              <ul>
+                <li><a href="#1安装对应的loader">1.安装对应的loader</a></li>
+                <li><a href="#2在webpackconfigjs中配置">2.在webpack.config.js中配置</a></li>
+              </ul>
+            </li>
+            <li><a href="#2在css中添加图片">2.在css中添加图片</a></li>
+            <li><a href="#3es6转es5babel">3.ES6转ES5(babel)</a></li>
+          </ul>
+        </li>
+      </ul>
+    </li>
+    <li><a href="#五webpack配置vue">五、webpack配置Vue</a>
+      <ul>
+        <li>
+          <ul>
+            <li><a href="#1简单使用-1">1.简单使用</a></li>
+            <li><a href="#2el和template的区别">2.el和template的区别</a></li>
+          </ul>
+        </li>
+      </ul>
+    </li>
+    <li><a href="#六plugin">六、plugin</a>
+      <ul>
+        <li>
+          <ul>
+            <li><a href="#1版权声明插件">1.版权声明插件</a></li>
+            <li><a href="#2打包html的plugin">2.打包html的plugin</a></li>
+            <li><a href="#3js压缩">3.js压缩</a></li>
+          </ul>
+        </li>
+      </ul>
+    </li>
+  </ul>
+</nav></div>
+            </div><div class="content" id="content"><h2 id="一简介">一、简介</h2>
+<p>webpack:JavaScript应用的静态<strong>模块打包</strong>工具
+grunt/gulp（其它打包工具）</p>
+<blockquote>
+<p>grunt/gulp的核心是配置一系列的task，定义task要处理的事务（es6、ts转换，图片压缩，scss转css）
+让grunt/gulp执行这些task，让整个流程自动化
+grunt/gulp也被称为前端自动化任务管理工具。
+当工程模块依赖非常简单是可以通过grunt/gulp进行简单的合并、压缩。</p>
+</blockquote>
+<p>gurnt/gulp重点在于前端流程的自动化，webpack强调的是模块化开发管理，文件压缩合并只是附加功能。</p>
+<h2 id="二简单使用">二、简单使用</h2>
+<p>安装webpack
+首先安装好node环境，</p>
+<blockquote>
+<p><code>npm install webpack@3.6.0 -g</code> 安装低版本方便学习webpack</p>
+</blockquote>
+<p>1.CommonJS的打包方式</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-JavaScript" data-lang="JavaScript"><span class="c1">// mathUtils.js
+</span><span class="c1"></span><span class="kd">function</span> <span class="nx">add</span><span class="p">(</span><span class="nx">num1</span><span class="p">,</span> <span class="nx">num2</span><span class="p">)</span> <span class="p">{</span>
+  <span class="k">return</span> <span class="nx">num1</span> <span class="o">+</span> <span class="nx">num2</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="kd">function</span> <span class="nx">mul</span><span class="p">(</span><span class="nx">num1</span><span class="p">,</span> <span class="nx">num2</span><span class="p">)</span> <span class="p">{</span>
+  <span class="k">return</span> <span class="nx">num1</span> <span class="o">*</span> <span class="nx">num2</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="nx">module</span><span class="p">.</span><span class="nx">exports</span> <span class="o">=</span> <span class="p">{</span>
+  <span class="nx">add</span><span class="p">,</span>
+  <span class="nx">mul</span><span class="p">,</span>
+<span class="p">}</span>
+</code></pre></td></tr></table>
+</div>
+</div><div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-JavaScript" data-lang="JavaScript"><span class="c1">//main.js
+</span><span class="c1"></span><span class="kr">const</span> <span class="p">{</span><span class="nx">add</span><span class="p">,</span><span class="nx">mul</span><span class="p">}</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;mathUtils.js&#39;</span><span class="p">)</span>
+<span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">add</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">))</span>
+<span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">mul</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">))</span>
+</code></pre></td></tr></table>
+</div>
+</div><p>通过webpack进行打包,执行下面的命令</p>
+<blockquote>
+<p><code>webpack main.js bundle.js</code></p>
+</blockquote>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-html" data-lang="html"><span class="p">&lt;</span><span class="nt">body</span><span class="p">&gt;</span>
+<span class="p">&lt;/</span><span class="nt">body</span><span class="p">&gt;</span>
+<span class="p">&lt;</span><span class="nt">script</span> <span class="na">src</span><span class="o">=</span><span class="s">&#34;./dist/bundle.js&#34;</span><span class="p">&gt;&lt;/</span><span class="nt">script</span><span class="p">&gt;</span>
+<span class="p">&lt;/</span><span class="nt">html</span><span class="p">&gt;</span>
+</code></pre></td></tr></table>
+</div>
+</div><p>2.ES6的打包方式</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-JavaScript" data-lang="JavaScript"><span class="c1">//info.js
+</span><span class="c1"></span><span class="kr">export</span> <span class="kr">const</span> <span class="nx">name</span> <span class="o">=</span> <span class="s1">&#39;outFile&#39;</span><span class="p">;</span>
+<span class="kr">export</span> <span class="kr">const</span> <span class="nx">age</span> <span class="o">=</span> <span class="mi">18</span><span class="p">;</span>
+<span class="kr">export</span> <span class="kr">const</span> <span class="nx">height</span> <span class="o">=</span> <span class="mf">1.88</span><span class="p">;</span>
+</code></pre></td></tr></table>
+</div>
+</div><div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span><span class="lnt">8
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-JavaScript" data-lang="JavaScript"><span class="kr">const</span> <span class="p">{</span> <span class="nx">add</span><span class="p">,</span> <span class="nx">mul</span> <span class="p">}</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;.mathUtils.js&#39;</span><span class="p">)</span>
+
+<span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">add</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">))</span>
+<span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">mul</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">))</span>
+
+<span class="kr">import</span> <span class="p">{</span> <span class="nx">name</span><span class="p">,</span> <span class="nx">age</span><span class="p">,</span> <span class="nx">height</span> <span class="p">}</span> <span class="nx">from</span> <span class="s1">&#39;.info&#39;</span>
+<span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">name</span><span class="p">,</span> <span class="nx">age</span><span class="p">)</span>
+<span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">height</span><span class="p">)</span>
+</code></pre></td></tr></table>
+</div>
+</div><p>重新执行打包命令</p>
+<h2 id="三webpack配置">三、webpack配置</h2>
+<p>1.简单配置
+在项目目录下新建一个<code>webpack.config.js</code>文件</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-JavaScript" data-lang="JavaScript"><span class="kr">const</span> <span class="nx">path</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;path&#39;</span><span class="p">)</span>
+<span class="nx">module</span><span class="p">.</span><span class="kr">export</span> <span class="o">=</span> <span class="p">{</span>
+  <span class="c1">//输入，入口
+</span><span class="c1"></span>  <span class="nx">entry</span><span class="o">:</span> <span class="s1">&#39;/src/main.js&#39;</span><span class="p">,</span>
+  <span class="c1">//输出
+</span><span class="c1"></span>  <span class="nx">output</span><span class="o">:</span> <span class="p">{</span>
+    <span class="c1">// 需要动态获取
+</span><span class="c1"></span>    <span class="nx">path</span><span class="o">:</span> <span class="s1">&#39;./dist/&#39;</span><span class="p">,</span>
+    <span class="nx">filename</span><span class="o">:</span> <span class="s1">&#39;bundle.js&#39;</span>
+  <span class="p">},</span>
+<span class="p">}</span>
+</code></pre></td></tr></table>
+</div>
+</div><p>注：path需要动态获取，不能写死也不能写相对路径，这个时候就需要用的node的path了
+依赖node的环境，需要先进行初始化<code>npm init</code>,会生成一个<code>package.json</code>的文件（npm包管理）。如果有依赖需要再执行<code>npm install</code>，最后再执行<code>webpack</code>
+2.与npm build做映射
+修改<code>package.json</code></p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-json" data-lang="json"><span class="p">{</span>
+  <span class="nt">&#34;name&#34;</span><span class="p">:</span> <span class="s2">&#34;meetwebpack&#34;</span><span class="p">,</span>
+  <span class="nt">&#34;version&#34;</span><span class="p">:</span> <span class="s2">&#34;1.0.0&#34;</span><span class="p">,</span>
+  <span class="nt">&#34;description&#34;</span><span class="p">:</span> <span class="s2">&#34;&#34;</span><span class="p">,</span>
+  <span class="nt">&#34;main&#34;</span><span class="p">:</span> <span class="s2">&#34;index.js&#34;</span><span class="p">,</span>
+  <span class="nt">&#34;scripts&#34;</span><span class="p">:</span> <span class="p">{</span>
+    <span class="nt">&#34;test&#34;</span><span class="p">:</span> <span class="s2">&#34;echo \&#34;Error: no test specified\&#34; &amp;&amp; exit 1&#34;</span><span class="p">,</span>
+    <span class="err">//添加命令，优先从本地查找命令，如果是终端运行是先从全局查找</span>
+    <span class="nt">&#34;build&#34;</span><span class="p">:</span> <span class="s2">&#34;webpack&#34;</span>
+  <span class="p">},</span>
+  <span class="nt">&#34;author&#34;</span><span class="p">:</span> <span class="s2">&#34;&#34;</span><span class="p">,</span>
+  <span class="nt">&#34;license&#34;</span><span class="p">:</span> <span class="s2">&#34;ISC&#34;</span>
+<span class="p">}</span>
+</code></pre></td></tr></table>
+</div>
+</div><blockquote>
+<p>要保证局部的webpack版本与使用的一致，安装webpack时一般<code>npm install webpack@3.6.0 --save-dev</code>，表示开发时依赖，项目打包后不再继续使用。</p>
+</blockquote>
+<h2 id="四loader">四、loader</h2>
+<blockquote>
+<p>当我们将css样式也当做模块化开发时，就不能像以前一样再通过一个个链接引用了，而应该使用模块化的思想，新建一个样式，并在入口js中引用，通过<code>webpack</code>进行打包，首先查看目录。
+<img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://blogimg-1256896917.cos.ap-shanghai.myqcloud.com/iPic/2019-10-17-011602.png"
+        data-srcset="https://blogimg-1256896917.cos.ap-shanghai.myqcloud.com/iPic/2019-10-17-011602.png, https://blogimg-1256896917.cos.ap-shanghai.myqcloud.com/iPic/2019-10-17-011602.png 1.5x, https://blogimg-1256896917.cos.ap-shanghai.myqcloud.com/iPic/2019-10-17-011602.png 2x"
+        data-sizes="auto"
+        alt="https://blogimg-1256896917.cos.ap-shanghai.myqcloud.com/iPic/2019-10-17-011602.png"
+        title="https://blogimg-1256896917.cos.ap-shanghai.myqcloud.com/iPic/2019-10-17-011602.png" /></p>
+</blockquote>
+<h4 id="1简单使用">1.简单使用</h4>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-css" data-lang="css"><span class="c">/* normal.css */</span>
+<span class="nt">body</span><span class="p">{</span>
+  <span class="k">background-color</span><span class="p">:</span> <span class="kc">red</span>
+<span class="p">}</span>
+</code></pre></td></tr></table>
+</div>
+</div><div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-JavaScript" data-lang="JavaScript"><span class="p">...</span>
+<span class="c1">//main.js中引用
+</span><span class="c1"></span><span class="nx">require</span><span class="p">(</span><span class="s1">&#39;./css/normal.css&#39;</span><span class="p">)</span>
+</code></pre></td></tr></table>
+</div>
+</div><p>通过<code>webpack</code>进行打包
+<img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://blogimg-1256896917.cos.ap-shanghai.myqcloud.com/iPic/2019-10-17-011907.png"
+        data-srcset="https://blogimg-1256896917.cos.ap-shanghai.myqcloud.com/iPic/2019-10-17-011907.png, https://blogimg-1256896917.cos.ap-shanghai.myqcloud.com/iPic/2019-10-17-011907.png 1.5x, https://blogimg-1256896917.cos.ap-shanghai.myqcloud.com/iPic/2019-10-17-011907.png 2x"
+        data-sizes="auto"
+        alt="https://blogimg-1256896917.cos.ap-shanghai.myqcloud.com/iPic/2019-10-17-011907.png"
+        title="https://blogimg-1256896917.cos.ap-shanghai.myqcloud.com/iPic/2019-10-17-011907.png" />
+提示<code>You may need an appropriate loader to handle this file type</code>报错信息。</p>
+<blockquote>
+<p>我们需要将ES6转换为ES5的代码，typescript转成ES5，或者是将scss、less转成css等等，就需要给webpack扩展对应的loader。
+首先需要通过npm安装需要使用的loader，然后在<code>webpack.config.js</code>中的modules关键字下进行配置</p>
+</blockquote>
+<p><a href="https://www.webpackjs.com" target="_blank" rel="noopener noreffer">webpack中文网</a></p>
+<h5 id="1安装对应的loader">1.安装对应的loader</h5>
+<blockquote>
+<p><code>npm install --save-dev css-loader</code></p>
+</blockquote>
+<h5 id="2在webpackconfigjs中配置">2.在webpack.config.js中配置</h5>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-webpack.js" data-lang="webpack.js"><span class="kr">const</span> <span class="nx">path</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;path&#39;</span><span class="p">)</span>
+<span class="nx">module</span><span class="p">.</span><span class="nx">exports</span> <span class="o">=</span> <span class="p">{</span>
+  <span class="nx">entry</span><span class="o">:</span> <span class="s1">&#39;./src/main.js&#39;</span><span class="p">,</span>
+  <span class="nx">output</span><span class="o">:</span> <span class="p">{</span>
+    <span class="c1">// 需要动态获取
+</span><span class="c1"></span>    <span class="nx">path</span><span class="o">:</span> <span class="nx">path</span><span class="p">.</span><span class="nx">resolve</span><span class="p">(</span><span class="nx">__dirname</span><span class="p">,</span> <span class="s1">&#39;dist&#39;</span><span class="p">),</span>
+    <span class="nx">filename</span><span class="o">:</span> <span class="s1">&#39;bundle1.js&#39;</span>
+  <span class="p">},</span>
+  <span class="nx">module</span><span class="o">:</span><span class="p">{</span>
+    <span class="nx">rules</span><span class="o">:</span> <span class="p">[</span>
+      <span class="p">{</span> <span class="nx">test</span><span class="o">:</span> <span class="sr">/\.css$/</span><span class="p">,</span> <span class="nx">use</span><span class="o">:</span> <span class="s1">&#39;css-loader&#39;</span> <span class="p">},</span>
+    <span class="p">]</span>
+  <span class="p">}</span>
+<span class="p">}</span>
+</code></pre></td></tr></table>
+</div>
+</div><p>注:css-loader只负责文件加载,所以还需要安装<code>style-loader</code>将样式添加到dom中，执行命令<code>npm install --save-dev style-loader</code>
+在规则中继续配置</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-webpack.js" data-lang="webpack.js"><span class="p">...</span>
+<span class="nx">module</span><span class="o">:</span> <span class="p">{</span>
+    <span class="nx">rules</span><span class="o">:</span> <span class="p">[</span>
+        <span class="c1">// 使用多个loader时，从右往左
+</span><span class="c1"></span>      <span class="p">{</span> <span class="nx">test</span><span class="o">:</span> <span class="sr">/\.css$/</span><span class="p">,</span> <span class="nx">use</span><span class="o">:</span> <span class="p">[</span><span class="s1">&#39;style-loader&#39;</span><span class="p">,</span> <span class="s1">&#39;css-loader&#39;</span><span class="p">]</span> <span class="p">},</span>
+    <span class="p">]</span>
+  <span class="p">}</span>
+</code></pre></td></tr></table>
+</div>
+</div><p>要是需要使用less，可以参考webpack官网，配置<code>less-lader</code></p>
+<h4 id="2在css中添加图片">2.在css中添加图片</h4>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-css" data-lang="css"><span class="nt">body</span><span class="p">{</span>
+  <span class="k">background</span><span class="p">:</span> <span class="nb">url</span><span class="p">(</span><span class="s2">&#34;../img/2.jpg&#34;</span><span class="p">)</span>
+<span class="p">}</span>
+</code></pre></td></tr></table>
+</div>
+</div><blockquote>
+<p>直接通过<code>webpack</code>打包发现，需要安装loader，于是我们先安装<code>url-loader</code></p>
+</blockquote>
+<p>配置<code>webpack_config.js</code>:</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-css" data-lang="css"><span class="nt">module</span><span class="p">.</span><span class="nc">exports</span> <span class="o">=</span> <span class="p">{</span>
+  <span class="n">module</span><span class="p">:</span> <span class="err">{</span>
+    <span class="n">rules</span><span class="o">:</span> <span class="p">[</span>
+      <span class="err">{</span>
+        <span class="n">test</span><span class="o">:</span> <span class="o">/</span><span class="err">\</span><span class="o">.</span><span class="p">(</span><span class="n">png</span><span class="o">|</span><span class="n">jpg</span><span class="o">|</span><span class="n">gif</span><span class="p">)</span><span class="err">$</span><span class="o">/</span><span class="p">,</span>
+        <span class="n">use</span><span class="o">:</span> <span class="p">[</span>
+          <span class="err">{</span>
+            <span class="n">loader</span><span class="o">:</span> <span class="s1">&#39;url-loader&#39;</span><span class="p">,</span>
+            <span class="n">options</span><span class="o">:</span> <span class="err">{</span>
+              <span class="o">//</span><span class="err">当图片小于</span><span class="n">limit时</span><span class="err">，会将图片编译成</span><span class="n">base64字符串形式</span><span class="err">。</span>
+              <span class="o">//</span><span class="err">当图片大于</span><span class="n">limit时</span><span class="err">，需要使用</span><span class="n">file-loader模块进行加载</span><span class="err">，通过</span><span class="n">npm安装</span>
+              <span class="n">limit</span><span class="o">:</span> <span class="mi">8192</span>
+            <span class="p">}</span>
+          <span class="err">}</span>
+        <span class="o">]</span>
+      <span class="err">}</span>
+    <span class="o">]</span>
+  <span class="err">}</span>
+<span class="err">}</span>
+</code></pre></td></tr></table>
+</div>
+</div><blockquote>
+<p>再次打包，访问网页会发现图片没有加载，发现<code>dist</code>文件夹下慧多一个图片，
+需要在<code>webpackconfig.js</code>中的<code>output</code>中配置<code>publicPath: 'dist/'</code>，这个代表在路径前加入<code>dist/</code>
+图片的命名规则为32位hash值，目的是防止名字重复。但是实际开发中需要使用原来的名字，还要防止重复。所以我们可以在option中添加以下参数</p>
+</blockquote>
+<ul>
+<li>img：文件要打包到的文件夹</li>
+<li>name：获取图片原来的名字，放在该位置</li>
+<li>hash:8：为了防止图片名称冲突，依然使用hash，但是我们只保留8位</li>
+<li>ext：使用图片原来的扩展名</li>
+</ul>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span><span class="lnt">8
+</span><span class="lnt">9
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-JavaScript" data-lang="JavaScript"><span class="p">{</span>
+            <span class="nx">loader</span><span class="o">:</span> <span class="s1">&#39;url-loader&#39;</span><span class="p">,</span>
+            <span class="nx">options</span><span class="o">:</span> <span class="p">{</span>
+              <span class="nx">limit</span><span class="o">:</span> <span class="mi">6000</span><span class="p">,</span>
+              <span class="c1">// 变量名要使用中括号,hash取八位
+</span><span class="c1"></span>              <span class="nx">name</span><span class="o">:</span> <span class="s1">&#39;img/[name].[hash:8].[ext]&#39;</span>
+            <span class="p">},</span>
+
+          <span class="p">}</span>
+</code></pre></td></tr></table>
+</div>
+</div><h4 id="3es6转es5babel">3.ES6转ES5(babel)</h4>
+<p>安装：</p>
+<blockquote>
+<p><code>npm install --save-dev babel-loader@7 babel-core babel-preset-es2015</code></p>
+</blockquote>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-JavaScript" data-lang="JavaScript"><span class="c1">// webpackconfig.js配置规则
+</span><span class="c1"></span><span class="p">{</span>
+      <span class="nx">test</span><span class="o">:</span> <span class="sr">/\.js$/</span><span class="p">,</span>
+      <span class="nx">exclude</span><span class="o">:</span> <span class="sr">/(node_modules|bower_components)/</span><span class="p">,</span>
+      <span class="nx">use</span><span class="o">:</span> <span class="p">{</span>
+        <span class="nx">loader</span><span class="o">:</span> <span class="s1">&#39;babel-loader&#39;</span><span class="p">,</span>
+        <span class="nx">options</span><span class="o">:</span> <span class="p">{</span>
+          <span class="nx">presets</span><span class="o">:</span> <span class="p">[</span><span class="s1">&#39;es2015&#39;</span><span class="p">]</span>
+        <span class="p">}</span>
+      <span class="p">}</span>
+    <span class="p">}</span>
+</code></pre></td></tr></table>
+</div>
+</div><h2 id="五webpack配置vue">五、webpack配置Vue</h2>
+<h4 id="1简单使用-1">1.简单使用</h4>
+<p>安装vue：</p>
+<blockquote>
+<p><code>npm install vue --save</code>
+装好之后在 <code>main.js</code>中引入，<code>index.html</code>中使用</p>
+</blockquote>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-JavaScript" data-lang="JavaScript"><span class="c1">//main.js
+</span><span class="c1"></span><span class="p">...</span>
+<span class="kr">import</span> <span class="nx">Vue</span> <span class="nx">from</span> <span class="s1">&#39;vue&#39;</span>
+
+<span class="kr">const</span> <span class="nx">app</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Vue</span><span class="p">({</span>
+  <span class="nx">el</span><span class="o">:</span> <span class="s1">&#39;#app&#39;</span><span class="p">,</span>
+  <span class="nx">data</span><span class="o">:</span> <span class="p">{</span>
+    <span class="nx">message</span><span class="o">:</span> <span class="s1">&#39;webpack&#39;</span>
+  <span class="p">}</span>
+<span class="p">})</span>
+</code></pre></td></tr></table>
+</div>
+</div><div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-html" data-lang="html"><span class="p">&lt;</span><span class="nt">body</span><span class="p">&gt;</span>
+  <span class="p">&lt;</span><span class="nt">div</span> <span class="na">id</span><span class="o">=</span><span class="s">&#34;app&#34;</span><span class="p">&gt;</span>
+    <span class="p">&lt;</span><span class="nt">h2</span><span class="p">&gt;</span>{{message}}<span class="p">&lt;/</span><span class="nt">h2</span><span class="p">&gt;</span>
+  <span class="p">&lt;/</span><span class="nt">div</span><span class="p">&gt;</span>
+<span class="p">&lt;/</span><span class="nt">body</span><span class="p">&gt;</span>
+</code></pre></td></tr></table>
+</div>
+</div><blockquote>
+<p>编译运行,控制台报错，报错信息显示使用的<code>runtime-only</code>版本的vue</p>
+</blockquote>
+<ul>
+<li><code>runtime-only</code> 代码中不可以有任何的<code>template</code></li>
+<li><code>runtime-compiler</code>可以有<code>template</code>，因为<code>compiler</code>可以编译<code>template</code></li>
+</ul>
+<p>修改webpack的配置信息。</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-JavaScript" data-lang="JavaScript"><span class="nx">module</span><span class="o">:</span><span class="p">{...},</span>
+<span class="nx">resolve</span><span class="o">:</span> <span class="p">{</span>
+    <span class="c1">//alias别名,指定使用哪个版本的vue
+</span><span class="c1"></span>    <span class="nx">alias</span><span class="o">:</span> <span class="p">{</span>
+      <span class="s1">&#39;vue$&#39;</span><span class="o">:</span> <span class="s1">&#39;vue/dist/vue.esm.js&#39;</span>
+    <span class="p">}</span>
+  <span class="p">}</span>
+</code></pre></td></tr></table>
+</div>
+</div><h4 id="2el和template的区别">2.el和template的区别</h4>
+<p>1.同时有<code>el</code>和<code>template</code>时，会将<code>el</code>替换成<code>template</code>的内容。</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-JavaScript" data-lang="JavaScript"><span class="c1">//main.js
+</span><span class="c1"></span><span class="k">new</span> <span class="nx">Vue</span><span class="p">({</span>
+  <span class="nx">el</span><span class="o">:</span> <span class="s1">&#39;#app&#39;</span><span class="p">,</span>
+  <span class="c1">// 同时有el有template会自动替换vue挂载的地方
+</span><span class="c1"></span>  <span class="nx">template</span><span class="o">:</span>
+    <span class="sb">`&lt;div&gt;
+</span><span class="sb">      &lt;h2&gt;{{message}}&lt;/h2&gt;
+</span><span class="sb">      &lt;button&gt;按钮&lt;/button&gt;
+</span><span class="sb">    &lt;/div&gt;`</span>
+  <span class="p">,</span>
+  <span class="nx">data</span><span class="o">:</span> <span class="p">{</span>
+    <span class="nx">message</span><span class="o">:</span> <span class="s1">&#39;webpack&#39;</span>
+  <span class="p">}</span>
+<span class="p">})</span>
+</code></pre></td></tr></table>
+</div>
+</div><h2 id="六plugin">六、plugin</h2>
+<blockquote>
+<p>webpack现有功能的扩展，比如打包优化，文件压缩等等。</p>
+</blockquote>
+<p>与<code>loader</code>的区别：</p>
+<ul>
+<li>loader主要用于转换类型，是一个转换器</li>
+<li>plugin是扩展器。
+使用步骤与<code>loader</code>类似，通过<code>npm</code>安装，再在<code>webpack.config.js</code>中配置即可。</li>
+</ul>
+<h4 id="1版权声明插件">1.版权声明插件</h4>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span><span class="lnt">8
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-JavaScript" data-lang="JavaScript"><span class="kr">const</span> <span class="nx">webpack</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;webpack&#39;</span><span class="p">)</span>
+
+<span class="nx">module</span><span class="p">.</span><span class="nx">exports</span> <span class="o">=</span> <span class="p">{</span>
+  <span class="p">...</span>
+  <span class="nx">plugins</span><span class="o">:</span><span class="p">[</span>
+    <span class="k">new</span> <span class="nx">webpack</span><span class="p">.</span><span class="nx">BannerPlugin</span><span class="p">(</span><span class="s1">&#39;最终版权归xx所有&#39;</span><span class="p">)</span>
+  <span class="p">]</span>
+<span class="p">}</span>
+</code></pre></td></tr></table>
+</div>
+</div><blockquote>
+<p>重新打包即可看到信息。</p>
+</blockquote>
+<h4 id="2打包html的plugin">2.打包html的plugin</h4>
+<blockquote>
+<p>自动生成<code>index.html</code>文件(可以指定模板来生成)，将打包的<code>js</code>文件，通过<code>script</code>插入到body中
+<code>npm install html-webpack-plugin --save-dev</code></p>
+</blockquote>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span><span class="lnt">8
+</span><span class="lnt">9
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-JavaScript" data-lang="JavaScript"><span class="c1">//webpack.config.js
+</span><span class="c1"></span><span class="kr">const</span> <span class="nx">HtmlWebpackPlugin</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;html-webpack-plugin&#39;</span><span class="p">)</span>
+
+<span class="c1">//plugins中添加
+</span><span class="c1"></span><span class="nx">plugin</span><span class="o">:</span><span class="p">[</span>
+    <span class="k">new</span> <span class="nx">HtmlWebpackPlugin</span><span class="p">({</span>
+      <span class="nx">template</span><span class="o">:</span><span class="s1">&#39;index.html&#39;</span> <span class="c1">//根据index.html模板生成index.html文件
+</span><span class="c1"></span>    <span class="p">})</span>
+<span class="p">]</span>
+</code></pre></td></tr></table>
+</div>
+</div><p>注：这个时候需要注释之前的<code>publicPath:'dist/'</code></p>
+<h4 id="3js压缩">3.js压缩</h4>
+<p><code>npm insall uglifyjs-webpack-plugin --save-dev</code></p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-JavaScript" data-lang="JavaScript"><span class="c1">//webpack.config.js
+</span><span class="c1"></span>
+<span class="nx">cost</span> <span class="nx">uglifyjsPlugin</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;uglifyJsPlugin-webpack-plugin&#39;</span><span class="p">)</span>
+<span class="nx">plugins</span><span class="o">:</span><span class="p">[</span>
+    <span class="k">new</span> <span class="nx">uglifyJsPlugin</span><span class="p">()</span>
+<span class="p">]</span>
+</code></pre></td></tr></table>
+</div>
+</div></div><div class="post-footer" id="post-footer">
+    <div class="post-info">
+        <div class="post-info-line">
+            <div class="post-info-mod">
+                <span>更新于 2019-10-23</span>
+            </div>
+            <div class="post-info-license"></div>
+        </div>
+        <div class="post-info-line">
+            <div class="post-info-md"><span>
+                            <a class="link-to-markdown" href="/webpack%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/index.md" target="_blank">阅读原始文档</a>
+                        </span></div>
+            <div class="post-info-share">
+                <span><a href="javascript:void(0);" title="分享到 Twitter" data-sharer="twitter" data-url="http://101.35.190.67/webpack%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/" data-title="webpack学习笔记" data-via="xxxx" data-hashtags="webpack"><i class="fab fa-twitter fa-fw"></i></a><a href="javascript:void(0);" title="分享到 Facebook" data-sharer="facebook" data-url="http://101.35.190.67/webpack%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/" data-hashtag="webpack"><i class="fab fa-facebook-square fa-fw"></i></a><a href="javascript:void(0);" title="分享到 WhatsApp" data-sharer="whatsapp" data-url="http://101.35.190.67/webpack%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/" data-title="webpack学习笔记" data-web><i class="fab fa-whatsapp fa-fw"></i></a><a href="javascript:void(0);" title="分享到 Line" data-sharer="line" data-url="http://101.35.190.67/webpack%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/" data-title="webpack学习笔记"><i data-svg-src="/lib/simple-icons/icons/line.min.svg"></i></a><a href="javascript:void(0);" title="分享到 微博" data-sharer="weibo" data-url="http://101.35.190.67/webpack%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/" data-title="webpack学习笔记"><i class="fab fa-weibo fa-fw"></i></a><a href="javascript:void(0);" title="分享到 Myspace" data-sharer="myspace" data-url="http://101.35.190.67/webpack%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/" data-title="webpack学习笔记" data-description=""><i data-svg-src="/lib/simple-icons/icons/myspace.min.svg"></i></a><a href="javascript:void(0);" title="分享到 Blogger" data-sharer="blogger" data-url="http://101.35.190.67/webpack%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/" data-title="webpack学习笔记" data-description=""><i class="fab fa-blogger fa-fw"></i></a><a href="javascript:void(0);" title="分享到 Evernote" data-sharer="evernote" data-url="http://101.35.190.67/webpack%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/" data-title="webpack学习笔记"><i class="fab fa-evernote fa-fw"></i></a></span>
+            </div>
+        </div>
+    </div>
+
+    <div class="post-info-more">
+        <section class="post-tags"><i class="fas fa-tags fa-fw"></i>&nbsp;<a href="/tags/webpack/">webpack</a></section>
+        <section>
+            <span><a href="javascript:void(0);" onclick="window.history.back();">返回</a></span>&nbsp;|&nbsp;<span><a href="/">主页</a></span>
+        </section>
+    </div>
+
+    <div class="post-nav"><a href="/%E4%B8%80%E6%AC%A1%E4%BD%BF%E7%94%A8scrapy%E7%9A%84%E9%97%AE%E9%A2%98%E8%AE%B0%E5%BD%95/" class="prev" rel="prev" title="一次使用scrapy的问题记录"><i class="fas fa-angle-left fa-fw"></i>一次使用scrapy的问题记录</a>
+            <a href="/docker%E7%AE%80%E5%8D%95%E4%BD%BF%E7%94%A8/" class="next" rel="next" title="docker简单使用">docker简单使用<i class="fas fa-angle-right fa-fw"></i></a></div>
+</div>
+<div id="comments"><div id="valine" class="comment"></div><noscript>
+                Please enable JavaScript to view the comments powered by <a href="https://valine.js.org/">Valine</a>.
+            </noscript></div></article></div>
+            </main><footer class="footer">
+        <div class="footer-container"><div class="footer-line">由 <a href="https://gohugo.io/" target="_blank" rel="noopener noreffer" title="Hugo 0.68.3">Hugo</a> 强力驱动 | 主题 - <a href="https://github.com/dillonzq/LoveIt" target="_blank" rel="noopener noreffer" title="LoveIt 0.2.10"><i class="far fa-kiss-wink-heart fa-fw"></i> LoveIt</a>
+                </div><div class="footer-line"><i class="far fa-copyright fa-fw"></i><span itemprop="copyrightYear">2019 - 2022</span><span class="author" itemprop="copyrightHolder">&nbsp;<a href="/" target="_blank">bone</a></span>&nbsp;|&nbsp;<span class="license"><a rel="license external nofollow noopener noreffer" href="https://creativecommons.org/licenses/by-nc/4.0/" target="_blank">CC BY-NC 4.0</a></span></div>
+        </div>
+    </footer></div>
+
+        <div id="fixed-buttons"><a href="#" id="back-to-top" class="fixed-button" title="回到顶部">
+                <i class="fas fa-arrow-up fa-fw"></i>
+            </a><a href="#" id="view-comments" class="fixed-button" title="查看评论">
+                <i class="fas fa-comment fa-fw"></i>
+            </a>
+        </div><link rel="stylesheet" href="/lib/valine/valine.min.css"><link rel="stylesheet" href="/lib/katex/katex.min.css"><link rel="stylesheet" href="/lib/katex/copy-tex.min.css"><link rel="stylesheet" href="/lib/cookieconsent/cookieconsent.min.css"><script type="text/javascript" src="/lib/valine/Valine.min.js"></script><script type="text/javascript" src="/lib/smooth-scroll/smooth-scroll.min.js"></script><script type="text/javascript" src="/lib/autocomplete/autocomplete.min.js"></script><script type="text/javascript" src="/lib/lunr/lunr.min.js"></script><script type="text/javascript" src="/lib/lunr/lunr.stemmer.support.min.js"></script><script type="text/javascript" src="/lib/lunr/lunr.zh.min.js"></script><script type="text/javascript" src="/lib/lazysizes/lazysizes.min.js"></script><script type="text/javascript" src="/lib/twemoji/twemoji.min.js"></script><script type="text/javascript" src="/lib/clipboard/clipboard.min.js"></script><script type="text/javascript" src="/lib/sharer/sharer.min.js"></script><script type="text/javascript" src="/lib/typeit/typeit.min.js"></script><script type="text/javascript" src="/lib/katex/katex.min.js"></script><script type="text/javascript" src="/lib/katex/auto-render.min.js"></script><script type="text/javascript" src="/lib/katex/copy-tex.min.js"></script><script type="text/javascript" src="/lib/katex/mhchem.min.js"></script><script type="text/javascript" src="/lib/cookieconsent/cookieconsent.min.js"></script><script type="text/javascript">window.config={"code":{"copyTitle":"复制到剪贴板","maxShownLines":10},"comment":{"valine":{"appId":"","appKey":"","avatar":"mp","el":"#valine","emojiCDN":"https://cdn.jsdelivr.net/npm/emoji-datasource-google@5.0.1/img/google/64/","emojiMaps":{"100":"1f4af.png","alien":"1f47d.png","anger":"1f4a2.png","angry":"1f620.png","anguished":"1f627.png","astonished":"1f632.png","black_heart":"1f5a4.png","blue_heart":"1f499.png","blush":"1f60a.png","bomb":"1f4a3.png","boom":"1f4a5.png","broken_heart":"1f494.png","brown_heart":"1f90e.png","clown_face":"1f921.png","cold_face":"1f976.png","cold_sweat":"1f630.png","confounded":"1f616.png","confused":"1f615.png","cry":"1f622.png","crying_cat_face":"1f63f.png","cupid":"1f498.png","dash":"1f4a8.png","disappointed":"1f61e.png","disappointed_relieved":"1f625.png","dizzy":"1f4ab.png","dizzy_face":"1f635.png","drooling_face":"1f924.png","exploding_head":"1f92f.png","expressionless":"1f611.png","face_vomiting":"1f92e.png","face_with_cowboy_hat":"1f920.png","face_with_hand_over_mouth":"1f92d.png","face_with_head_bandage":"1f915.png","face_with_monocle":"1f9d0.png","face_with_raised_eyebrow":"1f928.png","face_with_rolling_eyes":"1f644.png","face_with_symbols_on_mouth":"1f92c.png","face_with_thermometer":"1f912.png","fearful":"1f628.png","flushed":"1f633.png","frowning":"1f626.png","ghost":"1f47b.png","gift_heart":"1f49d.png","green_heart":"1f49a.png","grimacing":"1f62c.png","grin":"1f601.png","grinning":"1f600.png","hankey":"1f4a9.png","hear_no_evil":"1f649.png","heart":"2764-fe0f.png","heart_decoration":"1f49f.png","heart_eyes":"1f60d.png","heart_eyes_cat":"1f63b.png","heartbeat":"1f493.png","heartpulse":"1f497.png","heavy_heart_exclamation_mark_ornament":"2763-fe0f.png","hole":"1f573-fe0f.png","hot_face":"1f975.png","hugging_face":"1f917.png","hushed":"1f62f.png","imp":"1f47f.png","innocent":"1f607.png","japanese_goblin":"1f47a.png","japanese_ogre":"1f479.png","joy":"1f602.png","joy_cat":"1f639.png","kiss":"1f48b.png","kissing":"1f617.png","kissing_cat":"1f63d.png","kissing_closed_eyes":"1f61a.png","kissing_heart":"1f618.png","kissing_smiling_eyes":"1f619.png","laughing":"1f606.png","left_speech_bubble":"1f5e8-fe0f.png","love_letter":"1f48c.png","lying_face":"1f925.png","mask":"1f637.png","money_mouth_face":"1f911.png","nauseated_face":"1f922.png","nerd_face":"1f913.png","neutral_face":"1f610.png","no_mouth":"1f636.png","open_mouth":"1f62e.png","orange_heart":"1f9e1.png","partying_face":"1f973.png","pensive":"1f614.png","persevere":"1f623.png","pleading_face":"1f97a.png","pouting_cat":"1f63e.png","purple_heart":"1f49c.png","rage":"1f621.png","relaxed":"263a-fe0f.png","relieved":"1f60c.png","revolving_hearts":"1f49e.png","right_anger_bubble":"1f5ef-fe0f.png","robot_face":"1f916.png","rolling_on_the_floor_laughing":"1f923.png","scream":"1f631.png","scream_cat":"1f640.png","see_no_evil":"1f648.png","shushing_face":"1f92b.png","skull":"1f480.png","skull_and_crossbones":"2620-fe0f.png","sleeping":"1f634.png","sleepy":"1f62a.png","slightly_frowning_face":"1f641.png","slightly_smiling_face":"1f642.png","smile":"1f604.png","smile_cat":"1f638.png","smiley":"1f603.png","smiley_cat":"1f63a.png","smiling_face_with_3_hearts":"1f970.png","smiling_imp":"1f608.png","smirk":"1f60f.png","smirk_cat":"1f63c.png","sneezing_face":"1f927.png","sob":"1f62d.png","space_invader":"1f47e.png","sparkling_heart":"1f496.png","speak_no_evil":"1f64a.png","speech_balloon":"1f4ac.png","star-struck":"1f929.png","stuck_out_tongue":"1f61b.png","stuck_out_tongue_closed_eyes":"1f61d.png","stuck_out_tongue_winking_eye":"1f61c.png","sunglasses":"1f60e.png","sweat":"1f613.png","sweat_drops":"1f4a6.png","sweat_smile":"1f605.png","thinking_face":"1f914.png","thought_balloon":"1f4ad.png","tired_face":"1f62b.png","triumph":"1f624.png","two_hearts":"1f495.png","unamused":"1f612.png","upside_down_face":"1f643.png","weary":"1f629.png","white_frowning_face":"2639-fe0f.png","white_heart":"1f90d.png","wink":"1f609.png","woozy_face":"1f974.png","worried":"1f61f.png","yawning_face":"1f971.png","yellow_heart":"1f49b.png","yum":"1f60b.png","zany_face":"1f92a.png","zipper_mouth_face":"1f910.png","zzz":"1f4a4.png"},"enableQQ":true,"highlight":true,"lang":"zh-cn","pageSize":10,"placeholder":"你的评论 ...","recordIP":true,"visitor":true}},"cookieconsent":{"content":{"dismiss":"同意","link":"了解更多","message":"本网站使用 Cookies 来改善您的浏览体验."},"enable":true,"palette":{"button":{"background":"#f0f0f0"},"popup":{"background":"#1aa3ff"}},"theme":"edgeless"},"data":{"id-1":"bone的博客","id-2":"bone的博客"},"math":{"delimiters":[{"display":true,"left":"$$","right":"$$"},{"display":true,"left":"\\[","right":"\\]"},{"display":false,"left":"$","right":"$"},{"display":false,"left":"\\(","right":"\\)"}],"strict":false},"search":{"highlightTag":"em","lunrIndexURL":"/index.json","lunrLanguageCode":"zh","lunrSegmentitURL":"/lib/lunr/lunr.segmentit.js","maxResultLength":10,"noResultsFound":"没有找到结果","snippetLength":50,"type":"lunr"},"twemoji":true,"typeit":{"cursorChar":"|","cursorSpeed":1000,"data":{"id-1":["id-1"],"id-2":["id-2"]},"duration":-1,"speed":100}};</script><script type="text/javascript" src="/js/theme.min.js"></script></body>
+</html>

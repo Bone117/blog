@@ -1,0 +1,36 @@
+<rss xmlns:atom="http://www.w3.org/2005/Atom" version="2.0">
+    <channel>
+        <title>JavaScript - 标签 - mine blog</title>
+        <link>http://101.35.190.67/tags/javascript/</link>
+        <description>JavaScript - 标签 - mine blog</description>
+        <generator>Hugo -- gohugo.io</generator><language>zh-CN</language><managingEditor>soufj17857@gmail.com (bone)</managingEditor>
+            <webMaster>soufj17857@gmail.com (bone)</webMaster><lastBuildDate>Thu, 18 Oct 2018 12:49:00 &#43;0000</lastBuildDate><atom:link href="http://101.35.190.67/tags/javascript/" rel="self" type="application/rss+xml" /><item>
+    <title>JS事件</title>
+    <link>http://101.35.190.67/js%E4%BA%8B%E4%BB%B6/</link>
+    <pubDate>Thu, 18 Oct 2018 12:49:00 &#43;0000</pubDate>
+    <author>作者</author>
+    <guid>http://101.35.190.67/js%E4%BA%8B%E4%BB%B6/</guid>
+    <description><![CDATA[一、事件的两种绑定方式 ******* 1、on事件绑定方式 1 2 3 4 document.onclick = function() { console.log(&#34;文档点击&#34;); } // on事件只能绑定一个]]></description>
+</item><item>
+    <title>JS高级</title>
+    <link>http://101.35.190.67/js%E9%AB%98%E7%BA%A7/</link>
+    <pubDate>Wed, 17 Oct 2018 13:28:00 &#43;0000</pubDate>
+    <author>作者</author>
+    <guid>http://101.35.190.67/js%E9%AB%98%E7%BA%A7/</guid>
+    <description><![CDATA[一、函数高级 1.函数回调 函数回调的本质：在一个函数中，满足特定条件下，调用另一个函数 1 2 3 4 5 6 7 //&lt;span style=&#34;color: #000000;&#34;&gt; 回调的函数 function callback(data) {} &lt;/span&gt;//&lt;span style=&#34;color: #000000;&#34;&gt; 逻辑函数 function func(callback) {]]></description>
+</item><item>
+    <title>JS基础操作</title>
+    <link>http://101.35.190.67/js%E5%9F%BA%E7%A1%80%E6%93%8D%E4%BD%9C/</link>
+    <pubDate>Mon, 15 Oct 2018 12:05:00 &#43;0000</pubDate>
+    <author>作者</author>
+    <guid>http://101.35.190.67/js%E5%9F%BA%E7%A1%80%E6%93%8D%E4%BD%9C/</guid>
+    <description><![CDATA[一、分支结构 1、if语句 if 基础语法 1 2 3 4 5 6 if (条件表达式) { 代码块; } // 当条件表达式结果为true，会执行代码块；反之不执行 // 条件表达式]]></description>
+</item><item>
+    <title>JavaScript入门（基础）</title>
+    <link>http://101.35.190.67/javascript%E5%85%A5%E9%97%A8%E5%9F%BA%E7%A1%80/</link>
+    <pubDate>Thu, 11 Oct 2018 11:45:00 &#43;0000</pubDate>
+    <author>作者</author>
+    <guid>http://101.35.190.67/javascript%E5%85%A5%E9%97%A8%E5%9F%BA%E7%A1%80/</guid>
+    <description><![CDATA[一、JS语言介绍 1.概述 浏览器脚本语言 可以编写运行在浏览器上的代码程序 属于解释性、弱语言类型编程语言 2.组成 ES语法：ECMAScript、]]></description>
+</item></channel>
+</rss>

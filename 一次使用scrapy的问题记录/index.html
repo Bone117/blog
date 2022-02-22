@@ -1,0 +1,452 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="robots" content="noodp" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge, chrome=1">
+        <title>一次使用scrapy的问题记录 - mine blog</title><meta name="Description" content="这是我的全新 Hugo 网站"><meta property="og:title" content="一次使用scrapy的问题记录" />
+<meta property="og:description" content="前景描述: 需要获取某APP的全国订单量，及抢单量。由于没有全国的选项所以只能分别对每一个城市进行订单的遍历。爬虫每天运行一次，一次获取48小" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="http://101.35.190.67/%E4%B8%80%E6%AC%A1%E4%BD%BF%E7%94%A8scrapy%E7%9A%84%E9%97%AE%E9%A2%98%E8%AE%B0%E5%BD%95/" />
+<meta property="og:image" content="https://blogimg-1256896917.cos.ap-shanghai.myqcloud.com/blog/2022-02-22-favicon.ico"/>
+<meta property="article:published_time" content="2019-09-12T14:01:00+00:00" />
+<meta property="article:modified_time" content="2019-09-12T14:01:00+00:00" />
+<meta name="twitter:card" content="summary_large_image"/>
+<meta name="twitter:image" content="https://blogimg-1256896917.cos.ap-shanghai.myqcloud.com/blog/2022-02-22-favicon.ico"/>
+
+<meta name="twitter:title" content="一次使用scrapy的问题记录"/>
+<meta name="twitter:description" content="前景描述: 需要获取某APP的全国订单量，及抢单量。由于没有全国的选项所以只能分别对每一个城市进行订单的遍历。爬虫每天运行一次，一次获取48小"/>
+<meta name="application-name" content="mine blog">
+<meta name="apple-mobile-web-app-title" content="mine blog"><link rel="shortcut icon" type="image/x-icon" href="/favicon.ico" />
+        <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+        <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png"><link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"><link rel="manifest" href="/site.webmanifest"><link rel="canonical" href="http://101.35.190.67/%E4%B8%80%E6%AC%A1%E4%BD%BF%E7%94%A8scrapy%E7%9A%84%E9%97%AE%E9%A2%98%E8%AE%B0%E5%BD%95/" /><link rel="prev" href="http://101.35.190.67/django-%E6%9F%A5%E8%AF%A2%E4%BC%98%E5%8C%96/" /><link rel="next" href="http://101.35.190.67/webpack%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/" /><link rel="stylesheet" href="/lib/normalize/normalize.min.css"><link rel="stylesheet" href="/css/style.min.css"><link rel="stylesheet" href="/lib/fontawesome-free/all.min.css"><link rel="stylesheet" href="/lib/animate/animate.min.css"><script type="application/ld+json">
+    {
+        "@context": "http://schema.org",
+        "@type": "BlogPosting",
+        "headline": "一次使用scrapy的问题记录",
+        "inLanguage": "zh-CN",
+        "mainEntityOfPage": {
+            "@type": "WebPage",
+            "@id": "http:\/\/101.35.190.67\/%E4%B8%80%E6%AC%A1%E4%BD%BF%E7%94%A8scrapy%E7%9A%84%E9%97%AE%E9%A2%98%E8%AE%B0%E5%BD%95\/"
+        },"genre": "posts","keywords": "爬虫, python","wordcount":  1862 ,
+        "url": "http:\/\/101.35.190.67\/%E4%B8%80%E6%AC%A1%E4%BD%BF%E7%94%A8scrapy%E7%9A%84%E9%97%AE%E9%A2%98%E8%AE%B0%E5%BD%95\/","datePublished": "2019-09-12T14:01:00+00:00","dateModified": "2019-09-12T14:01:00+00:00","publisher": {
+            "@type": "Organization",
+            "name": ""},"author": {
+                "@type": "Person",
+                "name": "bone"
+            },"description": ""
+    }
+    </script></head>
+    <body header-desktop="fixed" header-mobile="auto"><script type="text/javascript">(window.localStorage && localStorage.getItem('theme') ? localStorage.getItem('theme') === 'dark' : ('dark' === 'auto' ? window.matchMedia('(prefers-color-scheme: dark)').matches : 'dark' === 'dark')) && document.body.setAttribute('theme', 'dark');</script>
+
+        <div id="mask"></div><div class="wrapper"><header class="desktop" id="header-desktop">
+    <div class="header-wrapper">
+        <div class="header-title">
+            <a href="/" title="mine blog"><img
+        class="lazyload logo"
+        src="/svg/loading.min.svg"
+        data-src="https://blogimg-1256896917.cos.ap-shanghai.myqcloud.com/blog/2022-02-22-favicon.ico"
+        data-srcset="https://blogimg-1256896917.cos.ap-shanghai.myqcloud.com/blog/2022-02-22-favicon.ico, https://blogimg-1256896917.cos.ap-shanghai.myqcloud.com/blog/2022-02-22-favicon.ico 1.5x, https://blogimg-1256896917.cos.ap-shanghai.myqcloud.com/blog/2022-02-22-favicon.ico 2x"
+        data-sizes="auto"
+        alt="https://blogimg-1256896917.cos.ap-shanghai.myqcloud.com/blog/2022-02-22-favicon.ico"
+        title="https://blogimg-1256896917.cos.ap-shanghai.myqcloud.com/blog/2022-02-22-favicon.ico" /><span id="id-1" class="typeit"></span></a>
+        </div>
+        <div class="menu">
+            <div class="menu-inner"><a class="menu-item" href="/posts/"> 文章 </a><a class="menu-item" href="/tags/"> 标签 </a><a class="menu-item" href="/categories/"> 分类 </a><a class="menu-item" href="/about/"> 关于 </a><span class="menu-item delimiter"></span><span class="menu-item search" id="search-desktop">
+                        <input type="text" placeholder="搜索文章标题或内容..." id="search-input-desktop">
+                        <a href="javascript:void(0);" class="search-button search-toggle" id="search-toggle-desktop" title="搜索">
+                            <i class="fas fa-search fa-fw"></i>
+                        </a>
+                        <a href="javascript:void(0);" class="search-button search-clear" id="search-clear-desktop" title="清空">
+                            <i class="fas fa-times-circle fa-fw"></i>
+                        </a>
+                        <span class="search-button search-loading" id="search-loading-desktop">
+                            <i class="fas fa-spinner fa-fw fa-spin"></i>
+                        </span>
+                    </span><a href="javascript:void(0);" class="menu-item theme-switch" title="切换主题">
+                    <i class="fas fa-adjust fa-fw"></i>
+                </a>
+            </div>
+        </div>
+    </div>
+</header><header class="mobile" id="header-mobile">
+    <div class="header-container">
+        <div class="header-wrapper">
+            <div class="header-title">
+                <a href="/" title="mine blog"><img
+        class="lazyload logo"
+        src="/svg/loading.min.svg"
+        data-src="https://blogimg-1256896917.cos.ap-shanghai.myqcloud.com/blog/2022-02-22-favicon.ico"
+        data-srcset="https://blogimg-1256896917.cos.ap-shanghai.myqcloud.com/blog/2022-02-22-favicon.ico, https://blogimg-1256896917.cos.ap-shanghai.myqcloud.com/blog/2022-02-22-favicon.ico 1.5x, https://blogimg-1256896917.cos.ap-shanghai.myqcloud.com/blog/2022-02-22-favicon.ico 2x"
+        data-sizes="auto"
+        alt="https://blogimg-1256896917.cos.ap-shanghai.myqcloud.com/blog/2022-02-22-favicon.ico"
+        title="https://blogimg-1256896917.cos.ap-shanghai.myqcloud.com/blog/2022-02-22-favicon.ico" /><span id="id-2" class="typeit"></span></a>
+            </div>
+            <div class="menu-toggle" id="menu-toggle-mobile">
+                <span></span><span></span><span></span>
+            </div>
+        </div>
+        <div class="menu" id="menu-mobile"><div class="search-wrapper">
+                    <div class="search mobile" id="search-mobile">
+                        <input type="text" placeholder="搜索文章标题或内容..." id="search-input-mobile">
+                        <a href="javascript:void(0);" class="search-button search-toggle" id="search-toggle-mobile" title="搜索">
+                            <i class="fas fa-search fa-fw"></i>
+                        </a>
+                        <a href="javascript:void(0);" class="search-button search-clear" id="search-clear-mobile" title="清空">
+                            <i class="fas fa-times-circle fa-fw"></i>
+                        </a>
+                        <span class="search-button search-loading" id="search-loading-mobile">
+                            <i class="fas fa-spinner fa-fw fa-spin"></i>
+                        </span>
+                    </div>
+                    <a href="javascript:void(0);" class="search-cancel" id="search-cancel-mobile">
+                        取消
+                    </a>
+                </div><a class="menu-item" href="/posts/" title="">文章</a><a class="menu-item" href="/tags/" title="">标签</a><a class="menu-item" href="/categories/" title="">分类</a><a class="menu-item" href="/about/" title="">关于</a><a href="javascript:void(0);" class="menu-item theme-switch" title="切换主题">
+                <i class="fas fa-adjust fa-fw"></i>
+            </a></div>
+    </div>
+</header>
+<div class="search-dropdown desktop">
+    <div id="search-dropdown-desktop"></div>
+</div>
+<div class="search-dropdown mobile">
+    <div id="search-dropdown-mobile"></div>
+</div>
+<main class="main">
+                <div class="container"><div class="toc" id="toc-auto">
+            <h2 class="toc-title">目录</h2>
+            <div class="toc-content" id="toc-content-auto"></div>
+        </div><article class="page single"><h1 class="single-title animated flipInX">一次使用scrapy的问题记录</h1><div class="post-meta">
+            <div class="post-meta-line"><span class="post-author"><a href="/" title="Author" rel=" author" class="author"><i class="fas fa-user-circle fa-fw"></i>bone</a></span>&nbsp;<span class="post-category">收录于 <a href="/categories/python/"><i class="far fa-folder fa-fw"></i>python</a></span></div>
+            <div class="post-meta-line"><i class="far fa-calendar-alt fa-fw"></i>&nbsp;<time datetime="2019-09-12">2019-09-12</time>&nbsp;<i class="fas fa-pencil-alt fa-fw"></i>&nbsp;约 1862 字&nbsp;
+                <i class="far fa-clock fa-fw"></i>&nbsp;预计阅读 4 分钟&nbsp;<span id="/%E4%B8%80%E6%AC%A1%E4%BD%BF%E7%94%A8scrapy%E7%9A%84%E9%97%AE%E9%A2%98%E8%AE%B0%E5%BD%95/" class="leancloud_visitors" data-flag-title="一次使用scrapy的问题记录">
+                        <i class="far fa-eye fa-fw"></i>&nbsp;<span class=leancloud-visitors-count></span>&nbsp;次阅读
+                    </span>&nbsp;</div>
+        </div><div class="details toc" id="toc-static"  kept="">
+                <div class="details-summary toc-title">
+                    <span>目录</span>
+                    <span><i class="details-icon fas fa-angle-right"></i></span>
+                </div>
+                <div class="details-content toc-content" id="toc-content-static"><nav id="TableOfContents"></nav></div>
+            </div><div class="content" id="content"><p>前景描述:</p>
+<blockquote>
+<p>需要获取某APP的全国订单量，及抢单量。由于没有全国的选项所以只能分别对每一个城市进行订单的遍历。爬虫每天运行一次，一次获取48小时内的订单，从数据库中取出昨天的数据进行对比，有订单被抢则更新，无则不操作。(更新逻辑在这里不重要，重要的是爬取逻辑)。每个订单有发布时间，<strong>根据发布时间判断，在48小时外的就停止爬取，开始爬取下一个城市。</strong></p>
+</blockquote>
+<p><strong>先看第一版:</strong></p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span><span class="lnt">29
+</span><span class="lnt">30
+</span><span class="lnt">31
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-python" data-lang="python"><span class="c1">#spider</span>
+
+<span class="c1"># 构造一些请求参数，此处省略</span>
+<span class="c1"># 从配置中读取所有城市列表</span>
+<span class="n">cities</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">settings</span><span class="p">[</span><span class="s1">&#39;CITY_CH&#39;</span><span class="p">]</span>
+
+<span class="c1"># end_signal为某个城市爬取完毕的信号，</span>
+<span class="bp">self</span><span class="o">.</span><span class="n">end_signal</span> <span class="o">=</span> <span class="bp">False</span>
+
+<span class="k">for</span> <span class="n">city</span> <span class="ow">in</span> <span class="n">cities</span><span class="p">:</span>
+    <span class="c1"># 通过for循环对每个城市进行订单爬取</span>
+    <span class="n">post_data</span><span class="o">.</span><span class="n">update</span><span class="p">({</span><span class="s1">&#39;locationName&#39;</span><span class="p">:</span><span class="n">city</span><span class="p">})</span>
+    <span class="n">count</span> <span class="o">=</span> <span class="mi">1</span>
+    <span class="k">while</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">end_signas</span><span class="p">:</span>
+        <span class="n">post_data</span><span class="o">.</span><span class="n">update</span><span class="p">({</span><span class="s1">&#39;pageNum&#39;</span><span class="p">:</span><span class="nb">str</span><span class="p">(</span><span class="n">count</span><span class="p">)})</span>
+        <span class="n">data</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">post_data</span><span class="p">,</span> <span class="n">ensure_ascii</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span><span class="o">.</span><span class="n">split</span><span class="p">())</span>
+        <span class="n">sign</span> <span class="o">=</span> <span class="n">MD5Util</span><span class="o">.</span><span class="n">hex_digest</span><span class="p">(</span><span class="n">api_key</span> <span class="o">+</span> <span class="n">data</span> <span class="o">+</span> <span class="n">salt</span><span class="p">)</span><span class="o">.</span><span class="n">upper</span><span class="p">()</span>
+        <span class="n">params</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s1">&#39;apiKey&#39;</span><span class="p">:</span><span class="n">api_key</span><span class="p">,</span>
+            <span class="s1">&#39;data&#39;</span><span class="p">:</span><span class="n">data</span><span class="p">,</span>
+            <span class="s1">&#39;system&#39;</span><span class="p">:</span><span class="n">system</span><span class="p">,</span>
+            <span class="s1">&#39;sign&#39;</span><span class="p">:</span><span class="n">sign</span>
+        <span class="p">}</span>
+        <span class="n">meta</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;page&#39;</span><span class="p">:</span><span class="n">count</span><span class="p">}</span>
+        <span class="k">yield</span> <span class="n">scrapy</span><span class="o">.</span><span class="n">Request</span><span class="p">(</span><span class="n">url</span><span class="o">=</span><span class="n">url</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s1">&#39;POST&#39;</span><span class="p">,</span> <span class="n">body</span><span class="o">=</span><span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">params</span><span class="p">,</span> <span class="n">ensure_ascii</span><span class="o">=</span><span class="bp">False</span><span class="p">),</span>
+                             <span class="n">headers</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">headers</span><span class="p">,</span> <span class="n">callback</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">parse</span><span class="p">,</span><span class="n">meta</span><span class="o">=</span><span class="n">meta</span><span class="p">,</span> <span class="n">dont_filter</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+        <span class="n">count</span><span class="o">+=</span><span class="mi">1</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">end_signal</span> <span class="o">=</span> <span class="bp">False</span>
+
+<span class="k">def</span> <span class="nf">parse</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">response</span><span class="p">):</span>
+    <span class="c1"># 略</span>
+</code></pre></td></tr></table>
+</div>
+</div><div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-python" data-lang="python"><span class="c1"># 在spiderMiddleware中根据返回的item中的订单时间进行判断(此处不详写)</span>
+
+<span class="k">def</span> <span class="nf">process_spider_output</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">response</span><span class="p">,</span> <span class="n">result</span><span class="p">,</span> <span class="n">spider</span><span class="p">):</span>
+    <span class="n">result_bkp</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">res</span> <span class="ow">in</span> <span class="n">result</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">res</span><span class="p">[</span><span class="s1">&#39;order_time&#39;</span><span class="p">]</span> <span class="o">&lt;</span> <span class="n">before_date</span><span class="p">(</span><span class="mi">2</span><span class="p">):</span> <span class="c1">#before_date为自定义的时间函数</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&#34;{</span><span class="si">%s</span><span class="s2">}爬取完毕，开始爬取下一个城市&#34;</span> <span class="o">%</span> <span class="p">(</span><span class="n">res</span><span class="p">[</span><span class="s1">&#39;city_name&#39;</span><span class="p">]))</span>
+            <span class="n">spider</span><span class="o">.</span><span class="n">end_signal</span> <span class="o">=</span> <span class="bp">True</span>
+            <span class="k">break</span>
+        <span class="n">result_bkp</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">res</span><span class="o">.</span><span class="n">copy</span><span class="p">())</span>
+    <span class="k">return</span> <span class="n">result_bkp</span>
+</code></pre></td></tr></table>
+</div>
+</div><blockquote>
+<p>乍一看没有问题，遍历每个城市，再到解析 解析完后返回item到spiderMiddleware中进行判断订单是否超过48小时，超过就设置<code>self.end_signal为True</code>跳出spider中的while循环，注意while循环后面又将这个参数设置<code>False</code>然后下个城市的循环就开始了。
+<strong>问题来了：</strong>
+spider中将request返回出去添加到队列中，<strong>这里有一个队列</strong>，当response下载好返回回来通过parse函数去处理的时候也有一个队列，众所周知运气不好的人总会偶尔遇到一点网络问题，来举个栗子就清楚了
+<strong>栗子：<strong>spider中将</strong>城市A</strong>的1、2、3订单页(2、3为超过48小时的订单页)，添加到队列中，下载器去下载的时候可能<strong>第2页</strong>代理挂了，第三页超过48小时，中间件判断成功设置<code>self.end_signal=True</code>进行下一个城市的爬取。<strong>城市B</strong>添加了1、2、3(都在48小时内)，<strong>这个时候城市A的第二页订单下载完成了在中间件中判断又将</strong><code>self.end_signal=True</code> ，于是城市B后面的订单也就都没了，都没了。。。，直接开始了下一个城市的订单！</p>
+</blockquote>
+<p>一版总结:</p>
+<blockquote>
+<p>不要在一个异步的程序中通过一个全局变量去控制整个程序的流程。(总结的不好，可以帮我总结一下)</p>
+</blockquote>
+<p>第二版:</p>
+<blockquote>
+<p>既然不能通过全局变量来控制，那能不能让每个城市带一个标识来指明订单爬取结束。
+先看代码</p>
+</blockquote>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span><span class="lnt">29
+</span><span class="lnt">30
+</span><span class="lnt">31
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-python" data-lang="python"><span class="c1">#spider</span>
+<span class="n">cities</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">settings</span><span class="p">[</span><span class="s1">&#39;CITY_CH&#39;</span><span class="p">]</span>
+
+<span class="c1"># end_signal为某个城市爬取完毕的信号，</span>
+<span class="bp">self</span><span class="o">.</span><span class="n">end_signal</span> <span class="o">=</span> <span class="bp">False</span>
+
+<span class="k">for</span> <span class="n">city</span> <span class="ow">in</span> <span class="n">cities</span><span class="p">:</span>
+    <span class="c1"># 通过for循环对每个城市进行订单爬取</span>
+    <span class="n">post_data</span><span class="o">.</span><span class="n">update</span><span class="p">({</span><span class="s1">&#39;locationName&#39;</span><span class="p">:</span><span class="n">city</span><span class="p">})</span>
+    <span class="n">count</span> <span class="o">=</span> <span class="mi">1</span>
+    <span class="k">print</span><span class="p">(</span><span class="n">cities</span><span class="p">)</span>
+    <span class="k">print</span><span class="p">(</span><span class="n">city</span><span class="p">)</span>
+    <span class="k">while</span> <span class="ow">in</span> <span class="n">cities</span><span class="p">:</span>
+        <span class="n">post_data</span><span class="o">.</span><span class="n">update</span><span class="p">({</span><span class="s1">&#39;pageNum&#39;</span><span class="p">:</span><span class="nb">str</span><span class="p">(</span><span class="n">count</span><span class="p">)})</span>
+        <span class="n">data</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">post_data</span><span class="p">,</span> <span class="n">ensure_ascii</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span><span class="o">.</span><span class="n">split</span><span class="p">())</span>
+        <span class="n">sign</span> <span class="o">=</span> <span class="n">MD5Util</span><span class="o">.</span><span class="n">hex_digest</span><span class="p">(</span><span class="n">api_key</span> <span class="o">+</span> <span class="n">data</span> <span class="o">+</span> <span class="n">salt</span><span class="p">)</span><span class="o">.</span><span class="n">upper</span><span class="p">()</span>
+        <span class="n">params</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s1">&#39;apiKey&#39;</span><span class="p">:</span><span class="n">api_key</span><span class="p">,</span>
+            <span class="s1">&#39;data&#39;</span><span class="p">:</span><span class="n">data</span><span class="p">,</span>
+            <span class="s1">&#39;system&#39;</span><span class="p">:</span><span class="n">system</span><span class="p">,</span>
+            <span class="s1">&#39;sign&#39;</span><span class="p">:</span><span class="n">sign</span>
+        <span class="p">}</span>
+        <span class="n">meta</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;page&#39;</span><span class="p">:</span><span class="n">count</span><span class="p">}</span>
+        <span class="k">yield</span> <span class="n">scrapy</span><span class="o">.</span><span class="n">Request</span><span class="p">(</span><span class="n">url</span><span class="o">=</span><span class="n">url</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s1">&#39;POST&#39;</span><span class="p">,</span> <span class="n">body</span><span class="o">=</span><span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">params</span><span class="p">,</span> <span class="n">ensure_ascii</span><span class="o">=</span><span class="bp">False</span><span class="p">),</span>
+                             <span class="n">headers</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">headers</span><span class="p">,</span> <span class="n">callback</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">parse</span><span class="p">,</span><span class="n">meta</span><span class="o">=</span><span class="n">meta</span><span class="p">,</span> <span class="n">dont_filter</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+        <span class="n">count</span><span class="o">+=</span><span class="mi">1</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">end_signal</span> <span class="o">=</span> <span class="bp">False</span>
+
+<span class="k">def</span> <span class="nf">parse</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">response</span><span class="p">):</span>
+    <span class="c1"># 略</span>
+
+</code></pre></td></tr></table>
+</div>
+</div><div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-python" data-lang="python"><span class="c1"># 在spiderMiddleware中根据返回的item中的订单时间进行判断(此处不详写)</span>
+
+<span class="k">def</span> <span class="nf">process_spider_output</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">response</span><span class="p">,</span> <span class="n">result</span><span class="p">,</span> <span class="n">spider</span><span class="p">):</span>
+    <span class="n">result_bkp</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">res</span> <span class="ow">in</span> <span class="n">result</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">res</span><span class="p">[</span><span class="s1">&#39;order_time&#39;</span><span class="p">]</span> <span class="o">&lt;</span> <span class="n">before_date</span><span class="p">(</span><span class="mi">2</span><span class="p">):</span> <span class="c1">#before_date为自定义的时间函数</span>
+            <span class="k">if</span> <span class="n">res</span><span class="p">[</span><span class="s1">&#39;city_name&#39;</span><span class="p">]</span> <span class="ow">in</span> <span class="n">spider</span><span class="o">.</span><span class="n">cities</span><span class="p">:</span>
+                <span class="n">spider</span><span class="o">.</span><span class="n">cities</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">res</span><span class="p">[</span><span class="s1">&#39;city_name&#39;</span><span class="p">])</span>
+                <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&#34;{</span><span class="si">%s</span><span class="s2">}爬取完毕，开始爬取下一个城市&#34;</span> <span class="o">%</span> <span class="p">(</span><span class="n">res</span><span class="p">[</span><span class="s1">&#39;city_name&#39;</span><span class="p">]))</span>
+            <span class="k">break</span>
+        <span class="n">result_bkp</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">res</span><span class="o">.</span><span class="n">copy</span><span class="p">())</span>
+    <span class="k">return</span> <span class="n">result_bkp</span>
+
+</code></pre></td></tr></table>
+</div>
+</div><blockquote>
+<p>看逻辑也有点意思，判断这个城市是否在列表中，在的话说明还没爬取完毕，爬取完毕了就删除这个城市。嗯！运行一下！</p>
+</blockquote>
+<blockquote>
+<p>有意思的来了，第一个城市爬取正常，第二个城市不见了,上诉代码中打印的城市没有显示第二个城市，直接跳到了最后一个(设就三个城市) 怎么被吞了呢。
+敏感数据就不截图了。
+<img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://blogimg-1256896917.cos.ap-shanghai.myqcloud.com/iPic/2019-09-12-134243.png"
+        data-srcset="https://blogimg-1256896917.cos.ap-shanghai.myqcloud.com/iPic/2019-09-12-134243.png, https://blogimg-1256896917.cos.ap-shanghai.myqcloud.com/iPic/2019-09-12-134243.png 1.5x, https://blogimg-1256896917.cos.ap-shanghai.myqcloud.com/iPic/2019-09-12-134243.png 2x"
+        data-sizes="auto"
+        alt="https://blogimg-1256896917.cos.ap-shanghai.myqcloud.com/iPic/2019-09-12-134243.png"
+        title="https://blogimg-1256896917.cos.ap-shanghai.myqcloud.com/iPic/2019-09-12-134243.png" />
+<img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://blogimg-1256896917.cos.ap-shanghai.myqcloud.com/iPic/2019-09-12-134428.png"
+        data-srcset="https://blogimg-1256896917.cos.ap-shanghai.myqcloud.com/iPic/2019-09-12-134428.png, https://blogimg-1256896917.cos.ap-shanghai.myqcloud.com/iPic/2019-09-12-134428.png 1.5x, https://blogimg-1256896917.cos.ap-shanghai.myqcloud.com/iPic/2019-09-12-134428.png 2x"
+        data-sizes="auto"
+        alt="https://blogimg-1256896917.cos.ap-shanghai.myqcloud.com/iPic/2019-09-12-134428.png"
+        title="https://blogimg-1256896917.cos.ap-shanghai.myqcloud.com/iPic/2019-09-12-134428.png" /></p>
+</blockquote>
+<blockquote>
+<p>可以看到 打印的城市列表中明明还有北京的没有被删除，为啥直接到最后一个城市了呢？
+可能有大佬已经看出来了，我是生生打断点调试了半天，甚至怀疑是for循环内部有什么bug。
+最后灵机一动(滑稽)，难倒是因为城市列表的问题？我for循环它，然后又在他内部去删除它里面的元素，可以这样吗？
+写个demo测试一下</p>
+</blockquote>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-python" data-lang="python"><span class="n">cities</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;鞍山&#39;</span><span class="p">,</span> <span class="s1">&#39;北京&#39;</span><span class="p">,</span> <span class="s1">&#39;昆玉&#39;</span><span class="p">,]</span>
+
+<span class="k">for</span> <span class="n">city</span> <span class="ow">in</span> <span class="n">cities</span><span class="p">:</span>
+    <span class="n">cities</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="s1">&#39;鞍山&#39;</span><span class="p">)</span>
+    <span class="k">print</span><span class="p">(</span><span class="n">city</span><span class="p">)</span>
+</code></pre></td></tr></table>
+</div>
+</div><div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-python" data-lang="python"><span class="c1"># 错误就来了！ 果然不能在循环它的时候再对它进行删除操作</span>
+<span class="ne">ValueError</span><span class="p">:</span> <span class="nb">list</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">x</span><span class="p">):</span> <span class="n">x</span> <span class="ow">not</span> <span class="ow">in</span> <span class="nb">list</span>
+</code></pre></td></tr></table>
+</div>
+</div><blockquote>
+<p>至于在运行scrapy的时候为什么没有报这个错误，可能是在别的地方做了异常处理，但是有这个问题在，我们先去修复它一下。
+将<code>for city in cities</code>改为<code>for city in cities.copy()</code>,完美解决！！！
+还有一个小点就是python的值传递和地址传递，在处理item的时候要注意。</p>
+</blockquote>
+</div><div class="post-footer" id="post-footer">
+    <div class="post-info">
+        <div class="post-info-line">
+            <div class="post-info-mod">
+                <span>更新于 2019-09-12</span>
+            </div>
+            <div class="post-info-license"></div>
+        </div>
+        <div class="post-info-line">
+            <div class="post-info-md"><span>
+                            <a class="link-to-markdown" href="/%E4%B8%80%E6%AC%A1%E4%BD%BF%E7%94%A8scrapy%E7%9A%84%E9%97%AE%E9%A2%98%E8%AE%B0%E5%BD%95/index.md" target="_blank">阅读原始文档</a>
+                        </span></div>
+            <div class="post-info-share">
+                <span><a href="javascript:void(0);" title="分享到 Twitter" data-sharer="twitter" data-url="http://101.35.190.67/%E4%B8%80%E6%AC%A1%E4%BD%BF%E7%94%A8scrapy%E7%9A%84%E9%97%AE%E9%A2%98%E8%AE%B0%E5%BD%95/" data-title="一次使用scrapy的问题记录" data-via="xxxx" data-hashtags="爬虫,python"><i class="fab fa-twitter fa-fw"></i></a><a href="javascript:void(0);" title="分享到 Facebook" data-sharer="facebook" data-url="http://101.35.190.67/%E4%B8%80%E6%AC%A1%E4%BD%BF%E7%94%A8scrapy%E7%9A%84%E9%97%AE%E9%A2%98%E8%AE%B0%E5%BD%95/" data-hashtag="爬虫"><i class="fab fa-facebook-square fa-fw"></i></a><a href="javascript:void(0);" title="分享到 WhatsApp" data-sharer="whatsapp" data-url="http://101.35.190.67/%E4%B8%80%E6%AC%A1%E4%BD%BF%E7%94%A8scrapy%E7%9A%84%E9%97%AE%E9%A2%98%E8%AE%B0%E5%BD%95/" data-title="一次使用scrapy的问题记录" data-web><i class="fab fa-whatsapp fa-fw"></i></a><a href="javascript:void(0);" title="分享到 Line" data-sharer="line" data-url="http://101.35.190.67/%E4%B8%80%E6%AC%A1%E4%BD%BF%E7%94%A8scrapy%E7%9A%84%E9%97%AE%E9%A2%98%E8%AE%B0%E5%BD%95/" data-title="一次使用scrapy的问题记录"><i data-svg-src="/lib/simple-icons/icons/line.min.svg"></i></a><a href="javascript:void(0);" title="分享到 微博" data-sharer="weibo" data-url="http://101.35.190.67/%E4%B8%80%E6%AC%A1%E4%BD%BF%E7%94%A8scrapy%E7%9A%84%E9%97%AE%E9%A2%98%E8%AE%B0%E5%BD%95/" data-title="一次使用scrapy的问题记录"><i class="fab fa-weibo fa-fw"></i></a><a href="javascript:void(0);" title="分享到 Myspace" data-sharer="myspace" data-url="http://101.35.190.67/%E4%B8%80%E6%AC%A1%E4%BD%BF%E7%94%A8scrapy%E7%9A%84%E9%97%AE%E9%A2%98%E8%AE%B0%E5%BD%95/" data-title="一次使用scrapy的问题记录" data-description=""><i data-svg-src="/lib/simple-icons/icons/myspace.min.svg"></i></a><a href="javascript:void(0);" title="分享到 Blogger" data-sharer="blogger" data-url="http://101.35.190.67/%E4%B8%80%E6%AC%A1%E4%BD%BF%E7%94%A8scrapy%E7%9A%84%E9%97%AE%E9%A2%98%E8%AE%B0%E5%BD%95/" data-title="一次使用scrapy的问题记录" data-description=""><i class="fab fa-blogger fa-fw"></i></a><a href="javascript:void(0);" title="分享到 Evernote" data-sharer="evernote" data-url="http://101.35.190.67/%E4%B8%80%E6%AC%A1%E4%BD%BF%E7%94%A8scrapy%E7%9A%84%E9%97%AE%E9%A2%98%E8%AE%B0%E5%BD%95/" data-title="一次使用scrapy的问题记录"><i class="fab fa-evernote fa-fw"></i></a></span>
+            </div>
+        </div>
+    </div>
+
+    <div class="post-info-more">
+        <section class="post-tags"><i class="fas fa-tags fa-fw"></i>&nbsp;<a href="/tags/%E7%88%AC%E8%99%AB/">爬虫</a>,&nbsp;<a href="/tags/python/">python</a></section>
+        <section>
+            <span><a href="javascript:void(0);" onclick="window.history.back();">返回</a></span>&nbsp;|&nbsp;<span><a href="/">主页</a></span>
+        </section>
+    </div>
+
+    <div class="post-nav"><a href="/django-%E6%9F%A5%E8%AF%A2%E4%BC%98%E5%8C%96/" class="prev" rel="prev" title="Django-查询优化"><i class="fas fa-angle-left fa-fw"></i>Django-查询优化</a>
+            <a href="/webpack%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/" class="next" rel="next" title="webpack学习笔记">webpack学习笔记<i class="fas fa-angle-right fa-fw"></i></a></div>
+</div>
+<div id="comments"><div id="valine" class="comment"></div><noscript>
+                Please enable JavaScript to view the comments powered by <a href="https://valine.js.org/">Valine</a>.
+            </noscript></div></article></div>
+            </main><footer class="footer">
+        <div class="footer-container"><div class="footer-line">由 <a href="https://gohugo.io/" target="_blank" rel="noopener noreffer" title="Hugo 0.68.3">Hugo</a> 强力驱动 | 主题 - <a href="https://github.com/dillonzq/LoveIt" target="_blank" rel="noopener noreffer" title="LoveIt 0.2.10"><i class="far fa-kiss-wink-heart fa-fw"></i> LoveIt</a>
+                </div><div class="footer-line"><i class="far fa-copyright fa-fw"></i><span itemprop="copyrightYear">2019 - 2022</span><span class="author" itemprop="copyrightHolder">&nbsp;<a href="/" target="_blank">bone</a></span>&nbsp;|&nbsp;<span class="license"><a rel="license external nofollow noopener noreffer" href="https://creativecommons.org/licenses/by-nc/4.0/" target="_blank">CC BY-NC 4.0</a></span></div>
+        </div>
+    </footer></div>
+
+        <div id="fixed-buttons"><a href="#" id="back-to-top" class="fixed-button" title="回到顶部">
+                <i class="fas fa-arrow-up fa-fw"></i>
+            </a><a href="#" id="view-comments" class="fixed-button" title="查看评论">
+                <i class="fas fa-comment fa-fw"></i>
+            </a>
+        </div><link rel="stylesheet" href="/lib/valine/valine.min.css"><link rel="stylesheet" href="/lib/katex/katex.min.css"><link rel="stylesheet" href="/lib/katex/copy-tex.min.css"><link rel="stylesheet" href="/lib/cookieconsent/cookieconsent.min.css"><script type="text/javascript" src="/lib/valine/Valine.min.js"></script><script type="text/javascript" src="/lib/smooth-scroll/smooth-scroll.min.js"></script><script type="text/javascript" src="/lib/autocomplete/autocomplete.min.js"></script><script type="text/javascript" src="/lib/lunr/lunr.min.js"></script><script type="text/javascript" src="/lib/lunr/lunr.stemmer.support.min.js"></script><script type="text/javascript" src="/lib/lunr/lunr.zh.min.js"></script><script type="text/javascript" src="/lib/lazysizes/lazysizes.min.js"></script><script type="text/javascript" src="/lib/twemoji/twemoji.min.js"></script><script type="text/javascript" src="/lib/clipboard/clipboard.min.js"></script><script type="text/javascript" src="/lib/sharer/sharer.min.js"></script><script type="text/javascript" src="/lib/typeit/typeit.min.js"></script><script type="text/javascript" src="/lib/katex/katex.min.js"></script><script type="text/javascript" src="/lib/katex/auto-render.min.js"></script><script type="text/javascript" src="/lib/katex/copy-tex.min.js"></script><script type="text/javascript" src="/lib/katex/mhchem.min.js"></script><script type="text/javascript" src="/lib/cookieconsent/cookieconsent.min.js"></script><script type="text/javascript">window.config={"code":{"copyTitle":"复制到剪贴板","maxShownLines":10},"comment":{"valine":{"appId":"","appKey":"","avatar":"mp","el":"#valine","emojiCDN":"https://cdn.jsdelivr.net/npm/emoji-datasource-google@5.0.1/img/google/64/","emojiMaps":{"100":"1f4af.png","alien":"1f47d.png","anger":"1f4a2.png","angry":"1f620.png","anguished":"1f627.png","astonished":"1f632.png","black_heart":"1f5a4.png","blue_heart":"1f499.png","blush":"1f60a.png","bomb":"1f4a3.png","boom":"1f4a5.png","broken_heart":"1f494.png","brown_heart":"1f90e.png","clown_face":"1f921.png","cold_face":"1f976.png","cold_sweat":"1f630.png","confounded":"1f616.png","confused":"1f615.png","cry":"1f622.png","crying_cat_face":"1f63f.png","cupid":"1f498.png","dash":"1f4a8.png","disappointed":"1f61e.png","disappointed_relieved":"1f625.png","dizzy":"1f4ab.png","dizzy_face":"1f635.png","drooling_face":"1f924.png","exploding_head":"1f92f.png","expressionless":"1f611.png","face_vomiting":"1f92e.png","face_with_cowboy_hat":"1f920.png","face_with_hand_over_mouth":"1f92d.png","face_with_head_bandage":"1f915.png","face_with_monocle":"1f9d0.png","face_with_raised_eyebrow":"1f928.png","face_with_rolling_eyes":"1f644.png","face_with_symbols_on_mouth":"1f92c.png","face_with_thermometer":"1f912.png","fearful":"1f628.png","flushed":"1f633.png","frowning":"1f626.png","ghost":"1f47b.png","gift_heart":"1f49d.png","green_heart":"1f49a.png","grimacing":"1f62c.png","grin":"1f601.png","grinning":"1f600.png","hankey":"1f4a9.png","hear_no_evil":"1f649.png","heart":"2764-fe0f.png","heart_decoration":"1f49f.png","heart_eyes":"1f60d.png","heart_eyes_cat":"1f63b.png","heartbeat":"1f493.png","heartpulse":"1f497.png","heavy_heart_exclamation_mark_ornament":"2763-fe0f.png","hole":"1f573-fe0f.png","hot_face":"1f975.png","hugging_face":"1f917.png","hushed":"1f62f.png","imp":"1f47f.png","innocent":"1f607.png","japanese_goblin":"1f47a.png","japanese_ogre":"1f479.png","joy":"1f602.png","joy_cat":"1f639.png","kiss":"1f48b.png","kissing":"1f617.png","kissing_cat":"1f63d.png","kissing_closed_eyes":"1f61a.png","kissing_heart":"1f618.png","kissing_smiling_eyes":"1f619.png","laughing":"1f606.png","left_speech_bubble":"1f5e8-fe0f.png","love_letter":"1f48c.png","lying_face":"1f925.png","mask":"1f637.png","money_mouth_face":"1f911.png","nauseated_face":"1f922.png","nerd_face":"1f913.png","neutral_face":"1f610.png","no_mouth":"1f636.png","open_mouth":"1f62e.png","orange_heart":"1f9e1.png","partying_face":"1f973.png","pensive":"1f614.png","persevere":"1f623.png","pleading_face":"1f97a.png","pouting_cat":"1f63e.png","purple_heart":"1f49c.png","rage":"1f621.png","relaxed":"263a-fe0f.png","relieved":"1f60c.png","revolving_hearts":"1f49e.png","right_anger_bubble":"1f5ef-fe0f.png","robot_face":"1f916.png","rolling_on_the_floor_laughing":"1f923.png","scream":"1f631.png","scream_cat":"1f640.png","see_no_evil":"1f648.png","shushing_face":"1f92b.png","skull":"1f480.png","skull_and_crossbones":"2620-fe0f.png","sleeping":"1f634.png","sleepy":"1f62a.png","slightly_frowning_face":"1f641.png","slightly_smiling_face":"1f642.png","smile":"1f604.png","smile_cat":"1f638.png","smiley":"1f603.png","smiley_cat":"1f63a.png","smiling_face_with_3_hearts":"1f970.png","smiling_imp":"1f608.png","smirk":"1f60f.png","smirk_cat":"1f63c.png","sneezing_face":"1f927.png","sob":"1f62d.png","space_invader":"1f47e.png","sparkling_heart":"1f496.png","speak_no_evil":"1f64a.png","speech_balloon":"1f4ac.png","star-struck":"1f929.png","stuck_out_tongue":"1f61b.png","stuck_out_tongue_closed_eyes":"1f61d.png","stuck_out_tongue_winking_eye":"1f61c.png","sunglasses":"1f60e.png","sweat":"1f613.png","sweat_drops":"1f4a6.png","sweat_smile":"1f605.png","thinking_face":"1f914.png","thought_balloon":"1f4ad.png","tired_face":"1f62b.png","triumph":"1f624.png","two_hearts":"1f495.png","unamused":"1f612.png","upside_down_face":"1f643.png","weary":"1f629.png","white_frowning_face":"2639-fe0f.png","white_heart":"1f90d.png","wink":"1f609.png","woozy_face":"1f974.png","worried":"1f61f.png","yawning_face":"1f971.png","yellow_heart":"1f49b.png","yum":"1f60b.png","zany_face":"1f92a.png","zipper_mouth_face":"1f910.png","zzz":"1f4a4.png"},"enableQQ":true,"highlight":true,"lang":"zh-cn","pageSize":10,"placeholder":"你的评论 ...","recordIP":true,"visitor":true}},"cookieconsent":{"content":{"dismiss":"同意","link":"了解更多","message":"本网站使用 Cookies 来改善您的浏览体验."},"enable":true,"palette":{"button":{"background":"#f0f0f0"},"popup":{"background":"#1aa3ff"}},"theme":"edgeless"},"data":{"id-1":"bone的博客","id-2":"bone的博客"},"math":{"delimiters":[{"display":true,"left":"$$","right":"$$"},{"display":true,"left":"\\[","right":"\\]"},{"display":false,"left":"$","right":"$"},{"display":false,"left":"\\(","right":"\\)"}],"strict":false},"search":{"highlightTag":"em","lunrIndexURL":"/index.json","lunrLanguageCode":"zh","lunrSegmentitURL":"/lib/lunr/lunr.segmentit.js","maxResultLength":10,"noResultsFound":"没有找到结果","snippetLength":50,"type":"lunr"},"twemoji":true,"typeit":{"cursorChar":"|","cursorSpeed":1000,"data":{"id-1":["id-1"],"id-2":["id-2"]},"duration":-1,"speed":100}};</script><script type="text/javascript" src="/js/theme.min.js"></script></body>
+</html>

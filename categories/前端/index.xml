@@ -1,0 +1,71 @@
+<rss xmlns:atom="http://www.w3.org/2005/Atom" version="2.0">
+    <channel>
+        <title>前端 - 分类 - mine blog</title>
+        <link>http://101.35.190.67/categories/%E5%89%8D%E7%AB%AF/</link>
+        <description>前端 - 分类 - mine blog</description>
+        <generator>Hugo -- gohugo.io</generator><language>zh-CN</language><managingEditor>soufj17857@gmail.com (bone)</managingEditor>
+            <webMaster>soufj17857@gmail.com (bone)</webMaster><lastBuildDate>Thu, 06 Feb 2020 14:24:00 &#43;0000</lastBuildDate><atom:link href="http://101.35.190.67/categories/%E5%89%8D%E7%AB%AF/" rel="self" type="application/rss+xml" /><item>
+    <title>小程序自定义组件</title>
+    <link>http://101.35.190.67/%E5%B0%8F%E7%A8%8B%E5%BA%8F%E8%87%AA%E5%AE%9A%E4%B9%89%E7%BB%84%E4%BB%B6/</link>
+    <pubDate>Thu, 06 Feb 2020 14:24:00 &#43;0000</pubDate>
+    <author>作者</author>
+    <guid>http://101.35.190.67/%E5%B0%8F%E7%A8%8B%E5%BA%8F%E8%87%AA%E5%AE%9A%E4%B9%89%E7%BB%84%E4%BB%B6/</guid>
+    <description><![CDATA[一、自定义组件的步骤 需要在json文件中进行自定义组件声明(将component字段设置为true)可以将这组文件设置为自定义组件 在wxml]]></description>
+</item><item>
+    <title>flex布局笔记</title>
+    <link>http://101.35.190.67/flex%E5%B8%83%E5%B1%80%E7%AC%94%E8%AE%B0/</link>
+    <pubDate>Sat, 01 Feb 2020 12:05:00 &#43;0000</pubDate>
+    <author>作者</author>
+    <guid>http://101.35.190.67/flex%E5%B8%83%E5%B1%80%E7%AC%94%E8%AE%B0/</guid>
+    <description><![CDATA[一、简介： flex布局又叫弹性布局，只要将最外层的块级元素display设置为flex，就创建了flex布局。可以把他看成一个盒子，盒子里面]]></description>
+</item><item>
+    <title>小程序的双线程模型</title>
+    <link>http://101.35.190.67/%E5%B0%8F%E7%A8%8B%E5%BA%8F%E7%9A%84%E5%8F%8C%E7%BA%BF%E7%A8%8B%E6%A8%A1%E5%9E%8B/</link>
+    <pubDate>Mon, 27 Jan 2020 12:51:00 &#43;0000</pubDate>
+    <author>作者</author>
+    <guid>http://101.35.190.67/%E5%B0%8F%E7%A8%8B%E5%BA%8F%E7%9A%84%E5%8F%8C%E7%BA%BF%E7%A8%8B%E6%A8%A1%E5%9E%8B/</guid>
+    <description><![CDATA[微信客户端作为小程序的宿主环境，为了能够执行小程序的各种文件(wxml文件、wxss文件、js文件)，提供了双线程模型。 双线程模型： WXML]]></description>
+</item><item>
+    <title>webpack学习笔记</title>
+    <link>http://101.35.190.67/webpack%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/</link>
+    <pubDate>Wed, 23 Oct 2019 15:05:00 &#43;0000</pubDate>
+    <author>作者</author>
+    <guid>http://101.35.190.67/webpack%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/</guid>
+    <description><![CDATA[一、简介 webpack:JavaScript应用的静态模块打包工具 grunt/gulp（其它打包工具） grunt/gulp的核心是配置一系列]]></description>
+</item><item>
+    <title>JS事件</title>
+    <link>http://101.35.190.67/js%E4%BA%8B%E4%BB%B6/</link>
+    <pubDate>Thu, 18 Oct 2018 12:49:00 &#43;0000</pubDate>
+    <author>作者</author>
+    <guid>http://101.35.190.67/js%E4%BA%8B%E4%BB%B6/</guid>
+    <description><![CDATA[一、事件的两种绑定方式 ******* 1、on事件绑定方式 1 2 3 4 document.onclick = function() { console.log(&#34;文档点击&#34;); } // on事件只能绑定一个]]></description>
+</item><item>
+    <title>JS高级</title>
+    <link>http://101.35.190.67/js%E9%AB%98%E7%BA%A7/</link>
+    <pubDate>Wed, 17 Oct 2018 13:28:00 &#43;0000</pubDate>
+    <author>作者</author>
+    <guid>http://101.35.190.67/js%E9%AB%98%E7%BA%A7/</guid>
+    <description><![CDATA[一、函数高级 1.函数回调 函数回调的本质：在一个函数中，满足特定条件下，调用另一个函数 1 2 3 4 5 6 7 //&lt;span style=&#34;color: #000000;&#34;&gt; 回调的函数 function callback(data) {} &lt;/span&gt;//&lt;span style=&#34;color: #000000;&#34;&gt; 逻辑函数 function func(callback) {]]></description>
+</item><item>
+    <title>JS基础操作</title>
+    <link>http://101.35.190.67/js%E5%9F%BA%E7%A1%80%E6%93%8D%E4%BD%9C/</link>
+    <pubDate>Mon, 15 Oct 2018 12:05:00 &#43;0000</pubDate>
+    <author>作者</author>
+    <guid>http://101.35.190.67/js%E5%9F%BA%E7%A1%80%E6%93%8D%E4%BD%9C/</guid>
+    <description><![CDATA[一、分支结构 1、if语句 if 基础语法 1 2 3 4 5 6 if (条件表达式) { 代码块; } // 当条件表达式结果为true，会执行代码块；反之不执行 // 条件表达式]]></description>
+</item><item>
+    <title>JavaScript入门（基础）</title>
+    <link>http://101.35.190.67/javascript%E5%85%A5%E9%97%A8%E5%9F%BA%E7%A1%80/</link>
+    <pubDate>Thu, 11 Oct 2018 11:45:00 &#43;0000</pubDate>
+    <author>作者</author>
+    <guid>http://101.35.190.67/javascript%E5%85%A5%E9%97%A8%E5%9F%BA%E7%A1%80/</guid>
+    <description><![CDATA[一、JS语言介绍 1.概述 浏览器脚本语言 可以编写运行在浏览器上的代码程序 属于解释性、弱语言类型编程语言 2.组成 ES语法：ECMAScript、]]></description>
+</item><item>
+    <title>高级布局</title>
+    <link>http://101.35.190.67/%E9%AB%98%E7%BA%A7%E5%B8%83%E5%B1%80/</link>
+    <pubDate>Thu, 27 Sep 2018 11:55:00 &#43;0000</pubDate>
+    <author>作者</author>
+    <guid>http://101.35.190.67/%E9%AB%98%E7%BA%A7%E5%B8%83%E5%B1%80/</guid>
+    <description><![CDATA[一、文档流(normal flow) 1.概念 1 将窗体自上而下分成一行一行，块级元素从上至下，行内元素在每行中从左至右顺序排放元素 1 本质为normal f]]></description>
+</item></channel>
+</rss>

@@ -1,0 +1,15 @@
+<rss xmlns:atom="http://www.w3.org/2005/Atom" version="2.0">
+    <channel>
+        <title>git - 分类 - mine blog</title>
+        <link>http://101.35.190.67/categories/git/</link>
+        <description>git - 分类 - mine blog</description>
+        <generator>Hugo -- gohugo.io</generator><language>zh-CN</language><managingEditor>soufj17857@gmail.com (bone)</managingEditor>
+            <webMaster>soufj17857@gmail.com (bone)</webMaster><lastBuildDate>Fri, 12 Jul 2019 05:43:00 &#43;0000</lastBuildDate><atom:link href="http://101.35.190.67/categories/git/" rel="self" type="application/rss+xml" /><item>
+    <title>GIT常用操作</title>
+    <link>http://101.35.190.67/git%E5%B8%B8%E7%94%A8%E6%93%8D%E4%BD%9C/</link>
+    <pubDate>Fri, 12 Jul 2019 05:43:00 &#43;0000</pubDate>
+    <author>作者</author>
+    <guid>http://101.35.190.67/git%E5%B8%B8%E7%94%A8%E6%93%8D%E4%BD%9C/</guid>
+    <description><![CDATA[GIT常用操作 git本地仓库与远程建立连接 1.在本地初始化仓库 1 2 3 4 git init git add . git commit -m &#39;add files&#39; 2.在github上新建一个仓库 3.本地与远程仓库]]></description>
+</item></channel>
+</rss>

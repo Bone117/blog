@@ -1,0 +1,320 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="robots" content="noodp" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge, chrome=1">
+        <title>flex布局笔记 - mine blog</title><meta name="Description" content="这是我的全新 Hugo 网站"><meta property="og:title" content="flex布局笔记" />
+<meta property="og:description" content="一、简介： flex布局又叫弹性布局，只要将最外层的块级元素display设置为flex，就创建了flex布局。可以把他看成一个盒子，盒子里面" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="http://101.35.190.67/flex%E5%B8%83%E5%B1%80%E7%AC%94%E8%AE%B0/" />
+<meta property="og:image" content="https://blogimg-1256896917.cos.ap-shanghai.myqcloud.com/blog/2022-02-22-favicon.ico"/>
+<meta property="article:published_time" content="2020-02-01T12:05:00+00:00" />
+<meta property="article:modified_time" content="2020-02-01T12:05:00+00:00" />
+<meta name="twitter:card" content="summary_large_image"/>
+<meta name="twitter:image" content="https://blogimg-1256896917.cos.ap-shanghai.myqcloud.com/blog/2022-02-22-favicon.ico"/>
+
+<meta name="twitter:title" content="flex布局笔记"/>
+<meta name="twitter:description" content="一、简介： flex布局又叫弹性布局，只要将最外层的块级元素display设置为flex，就创建了flex布局。可以把他看成一个盒子，盒子里面"/>
+<meta name="application-name" content="mine blog">
+<meta name="apple-mobile-web-app-title" content="mine blog"><link rel="shortcut icon" type="image/x-icon" href="/favicon.ico" />
+        <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+        <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png"><link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"><link rel="manifest" href="/site.webmanifest"><link rel="canonical" href="http://101.35.190.67/flex%E5%B8%83%E5%B1%80%E7%AC%94%E8%AE%B0/" /><link rel="prev" href="http://101.35.190.67/%E5%B0%8F%E7%A8%8B%E5%BA%8F%E7%9A%84%E5%8F%8C%E7%BA%BF%E7%A8%8B%E6%A8%A1%E5%9E%8B/" /><link rel="next" href="http://101.35.190.67/%E5%B0%8F%E7%A8%8B%E5%BA%8F%E8%87%AA%E5%AE%9A%E4%B9%89%E7%BB%84%E4%BB%B6/" /><link rel="stylesheet" href="/lib/normalize/normalize.min.css"><link rel="stylesheet" href="/css/style.min.css"><link rel="stylesheet" href="/lib/fontawesome-free/all.min.css"><link rel="stylesheet" href="/lib/animate/animate.min.css"><script type="application/ld+json">
+    {
+        "@context": "http://schema.org",
+        "@type": "BlogPosting",
+        "headline": "flex布局笔记",
+        "inLanguage": "zh-CN",
+        "mainEntityOfPage": {
+            "@type": "WebPage",
+            "@id": "http:\/\/101.35.190.67\/flex%E5%B8%83%E5%B1%80%E7%AC%94%E8%AE%B0\/"
+        },"genre": "posts","keywords": "html, css","wordcount":  2039 ,
+        "url": "http:\/\/101.35.190.67\/flex%E5%B8%83%E5%B1%80%E7%AC%94%E8%AE%B0\/","datePublished": "2020-02-01T12:05:00+00:00","dateModified": "2020-02-01T12:05:00+00:00","publisher": {
+            "@type": "Organization",
+            "name": ""},"author": {
+                "@type": "Person",
+                "name": "bone"
+            },"description": ""
+    }
+    </script></head>
+    <body header-desktop="fixed" header-mobile="auto"><script type="text/javascript">(window.localStorage && localStorage.getItem('theme') ? localStorage.getItem('theme') === 'dark' : ('dark' === 'auto' ? window.matchMedia('(prefers-color-scheme: dark)').matches : 'dark' === 'dark')) && document.body.setAttribute('theme', 'dark');</script>
+
+        <div id="mask"></div><div class="wrapper"><header class="desktop" id="header-desktop">
+    <div class="header-wrapper">
+        <div class="header-title">
+            <a href="/" title="mine blog"><img
+        class="lazyload logo"
+        src="/svg/loading.min.svg"
+        data-src="https://blogimg-1256896917.cos.ap-shanghai.myqcloud.com/blog/2022-02-22-favicon.ico"
+        data-srcset="https://blogimg-1256896917.cos.ap-shanghai.myqcloud.com/blog/2022-02-22-favicon.ico, https://blogimg-1256896917.cos.ap-shanghai.myqcloud.com/blog/2022-02-22-favicon.ico 1.5x, https://blogimg-1256896917.cos.ap-shanghai.myqcloud.com/blog/2022-02-22-favicon.ico 2x"
+        data-sizes="auto"
+        alt="https://blogimg-1256896917.cos.ap-shanghai.myqcloud.com/blog/2022-02-22-favicon.ico"
+        title="https://blogimg-1256896917.cos.ap-shanghai.myqcloud.com/blog/2022-02-22-favicon.ico" /><span id="id-1" class="typeit"></span></a>
+        </div>
+        <div class="menu">
+            <div class="menu-inner"><a class="menu-item" href="/posts/"> 文章 </a><a class="menu-item" href="/tags/"> 标签 </a><a class="menu-item" href="/categories/"> 分类 </a><a class="menu-item" href="/about/"> 关于 </a><span class="menu-item delimiter"></span><span class="menu-item search" id="search-desktop">
+                        <input type="text" placeholder="搜索文章标题或内容..." id="search-input-desktop">
+                        <a href="javascript:void(0);" class="search-button search-toggle" id="search-toggle-desktop" title="搜索">
+                            <i class="fas fa-search fa-fw"></i>
+                        </a>
+                        <a href="javascript:void(0);" class="search-button search-clear" id="search-clear-desktop" title="清空">
+                            <i class="fas fa-times-circle fa-fw"></i>
+                        </a>
+                        <span class="search-button search-loading" id="search-loading-desktop">
+                            <i class="fas fa-spinner fa-fw fa-spin"></i>
+                        </span>
+                    </span><a href="javascript:void(0);" class="menu-item theme-switch" title="切换主题">
+                    <i class="fas fa-adjust fa-fw"></i>
+                </a>
+            </div>
+        </div>
+    </div>
+</header><header class="mobile" id="header-mobile">
+    <div class="header-container">
+        <div class="header-wrapper">
+            <div class="header-title">
+                <a href="/" title="mine blog"><img
+        class="lazyload logo"
+        src="/svg/loading.min.svg"
+        data-src="https://blogimg-1256896917.cos.ap-shanghai.myqcloud.com/blog/2022-02-22-favicon.ico"
+        data-srcset="https://blogimg-1256896917.cos.ap-shanghai.myqcloud.com/blog/2022-02-22-favicon.ico, https://blogimg-1256896917.cos.ap-shanghai.myqcloud.com/blog/2022-02-22-favicon.ico 1.5x, https://blogimg-1256896917.cos.ap-shanghai.myqcloud.com/blog/2022-02-22-favicon.ico 2x"
+        data-sizes="auto"
+        alt="https://blogimg-1256896917.cos.ap-shanghai.myqcloud.com/blog/2022-02-22-favicon.ico"
+        title="https://blogimg-1256896917.cos.ap-shanghai.myqcloud.com/blog/2022-02-22-favicon.ico" /><span id="id-2" class="typeit"></span></a>
+            </div>
+            <div class="menu-toggle" id="menu-toggle-mobile">
+                <span></span><span></span><span></span>
+            </div>
+        </div>
+        <div class="menu" id="menu-mobile"><div class="search-wrapper">
+                    <div class="search mobile" id="search-mobile">
+                        <input type="text" placeholder="搜索文章标题或内容..." id="search-input-mobile">
+                        <a href="javascript:void(0);" class="search-button search-toggle" id="search-toggle-mobile" title="搜索">
+                            <i class="fas fa-search fa-fw"></i>
+                        </a>
+                        <a href="javascript:void(0);" class="search-button search-clear" id="search-clear-mobile" title="清空">
+                            <i class="fas fa-times-circle fa-fw"></i>
+                        </a>
+                        <span class="search-button search-loading" id="search-loading-mobile">
+                            <i class="fas fa-spinner fa-fw fa-spin"></i>
+                        </span>
+                    </div>
+                    <a href="javascript:void(0);" class="search-cancel" id="search-cancel-mobile">
+                        取消
+                    </a>
+                </div><a class="menu-item" href="/posts/" title="">文章</a><a class="menu-item" href="/tags/" title="">标签</a><a class="menu-item" href="/categories/" title="">分类</a><a class="menu-item" href="/about/" title="">关于</a><a href="javascript:void(0);" class="menu-item theme-switch" title="切换主题">
+                <i class="fas fa-adjust fa-fw"></i>
+            </a></div>
+    </div>
+</header>
+<div class="search-dropdown desktop">
+    <div id="search-dropdown-desktop"></div>
+</div>
+<div class="search-dropdown mobile">
+    <div id="search-dropdown-mobile"></div>
+</div>
+<main class="main">
+                <div class="container"><div class="toc" id="toc-auto">
+            <h2 class="toc-title">目录</h2>
+            <div class="toc-content" id="toc-content-auto"></div>
+        </div><article class="page single"><h1 class="single-title animated flipInX">flex布局笔记</h1><div class="post-meta">
+            <div class="post-meta-line"><span class="post-author"><a href="/" title="Author" rel=" author" class="author"><i class="fas fa-user-circle fa-fw"></i>bone</a></span>&nbsp;<span class="post-category">收录于 <a href="/categories/%E5%89%8D%E7%AB%AF/"><i class="far fa-folder fa-fw"></i>前端</a></span></div>
+            <div class="post-meta-line"><i class="far fa-calendar-alt fa-fw"></i>&nbsp;<time datetime="2020-02-01">2020-02-01</time>&nbsp;<i class="fas fa-pencil-alt fa-fw"></i>&nbsp;约 2039 字&nbsp;
+                <i class="far fa-clock fa-fw"></i>&nbsp;预计阅读 5 分钟&nbsp;<span id="/flex%E5%B8%83%E5%B1%80%E7%AC%94%E8%AE%B0/" class="leancloud_visitors" data-flag-title="flex布局笔记">
+                        <i class="far fa-eye fa-fw"></i>&nbsp;<span class=leancloud-visitors-count></span>&nbsp;次阅读
+                    </span>&nbsp;</div>
+        </div><div class="details toc" id="toc-static"  kept="">
+                <div class="details-summary toc-title">
+                    <span>目录</span>
+                    <span><i class="details-icon fas fa-angle-right"></i></span>
+                </div>
+                <div class="details-content toc-content" id="toc-content-static"><nav id="TableOfContents">
+  <ul>
+    <li><a href="#一简介">一、简介：</a>
+      <ul>
+        <li>
+          <ul>
+            <li><a href="#几个基础概念">几个基础概念：</a></li>
+          </ul>
+        </li>
+      </ul>
+    </li>
+    <li><a href="#二container的属性">二、container的属性</a>
+      <ul>
+        <li>
+          <ul>
+            <li><a href="#21-flex-direction绝对主轴方向控制子项的整体布局方向">2.1 flex-direction：绝对主轴方向，控制子项的整体布局方向</a></li>
+            <li><a href="#22-justify-content主轴的对齐方式控制子项的对齐方式">2.2 justify-content：主轴的对齐方式，控制子项的对齐方式</a></li>
+            <li><a href="#23-align-itemsitem在cross-axis上的对齐方式">2.3 align-items：item在cross axis上的对齐方式</a></li>
+            <li><a href="#24-flex-wrap控制子项整体单行显示还是换行显示">2.4 flex-wrap:控制子项整体单行显示还是换行显示</a></li>
+            <li><a href="#25-align-contentalign-content可以看成和justify-content是相似且对立的属性justify-content指明水平方向flex子项的对齐和分布方式而align-content则是指明垂直方向每一行flex元素的对齐和分布方式如果所有flex子项只有一行则align-content属性是没有任何效果的">2.5 align-content：align-content可以看成和justify-content是相似且对立的属性，justify-content指明水平方向flex子项的对齐和分布方式，而align-content则是指明垂直方向每一行flex元素的对齐和分布方式。如果所有flex子项只有一行，则align-content属性是没有任何效果的。</a></li>
+          </ul>
+        </li>
+      </ul>
+    </li>
+    <li><a href="#三flex-items属性">三、flex-items属性</a>
+      <ul>
+        <li>
+          <ul>
+            <li><a href="#31-order">3.1 order：</a></li>
+            <li><a href="#32-align-self">3.2 align-self:</a></li>
+            <li><a href="#33-flex-grow">3.3 flex-grow：</a></li>
+            <li><a href="#34-flex-shrinnk">3.4 flex-shrinnk：</a></li>
+            <li><a href="#35-flex-basis">3.5 flex-basis：</a></li>
+          </ul>
+        </li>
+      </ul>
+    </li>
+  </ul>
+</nav></div>
+            </div><div class="content" id="content"><h2 id="一简介">一、简介：</h2>
+<blockquote>
+<p>flex布局又叫弹性布局，只要将最外层的块级元素display设置为flex，就创建了flex布局。可以把他看成一个盒子，盒子里面有很多子项。设置了flex布局的最外层元素被称为flex container，作为容器存在，里面的子项被称为flex items。container和item分别有不同的属性可以设置。</p>
+</blockquote>
+<h4 id="几个基础概念">几个基础概念：</h4>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://blogimg-1256896917.cos.ap-shanghai.myqcloud.com/blog/2022-02-22-006tNbRwly1gbfpf6jbg6j310q0fqtcw.jpeg"
+        data-srcset="https://blogimg-1256896917.cos.ap-shanghai.myqcloud.com/blog/2022-02-22-006tNbRwly1gbfpf6jbg6j310q0fqtcw.jpeg, https://blogimg-1256896917.cos.ap-shanghai.myqcloud.com/blog/2022-02-22-006tNbRwly1gbfpf6jbg6j310q0fqtcw.jpeg 1.5x, https://blogimg-1256896917.cos.ap-shanghai.myqcloud.com/blog/2022-02-22-006tNbRwly1gbfpf6jbg6j310q0fqtcw.jpeg 2x"
+        data-sizes="auto"
+        alt="https://blogimg-1256896917.cos.ap-shanghai.myqcloud.com/blog/2022-02-22-006tNbRwly1gbfpf6jbg6j310q0fqtcw.jpeg"
+        title="https://blogimg-1256896917.cos.ap-shanghai.myqcloud.com/blog/2022-02-22-006tNbRwly1gbfpf6jbg6j310q0fqtcw.jpeg" />
+（图片来自网络）</p>
+<ul>
+<li>主轴：main axis（从main-start到main-end）子元素默认排布</li>
+<li>交叉轴：cross axis(从cross-start到cross-end)</li>
+<li>main size：单个项目占据主轴长度大小</li>
+<li>cross size：子元素在交叉轴方向上代销</li>
+</ul>
+<h2 id="二container的属性">二、container的属性</h2>
+<h4 id="21-flex-direction绝对主轴方向控制子项的整体布局方向">2.1 flex-direction：绝对主轴方向，控制子项的整体布局方向</h4>
+<ul>
+<li>row：主轴从左到右</li>
+<li>row-reverse：主轴从右到左</li>
+<li>column：主轴从上到下</li>
+<li>column-reverse：主轴从下到上</li>
+</ul>
+<h4 id="22-justify-content主轴的对齐方式控制子项的对齐方式">2.2 justify-content：主轴的对齐方式，控制子项的对齐方式</h4>
+<ul>
+<li>flex-start:与main start对齐(默认值)</li>
+<li>flex-end：与main end对齐</li>
+<li>center：居中对齐</li>
+<li>space-between：item之间距离相等，main start 和main end 两端对齐(两端靠边)</li>
+<li>space-evenly：item之间和两端距离相等</li>
+<li>space-around：item之间距离相等，main start 和main end之间的距离是 items之间距离的一半。</li>
+</ul>
+<h4 id="23-align-itemsitem在cross-axis上的对齐方式">2.3 align-items：item在cross axis上的对齐方式</h4>
+<ul>
+<li>normal：与stretch一致，item在cross axis方向的size为auto时，会自动拉伸至填充container(意思就是item没有设置高度，会自动填充至container高度)</li>
+<li>flex-start:与cross start对齐(顶部对齐)</li>
+<li>flex-end：与cross end对齐(底部对齐)</li>
+<li>center：居中对齐</li>
+<li>baseline：与基准线对齐</li>
+</ul>
+<h4 id="24-flex-wrap控制子项整体单行显示还是换行显示">2.4 flex-wrap:控制子项整体单行显示还是换行显示</h4>
+<ul>
+<li>nowarp：默认nowarp，一行放不下时会压缩。</li>
+<li>warp：宽度不足换行显示</li>
+<li>wrap-reverse：宽度不足换行显示，但是从下往上开始</li>
+</ul>
+<h4 id="25-align-contentalign-content可以看成和justify-content是相似且对立的属性justify-content指明水平方向flex子项的对齐和分布方式而align-content则是指明垂直方向每一行flex元素的对齐和分布方式如果所有flex子项只有一行则align-content属性是没有任何效果的">2.5 align-content：align-content可以看成和justify-content是相似且对立的属性，justify-content指明水平方向flex子项的对齐和分布方式，而align-content则是指明垂直方向每一行flex元素的对齐和分布方式。如果所有flex子项只有一行，则align-content属性是没有任何效果的。</h4>
+<ul>
+<li>stretch：默认值，与align-items的stretch类似</li>
+<li>flex-start：与cross start 对齐，顶部堆砌</li>
+<li>flex-end：与cross end 对齐</li>
+<li>center：居中对齐</li>
+<li>space-between：顶底两端对齐，items之间距离相等</li>
+<li>space-around：顶底两端是items距离之间的一半，items之间的距离相等</li>
+<li>space-evenly：全部等距。</li>
+</ul>
+<h2 id="三flex-items属性">三、flex-items属性</h2>
+<h4 id="31-order">3.1 order：</h4>
+<blockquote>
+<p>可以设置任意整数,值越小越排在前面，默认值是0</p>
+</blockquote>
+<h4 id="32-align-self">3.2 align-self:</h4>
+<blockquote>
+<p>可以覆盖flex container设置的align-items。参数与align-items一致</p>
+</blockquote>
+<h4 id="33-flex-grow">3.3 flex-grow：</h4>
+<blockquote>
+<p>决定flex items 如何扩展。当flex container 在main axis还有剩余size时，可用。可以设置任意非负数字，默认为0。</p>
+</blockquote>
+<ul>
+<li>所有flex-grow总和超过1，每个item扩展的size为 <code>剩余size*flex-grow/sum</code></li>
+<li>所有flex-grow总和不超过1，每个item扩展的size为 `剩余size*flex-grow</li>
+</ul>
+<p>注：flex items扩展后端饿size不能超过width\height</p>
+<h4 id="34-flex-shrinnk">3.4 flex-shrinnk：</h4>
+<blockquote>
+<p>不支持负值，默认值是1，也就是默认所有的flex子项都会收缩。如果设置为0，则表示不收缩，保持原始的fit-content宽度。</p>
+</blockquote>
+<ul>
+<li>如果只有一个flex子项设置了flex-shrink：</li>
+</ul>
+<blockquote>
+<p>flex-shrink值小于1，则收缩的尺寸不完全，会有一部分内容溢出flex容器。
+flex-shrink值大于等于1，则收缩完全，正好填满flex容器。</p>
+</blockquote>
+<ul>
+<li>如果多个flex子项设置了flex-shrink：</li>
+</ul>
+<blockquote>
+<p>flex-shrink值的总和小于1，则收缩的尺寸不完全，每个元素收缩尺寸占“完全收缩的尺寸”的比例就是设置的flex-shrink的值。
+flex-shrink值的总和大于1，则收缩完全，每个元素收缩尺寸的比例和flex-shrink值的比例一样。</p>
+</blockquote>
+<h4 id="35-flex-basis">3.5 flex-basis：</h4>
+<blockquote>
+<p>用来设置item的宽度。</p>
+</blockquote>
+<p>决定items宽度的优先级(从高到低)：</p>
+<blockquote>
+<p>max-width\min-width &gt; flex-basis &gt; width &gt;内容的size</p>
+</blockquote>
+<p>参考：https://www.zhangxinxu.com/wordpress/2018/10/display-flex-css3-css/</p>
+</div><div class="post-footer" id="post-footer">
+    <div class="post-info">
+        <div class="post-info-line">
+            <div class="post-info-mod">
+                <span>更新于 2020-02-01</span>
+            </div>
+            <div class="post-info-license"></div>
+        </div>
+        <div class="post-info-line">
+            <div class="post-info-md"><span>
+                            <a class="link-to-markdown" href="/flex%E5%B8%83%E5%B1%80%E7%AC%94%E8%AE%B0/index.md" target="_blank">阅读原始文档</a>
+                        </span></div>
+            <div class="post-info-share">
+                <span><a href="javascript:void(0);" title="分享到 Twitter" data-sharer="twitter" data-url="http://101.35.190.67/flex%E5%B8%83%E5%B1%80%E7%AC%94%E8%AE%B0/" data-title="flex布局笔记" data-via="xxxx" data-hashtags="html,css"><i class="fab fa-twitter fa-fw"></i></a><a href="javascript:void(0);" title="分享到 Facebook" data-sharer="facebook" data-url="http://101.35.190.67/flex%E5%B8%83%E5%B1%80%E7%AC%94%E8%AE%B0/" data-hashtag="html"><i class="fab fa-facebook-square fa-fw"></i></a><a href="javascript:void(0);" title="分享到 WhatsApp" data-sharer="whatsapp" data-url="http://101.35.190.67/flex%E5%B8%83%E5%B1%80%E7%AC%94%E8%AE%B0/" data-title="flex布局笔记" data-web><i class="fab fa-whatsapp fa-fw"></i></a><a href="javascript:void(0);" title="分享到 Line" data-sharer="line" data-url="http://101.35.190.67/flex%E5%B8%83%E5%B1%80%E7%AC%94%E8%AE%B0/" data-title="flex布局笔记"><i data-svg-src="/lib/simple-icons/icons/line.min.svg"></i></a><a href="javascript:void(0);" title="分享到 微博" data-sharer="weibo" data-url="http://101.35.190.67/flex%E5%B8%83%E5%B1%80%E7%AC%94%E8%AE%B0/" data-title="flex布局笔记"><i class="fab fa-weibo fa-fw"></i></a><a href="javascript:void(0);" title="分享到 Myspace" data-sharer="myspace" data-url="http://101.35.190.67/flex%E5%B8%83%E5%B1%80%E7%AC%94%E8%AE%B0/" data-title="flex布局笔记" data-description=""><i data-svg-src="/lib/simple-icons/icons/myspace.min.svg"></i></a><a href="javascript:void(0);" title="分享到 Blogger" data-sharer="blogger" data-url="http://101.35.190.67/flex%E5%B8%83%E5%B1%80%E7%AC%94%E8%AE%B0/" data-title="flex布局笔记" data-description=""><i class="fab fa-blogger fa-fw"></i></a><a href="javascript:void(0);" title="分享到 Evernote" data-sharer="evernote" data-url="http://101.35.190.67/flex%E5%B8%83%E5%B1%80%E7%AC%94%E8%AE%B0/" data-title="flex布局笔记"><i class="fab fa-evernote fa-fw"></i></a></span>
+            </div>
+        </div>
+    </div>
+
+    <div class="post-info-more">
+        <section class="post-tags"><i class="fas fa-tags fa-fw"></i>&nbsp;<a href="/tags/html/">html</a>,&nbsp;<a href="/tags/css/">css</a></section>
+        <section>
+            <span><a href="javascript:void(0);" onclick="window.history.back();">返回</a></span>&nbsp;|&nbsp;<span><a href="/">主页</a></span>
+        </section>
+    </div>
+
+    <div class="post-nav"><a href="/%E5%B0%8F%E7%A8%8B%E5%BA%8F%E7%9A%84%E5%8F%8C%E7%BA%BF%E7%A8%8B%E6%A8%A1%E5%9E%8B/" class="prev" rel="prev" title="小程序的双线程模型"><i class="fas fa-angle-left fa-fw"></i>小程序的双线程模型</a>
+            <a href="/%E5%B0%8F%E7%A8%8B%E5%BA%8F%E8%87%AA%E5%AE%9A%E4%B9%89%E7%BB%84%E4%BB%B6/" class="next" rel="next" title="小程序自定义组件">小程序自定义组件<i class="fas fa-angle-right fa-fw"></i></a></div>
+</div>
+<div id="comments"><div id="valine" class="comment"></div><noscript>
+                Please enable JavaScript to view the comments powered by <a href="https://valine.js.org/">Valine</a>.
+            </noscript></div></article></div>
+            </main><footer class="footer">
+        <div class="footer-container"><div class="footer-line">由 <a href="https://gohugo.io/" target="_blank" rel="noopener noreffer" title="Hugo 0.68.3">Hugo</a> 强力驱动 | 主题 - <a href="https://github.com/dillonzq/LoveIt" target="_blank" rel="noopener noreffer" title="LoveIt 0.2.10"><i class="far fa-kiss-wink-heart fa-fw"></i> LoveIt</a>
+                </div><div class="footer-line"><i class="far fa-copyright fa-fw"></i><span itemprop="copyrightYear">2019 - 2022</span><span class="author" itemprop="copyrightHolder">&nbsp;<a href="/" target="_blank">bone</a></span>&nbsp;|&nbsp;<span class="license"><a rel="license external nofollow noopener noreffer" href="https://creativecommons.org/licenses/by-nc/4.0/" target="_blank">CC BY-NC 4.0</a></span></div>
+        </div>
+    </footer></div>
+
+        <div id="fixed-buttons"><a href="#" id="back-to-top" class="fixed-button" title="回到顶部">
+                <i class="fas fa-arrow-up fa-fw"></i>
+            </a><a href="#" id="view-comments" class="fixed-button" title="查看评论">
+                <i class="fas fa-comment fa-fw"></i>
+            </a>
+        </div><link rel="stylesheet" href="/lib/valine/valine.min.css"><link rel="stylesheet" href="/lib/katex/katex.min.css"><link rel="stylesheet" href="/lib/katex/copy-tex.min.css"><link rel="stylesheet" href="/lib/cookieconsent/cookieconsent.min.css"><script type="text/javascript" src="/lib/valine/Valine.min.js"></script><script type="text/javascript" src="/lib/smooth-scroll/smooth-scroll.min.js"></script><script type="text/javascript" src="/lib/autocomplete/autocomplete.min.js"></script><script type="text/javascript" src="/lib/lunr/lunr.min.js"></script><script type="text/javascript" src="/lib/lunr/lunr.stemmer.support.min.js"></script><script type="text/javascript" src="/lib/lunr/lunr.zh.min.js"></script><script type="text/javascript" src="/lib/lazysizes/lazysizes.min.js"></script><script type="text/javascript" src="/lib/twemoji/twemoji.min.js"></script><script type="text/javascript" src="/lib/clipboard/clipboard.min.js"></script><script type="text/javascript" src="/lib/sharer/sharer.min.js"></script><script type="text/javascript" src="/lib/typeit/typeit.min.js"></script><script type="text/javascript" src="/lib/katex/katex.min.js"></script><script type="text/javascript" src="/lib/katex/auto-render.min.js"></script><script type="text/javascript" src="/lib/katex/copy-tex.min.js"></script><script type="text/javascript" src="/lib/katex/mhchem.min.js"></script><script type="text/javascript" src="/lib/cookieconsent/cookieconsent.min.js"></script><script type="text/javascript">window.config={"code":{"copyTitle":"复制到剪贴板","maxShownLines":10},"comment":{"valine":{"appId":"","appKey":"","avatar":"mp","el":"#valine","emojiCDN":"https://cdn.jsdelivr.net/npm/emoji-datasource-google@5.0.1/img/google/64/","emojiMaps":{"100":"1f4af.png","alien":"1f47d.png","anger":"1f4a2.png","angry":"1f620.png","anguished":"1f627.png","astonished":"1f632.png","black_heart":"1f5a4.png","blue_heart":"1f499.png","blush":"1f60a.png","bomb":"1f4a3.png","boom":"1f4a5.png","broken_heart":"1f494.png","brown_heart":"1f90e.png","clown_face":"1f921.png","cold_face":"1f976.png","cold_sweat":"1f630.png","confounded":"1f616.png","confused":"1f615.png","cry":"1f622.png","crying_cat_face":"1f63f.png","cupid":"1f498.png","dash":"1f4a8.png","disappointed":"1f61e.png","disappointed_relieved":"1f625.png","dizzy":"1f4ab.png","dizzy_face":"1f635.png","drooling_face":"1f924.png","exploding_head":"1f92f.png","expressionless":"1f611.png","face_vomiting":"1f92e.png","face_with_cowboy_hat":"1f920.png","face_with_hand_over_mouth":"1f92d.png","face_with_head_bandage":"1f915.png","face_with_monocle":"1f9d0.png","face_with_raised_eyebrow":"1f928.png","face_with_rolling_eyes":"1f644.png","face_with_symbols_on_mouth":"1f92c.png","face_with_thermometer":"1f912.png","fearful":"1f628.png","flushed":"1f633.png","frowning":"1f626.png","ghost":"1f47b.png","gift_heart":"1f49d.png","green_heart":"1f49a.png","grimacing":"1f62c.png","grin":"1f601.png","grinning":"1f600.png","hankey":"1f4a9.png","hear_no_evil":"1f649.png","heart":"2764-fe0f.png","heart_decoration":"1f49f.png","heart_eyes":"1f60d.png","heart_eyes_cat":"1f63b.png","heartbeat":"1f493.png","heartpulse":"1f497.png","heavy_heart_exclamation_mark_ornament":"2763-fe0f.png","hole":"1f573-fe0f.png","hot_face":"1f975.png","hugging_face":"1f917.png","hushed":"1f62f.png","imp":"1f47f.png","innocent":"1f607.png","japanese_goblin":"1f47a.png","japanese_ogre":"1f479.png","joy":"1f602.png","joy_cat":"1f639.png","kiss":"1f48b.png","kissing":"1f617.png","kissing_cat":"1f63d.png","kissing_closed_eyes":"1f61a.png","kissing_heart":"1f618.png","kissing_smiling_eyes":"1f619.png","laughing":"1f606.png","left_speech_bubble":"1f5e8-fe0f.png","love_letter":"1f48c.png","lying_face":"1f925.png","mask":"1f637.png","money_mouth_face":"1f911.png","nauseated_face":"1f922.png","nerd_face":"1f913.png","neutral_face":"1f610.png","no_mouth":"1f636.png","open_mouth":"1f62e.png","orange_heart":"1f9e1.png","partying_face":"1f973.png","pensive":"1f614.png","persevere":"1f623.png","pleading_face":"1f97a.png","pouting_cat":"1f63e.png","purple_heart":"1f49c.png","rage":"1f621.png","relaxed":"263a-fe0f.png","relieved":"1f60c.png","revolving_hearts":"1f49e.png","right_anger_bubble":"1f5ef-fe0f.png","robot_face":"1f916.png","rolling_on_the_floor_laughing":"1f923.png","scream":"1f631.png","scream_cat":"1f640.png","see_no_evil":"1f648.png","shushing_face":"1f92b.png","skull":"1f480.png","skull_and_crossbones":"2620-fe0f.png","sleeping":"1f634.png","sleepy":"1f62a.png","slightly_frowning_face":"1f641.png","slightly_smiling_face":"1f642.png","smile":"1f604.png","smile_cat":"1f638.png","smiley":"1f603.png","smiley_cat":"1f63a.png","smiling_face_with_3_hearts":"1f970.png","smiling_imp":"1f608.png","smirk":"1f60f.png","smirk_cat":"1f63c.png","sneezing_face":"1f927.png","sob":"1f62d.png","space_invader":"1f47e.png","sparkling_heart":"1f496.png","speak_no_evil":"1f64a.png","speech_balloon":"1f4ac.png","star-struck":"1f929.png","stuck_out_tongue":"1f61b.png","stuck_out_tongue_closed_eyes":"1f61d.png","stuck_out_tongue_winking_eye":"1f61c.png","sunglasses":"1f60e.png","sweat":"1f613.png","sweat_drops":"1f4a6.png","sweat_smile":"1f605.png","thinking_face":"1f914.png","thought_balloon":"1f4ad.png","tired_face":"1f62b.png","triumph":"1f624.png","two_hearts":"1f495.png","unamused":"1f612.png","upside_down_face":"1f643.png","weary":"1f629.png","white_frowning_face":"2639-fe0f.png","white_heart":"1f90d.png","wink":"1f609.png","woozy_face":"1f974.png","worried":"1f61f.png","yawning_face":"1f971.png","yellow_heart":"1f49b.png","yum":"1f60b.png","zany_face":"1f92a.png","zipper_mouth_face":"1f910.png","zzz":"1f4a4.png"},"enableQQ":true,"highlight":true,"lang":"zh-cn","pageSize":10,"placeholder":"你的评论 ...","recordIP":true,"visitor":true}},"cookieconsent":{"content":{"dismiss":"同意","link":"了解更多","message":"本网站使用 Cookies 来改善您的浏览体验."},"enable":true,"palette":{"button":{"background":"#f0f0f0"},"popup":{"background":"#1aa3ff"}},"theme":"edgeless"},"data":{"id-1":"bone的博客","id-2":"bone的博客"},"math":{"delimiters":[{"display":true,"left":"$$","right":"$$"},{"display":true,"left":"\\[","right":"\\]"},{"display":false,"left":"$","right":"$"},{"display":false,"left":"\\(","right":"\\)"}],"strict":false},"search":{"highlightTag":"em","lunrIndexURL":"/index.json","lunrLanguageCode":"zh","lunrSegmentitURL":"/lib/lunr/lunr.segmentit.js","maxResultLength":10,"noResultsFound":"没有找到结果","snippetLength":50,"type":"lunr"},"twemoji":true,"typeit":{"cursorChar":"|","cursorSpeed":1000,"data":{"id-1":["id-1"],"id-2":["id-2"]},"duration":-1,"speed":100}};</script><script type="text/javascript" src="/js/theme.min.js"></script></body>
+</html>

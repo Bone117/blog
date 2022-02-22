@@ -1,0 +1,782 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="robots" content="noodp" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge, chrome=1">
+        <title>python定时任务APScheduler - mine blog</title><meta name="Description" content="这是我的全新 Hugo 网站"><meta property="og:title" content="python定时任务APScheduler" />
+<meta property="og:description" content="APScheduler定时任务 APScheduler 支持三种调度任务：固定时间间隔，固定时间点（日期），Linux 下的 Crontab 命令。同时，它还支持异步执行、后台执行调" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="http://101.35.190.67/python%E5%AE%9A%E6%97%B6%E4%BB%BB%E5%8A%A1apscheduler/" />
+<meta property="og:image" content="https://blogimg-1256896917.cos.ap-shanghai.myqcloud.com/blog/2022-02-22-favicon.ico"/>
+<meta property="article:published_time" content="2019-07-15T01:20:00+00:00" />
+<meta property="article:modified_time" content="2019-07-15T01:20:00+00:00" />
+<meta name="twitter:card" content="summary_large_image"/>
+<meta name="twitter:image" content="https://blogimg-1256896917.cos.ap-shanghai.myqcloud.com/blog/2022-02-22-favicon.ico"/>
+
+<meta name="twitter:title" content="python定时任务APScheduler"/>
+<meta name="twitter:description" content="APScheduler定时任务 APScheduler 支持三种调度任务：固定时间间隔，固定时间点（日期），Linux 下的 Crontab 命令。同时，它还支持异步执行、后台执行调"/>
+<meta name="application-name" content="mine blog">
+<meta name="apple-mobile-web-app-title" content="mine blog"><link rel="shortcut icon" type="image/x-icon" href="/favicon.ico" />
+        <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+        <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png"><link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"><link rel="manifest" href="/site.webmanifest"><link rel="canonical" href="http://101.35.190.67/python%E5%AE%9A%E6%97%B6%E4%BB%BB%E5%8A%A1apscheduler/" /><link rel="prev" href="http://101.35.190.67/git%E5%B8%B8%E7%94%A8%E6%93%8D%E4%BD%9C/" /><link rel="next" href="http://101.35.190.67/python%E9%80%9A%E8%BF%87timedrotatingfilehandler%E6%8C%89%E6%97%B6%E9%97%B4%E5%88%87%E5%89%B2%E6%97%A5%E5%BF%97/" /><link rel="stylesheet" href="/lib/normalize/normalize.min.css"><link rel="stylesheet" href="/css/style.min.css"><link rel="stylesheet" href="/lib/fontawesome-free/all.min.css"><link rel="stylesheet" href="/lib/animate/animate.min.css"><script type="application/ld+json">
+    {
+        "@context": "http://schema.org",
+        "@type": "BlogPosting",
+        "headline": "python定时任务APScheduler",
+        "inLanguage": "zh-CN",
+        "mainEntityOfPage": {
+            "@type": "WebPage",
+            "@id": "http:\/\/101.35.190.67\/python%E5%AE%9A%E6%97%B6%E4%BB%BB%E5%8A%A1apscheduler\/"
+        },"genre": "posts","keywords": "APScheduler, python","wordcount":  2261 ,
+        "url": "http:\/\/101.35.190.67\/python%E5%AE%9A%E6%97%B6%E4%BB%BB%E5%8A%A1apscheduler\/","datePublished": "2019-07-15T01:20:00+00:00","dateModified": "2019-07-15T01:20:00+00:00","publisher": {
+            "@type": "Organization",
+            "name": ""},"author": {
+                "@type": "Person",
+                "name": "bone"
+            },"description": ""
+    }
+    </script></head>
+    <body header-desktop="fixed" header-mobile="auto"><script type="text/javascript">(window.localStorage && localStorage.getItem('theme') ? localStorage.getItem('theme') === 'dark' : ('dark' === 'auto' ? window.matchMedia('(prefers-color-scheme: dark)').matches : 'dark' === 'dark')) && document.body.setAttribute('theme', 'dark');</script>
+
+        <div id="mask"></div><div class="wrapper"><header class="desktop" id="header-desktop">
+    <div class="header-wrapper">
+        <div class="header-title">
+            <a href="/" title="mine blog"><img
+        class="lazyload logo"
+        src="/svg/loading.min.svg"
+        data-src="https://blogimg-1256896917.cos.ap-shanghai.myqcloud.com/blog/2022-02-22-favicon.ico"
+        data-srcset="https://blogimg-1256896917.cos.ap-shanghai.myqcloud.com/blog/2022-02-22-favicon.ico, https://blogimg-1256896917.cos.ap-shanghai.myqcloud.com/blog/2022-02-22-favicon.ico 1.5x, https://blogimg-1256896917.cos.ap-shanghai.myqcloud.com/blog/2022-02-22-favicon.ico 2x"
+        data-sizes="auto"
+        alt="https://blogimg-1256896917.cos.ap-shanghai.myqcloud.com/blog/2022-02-22-favicon.ico"
+        title="https://blogimg-1256896917.cos.ap-shanghai.myqcloud.com/blog/2022-02-22-favicon.ico" /><span id="id-1" class="typeit"></span></a>
+        </div>
+        <div class="menu">
+            <div class="menu-inner"><a class="menu-item" href="/posts/"> 文章 </a><a class="menu-item" href="/tags/"> 标签 </a><a class="menu-item" href="/categories/"> 分类 </a><a class="menu-item" href="/about/"> 关于 </a><span class="menu-item delimiter"></span><span class="menu-item search" id="search-desktop">
+                        <input type="text" placeholder="搜索文章标题或内容..." id="search-input-desktop">
+                        <a href="javascript:void(0);" class="search-button search-toggle" id="search-toggle-desktop" title="搜索">
+                            <i class="fas fa-search fa-fw"></i>
+                        </a>
+                        <a href="javascript:void(0);" class="search-button search-clear" id="search-clear-desktop" title="清空">
+                            <i class="fas fa-times-circle fa-fw"></i>
+                        </a>
+                        <span class="search-button search-loading" id="search-loading-desktop">
+                            <i class="fas fa-spinner fa-fw fa-spin"></i>
+                        </span>
+                    </span><a href="javascript:void(0);" class="menu-item theme-switch" title="切换主题">
+                    <i class="fas fa-adjust fa-fw"></i>
+                </a>
+            </div>
+        </div>
+    </div>
+</header><header class="mobile" id="header-mobile">
+    <div class="header-container">
+        <div class="header-wrapper">
+            <div class="header-title">
+                <a href="/" title="mine blog"><img
+        class="lazyload logo"
+        src="/svg/loading.min.svg"
+        data-src="https://blogimg-1256896917.cos.ap-shanghai.myqcloud.com/blog/2022-02-22-favicon.ico"
+        data-srcset="https://blogimg-1256896917.cos.ap-shanghai.myqcloud.com/blog/2022-02-22-favicon.ico, https://blogimg-1256896917.cos.ap-shanghai.myqcloud.com/blog/2022-02-22-favicon.ico 1.5x, https://blogimg-1256896917.cos.ap-shanghai.myqcloud.com/blog/2022-02-22-favicon.ico 2x"
+        data-sizes="auto"
+        alt="https://blogimg-1256896917.cos.ap-shanghai.myqcloud.com/blog/2022-02-22-favicon.ico"
+        title="https://blogimg-1256896917.cos.ap-shanghai.myqcloud.com/blog/2022-02-22-favicon.ico" /><span id="id-2" class="typeit"></span></a>
+            </div>
+            <div class="menu-toggle" id="menu-toggle-mobile">
+                <span></span><span></span><span></span>
+            </div>
+        </div>
+        <div class="menu" id="menu-mobile"><div class="search-wrapper">
+                    <div class="search mobile" id="search-mobile">
+                        <input type="text" placeholder="搜索文章标题或内容..." id="search-input-mobile">
+                        <a href="javascript:void(0);" class="search-button search-toggle" id="search-toggle-mobile" title="搜索">
+                            <i class="fas fa-search fa-fw"></i>
+                        </a>
+                        <a href="javascript:void(0);" class="search-button search-clear" id="search-clear-mobile" title="清空">
+                            <i class="fas fa-times-circle fa-fw"></i>
+                        </a>
+                        <span class="search-button search-loading" id="search-loading-mobile">
+                            <i class="fas fa-spinner fa-fw fa-spin"></i>
+                        </span>
+                    </div>
+                    <a href="javascript:void(0);" class="search-cancel" id="search-cancel-mobile">
+                        取消
+                    </a>
+                </div><a class="menu-item" href="/posts/" title="">文章</a><a class="menu-item" href="/tags/" title="">标签</a><a class="menu-item" href="/categories/" title="">分类</a><a class="menu-item" href="/about/" title="">关于</a><a href="javascript:void(0);" class="menu-item theme-switch" title="切换主题">
+                <i class="fas fa-adjust fa-fw"></i>
+            </a></div>
+    </div>
+</header>
+<div class="search-dropdown desktop">
+    <div id="search-dropdown-desktop"></div>
+</div>
+<div class="search-dropdown mobile">
+    <div id="search-dropdown-mobile"></div>
+</div>
+<main class="main">
+                <div class="container"><div class="toc" id="toc-auto">
+            <h2 class="toc-title">目录</h2>
+            <div class="toc-content" id="toc-content-auto"></div>
+        </div><article class="page single"><h1 class="single-title animated flipInX">python定时任务APScheduler</h1><div class="post-meta">
+            <div class="post-meta-line"><span class="post-author"><a href="/" title="Author" rel=" author" class="author"><i class="fas fa-user-circle fa-fw"></i>bone</a></span>&nbsp;<span class="post-category">收录于 <a href="/categories/python/"><i class="far fa-folder fa-fw"></i>python</a></span></div>
+            <div class="post-meta-line"><i class="far fa-calendar-alt fa-fw"></i>&nbsp;<time datetime="2019-07-15">2019-07-15</time>&nbsp;<i class="fas fa-pencil-alt fa-fw"></i>&nbsp;约 2261 字&nbsp;
+                <i class="far fa-clock fa-fw"></i>&nbsp;预计阅读 5 分钟&nbsp;<span id="/python%E5%AE%9A%E6%97%B6%E4%BB%BB%E5%8A%A1apscheduler/" class="leancloud_visitors" data-flag-title="python定时任务APScheduler">
+                        <i class="far fa-eye fa-fw"></i>&nbsp;<span class=leancloud-visitors-count></span>&nbsp;次阅读
+                    </span>&nbsp;</div>
+        </div><div class="details toc" id="toc-static"  kept="">
+                <div class="details-summary toc-title">
+                    <span>目录</span>
+                    <span><i class="details-icon fas fa-angle-right"></i></span>
+                </div>
+                <div class="details-content toc-content" id="toc-content-static"><nav id="TableOfContents">
+  <ul>
+    <li><a href="#apscheduler定时任务">APScheduler定时任务</a>
+      <ul>
+        <li><a href="#一基本架构">一、基本架构</a></li>
+        <li><a href="#二调度器组件schedulers">二、调度器组件(schedulers)</a></li>
+        <li><a href="#三触发器组件trigger">三、触发器组件(trigger)</a></li>
+        <li><a href="#四配置调度器">四、配置调度器</a>
+          <ul>
+            <li>
+              <ul>
+                <li><a href="#方法一">方法一：</a></li>
+                <li><a href="#方法二">方法二：</a></li>
+                <li><a href="#方法三">方法三：</a></li>
+              </ul>
+            </li>
+          </ul>
+        </li>
+        <li><a href="#五启动调度器">五、启动调度器</a>
+          <ul>
+            <li><a href="#1添加任务">1.添加任务</a></li>
+            <li><a href="#2移除任务">2.移除任务</a></li>
+            <li><a href="#3暂停任务">3.暂停任务</a></li>
+            <li><a href="#4调度器操作">4.调度器操作</a></li>
+            <li><a href="#异常捕获">异常捕获</a></li>
+          </ul>
+        </li>
+      </ul>
+    </li>
+  </ul>
+</nav></div>
+            </div><div class="content" id="content"><h2 id="apscheduler定时任务">APScheduler定时任务</h2>
+<blockquote>
+<p>APScheduler 支持三种调度任务：固定时间间隔，固定时间点（日期），Linux 下的 Crontab 命令。同时，它还支持异步执行、后台执行调度任务。</p>
+</blockquote>
+<h3 id="一基本架构">一、基本架构</h3>
+<ol>
+<li>
+<p>触发器 triggers：设定触发任务的条件</p>
+<blockquote>
+<p>描述一个任务何时被触发，按日期或按时间间隔或按 cronjob 表达式三种方式触发</p>
+</blockquote>
+</li>
+<li>
+<p>任务存储器 job stores：存放任务，可以放内存(默认)或数据库</p>
+<blockquote>
+<p>注：调度器之间不能共享任务存储器</p>
+</blockquote>
+</li>
+<li>
+<p>执行器 executors：用于执行任务，可设定执行模式</p>
+<blockquote>
+<p>将指定的作业提交到线程池或者进程池中运行，任务完成通知调度器触发相应的事件。</p>
+</blockquote>
+</li>
+<li>
+<p>调度器 schedulers：将上方三个组件作为参数，创建调度器实例执行。</p>
+<blockquote>
+<p>协调三个组件的运行。</p>
+</blockquote>
+</li>
+</ol>
+<h3 id="二调度器组件schedulers">二、调度器组件(schedulers)</h3>
+<ul>
+<li>
+<p><code>BlockingScheduler</code>阻塞式调度器</p>
+<blockquote>
+<p>调度程序是进程中唯一运行的进程，调用start函数会阻塞当前线程，不能立即返回。</p>
+</blockquote>
+</li>
+</ul>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-python" data-lang="python"><span class="kn">from</span> <span class="nn">apscheduler.schedulers.blocking</span> <span class="kn">import</span> <span class="n">BlockingScheduler</span>
+<span class="kn">import</span> <span class="nn">time</span>
+
+<span class="n">scheduler</span> <span class="o">=</span> <span class="n">BlockingScheduler</span><span class="p">()</span>
+ 
+<span class="k">def</span> <span class="nf">job1</span><span class="p">():</span>
+    <span class="k">print</span> <span class="s2">&#34;</span><span class="si">%s</span><span class="s2">: 执行任务&#34;</span>  <span class="o">%</span> <span class="n">time</span><span class="o">.</span><span class="n">asctime</span><span class="p">()</span>
+
+<span class="n">scheduler</span><span class="o">.</span><span class="n">add_job</span><span class="p">(</span><span class="n">job1</span><span class="p">,</span> <span class="s1">&#39;interval&#39;</span><span class="p">,</span> <span class="n">seconds</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>
+<span class="n">scheduler</span><span class="o">.</span><span class="n">start</span><span class="p">()</span>
+</code></pre></td></tr></table>
+</div>
+</div><ul>
+<li>
+<p><code>BackgroundScheduler</code>后台调度器</p>
+<blockquote>
+<p>当前线程不会阻塞，调度器后台执行</p>
+</blockquote>
+</li>
+</ul>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-python" data-lang="python"><span class="kn">from</span> <span class="nn">apscheduler.schedulers.background</span> <span class="kn">import</span> <span class="n">BackgroundScheduler</span>
+<span class="kn">import</span> <span class="nn">time</span>
+
+<span class="n">scheduler</span> <span class="o">=</span> <span class="n">BackgroundScheduler</span><span class="p">()</span>
+ 
+<span class="k">def</span> <span class="nf">job1</span><span class="p">():</span>
+    <span class="k">print</span> <span class="s2">&#34;</span><span class="si">%s</span><span class="s2">: 执行任务&#34;</span>  <span class="o">%</span> <span class="n">time</span><span class="o">.</span><span class="n">asctime</span><span class="p">()</span>
+
+<span class="n">scheduler</span><span class="o">.</span><span class="n">add_job</span><span class="p">(</span><span class="n">job1</span><span class="p">,</span> <span class="s1">&#39;interval&#39;</span><span class="p">,</span> <span class="n">seconds</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>
+<span class="n">scheduler</span><span class="o">.</span><span class="n">start</span><span class="p">()</span>
+<span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mi">10</span><span class="p">)</span>
+</code></pre></td></tr></table>
+</div>
+</div><blockquote>
+<p>注：10秒执行完后，程序结束。</p>
+</blockquote>
+<ul>
+<li>
+<p><code>AsyncIOScheduler</code>AsyncIO调度器</p>
+<blockquote>
+<p>适用于使用了asyncio的情况</p>
+</blockquote>
+</li>
+</ul>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span><span class="lnt">8
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-python" data-lang="python"><span class="kn">from</span> <span class="nn">apscheduler.schedulers.asyncio</span> <span class="kn">import</span> <span class="n">AsyncIOScheduler</span>
+<span class="kn">import</span> <span class="nn">asyncio</span>
+<span class="o">...</span>
+<span class="o">...</span>
+<span class="k">try</span><span class="p">:</span>
+    <span class="n">asyncio</span><span class="o">.</span><span class="n">get_event_loop</span><span class="p">()</span><span class="o">.</span><span class="n">run_forever</span><span class="p">()</span>
+<span class="k">except</span> <span class="p">(</span><span class="ne">KeyboardInterrupt</span><span class="p">,</span> <span class="ne">SystemExit</span><span class="p">):</span>
+    <span class="k">pass</span>
+</code></pre></td></tr></table>
+</div>
+</div><ul>
+<li>
+<p><code>GeventScheduler</code>Gevent调度器</p>
+<blockquote>
+<p>使用了Gevent的情况</p>
+</blockquote>
+</li>
+</ul>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span><span class="lnt">8
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-python" data-lang="python"><span class="kn">from</span> <span class="nn">apscheduler.schedulers.gevent</span> <span class="kn">import</span> <span class="n">GeventScheduler</span>
+<span class="o">...</span>
+<span class="o">...</span>
+<span class="n">g</span> <span class="o">=</span> <span class="n">scheduler</span><span class="o">.</span><span class="n">start</span><span class="p">()</span>
+<span class="k">try</span><span class="p">:</span>
+    <span class="n">g</span><span class="o">.</span><span class="n">join</span><span class="p">()</span>
+<span class="k">except</span> <span class="p">(</span><span class="ne">KeyboardInterrupt</span><span class="p">,</span> <span class="ne">SystemExit</span><span class="p">):</span>
+    <span class="k">pass</span>
+</code></pre></td></tr></table>
+</div>
+</div><ul>
+<li>
+<p><code>TornadoScheduler</code>Tornado调度器</p>
+<blockquote>
+<p>适用于构建Tornado应用</p>
+</blockquote>
+</li>
+<li>
+<p><code>TwistedScheduler</code> Twisted调度器</p>
+<blockquote>
+<p>适用于构建Twisted应用</p>
+</blockquote>
+</li>
+<li>
+<p><code>QtScheduler</code> Qt调度器</p>
+<blockquote>
+<p>适用于构建Qt应用</p>
+</blockquote>
+</li>
+</ul>
+<h3 id="三触发器组件trigger">三、触发器组件(trigger)</h3>
+<ol>
+<li>
+<p><code>date</code>：只在某个时间点执行一次，具体日期</p>
+<blockquote>
+<p><code>run_date(datetime|str)</code></p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-python" data-lang="python"><span class="n">scheduler</span><span class="o">.</span><span class="n">add_job</span><span class="p">(</span><span class="n">my_job</span><span class="p">,</span> <span class="s1">&#39;date&#39;</span><span class="p">,</span> <span class="n">run_date</span><span class="o">=</span><span class="n">datetime</span><span class="p">(</span><span class="mi">2019</span><span class="p">,</span> <span class="mi">7</span><span class="p">,</span> <span class="mi">12</span><span class="p">,</span> <span class="mi">15</span><span class="p">,</span> <span class="mi">30</span><span class="p">,</span> <span class="mi">5</span><span class="p">),</span> <span class="n">args</span><span class="o">=</span><span class="p">[])</span>
+<span class="n">scheduler</span><span class="o">.</span><span class="n">add_job</span><span class="p">(</span><span class="n">my_job</span><span class="p">,</span> <span class="s1">&#39;date&#39;</span><span class="p">,</span> <span class="n">run_date</span><span class="o">=</span><span class="s2">&#34;2019-07-12&#34;</span><span class="p">,</span> <span class="n">args</span><span class="o">=</span><span class="p">[])</span>
+</code></pre></td></tr></table>
+</div>
+</div><p><code>timezone</code> 指定时区</p>
+</blockquote>
+</li>
+<li>
+<p><code>interval</code>：每隔一段时间允许一次，时间间隔</p>
+<blockquote>
+<p><code>weeks=0 | days=0 | hours=0 | minutes=0 | seconds=0, start_date=None, end_date=None, timezone=None</code></p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-python" data-lang="python"><span class="n">scheduler</span><span class="o">.</span><span class="n">add_job</span><span class="p">(</span><span class="n">my_job</span><span class="p">,</span> <span class="s1">&#39;interval&#39;</span><span class="p">,</span> <span class="n">hours</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+<span class="n">scheduler</span><span class="o">.</span><span class="n">add_job</span><span class="p">(</span><span class="n">my_job</span><span class="p">,</span> <span class="s1">&#39;interval&#39;</span><span class="p">,</span> <span class="n">hours</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">start_date</span><span class="o">=</span><span class="s1">&#39;2017-9-8 21:30:00&#39;</span><span class="p">,</span> <span class="n">end_date</span><span class="o">=</span><span class="s1">&#39;2018-06-15 21:30:00)</span>
+</code></pre></td></tr></table>
+</div>
+</div></blockquote>
+</li>
+<li>
+<p><code>cron</code>：任务的运行周期</p>
+<blockquote>
+<p><code>(year=None, month=None, day=None, week=None, day_of_week=None, hour=None, minute=None, second=None, start_date=None, end_date=None, timezone=None)</code></p>
+<p>除了week和 day_of_week，它们的默认值是<code>*</code></p>
+<p>例如<code>day=1, minute=20</code>，这就等于<code>year='*', month='*', day=1, week='*', day_of_week='*', hour='*', minute=20, second=0</code>，工作将在每个月的第一天以每小时20分钟的时间执行</p>
+</blockquote>
+<p>表达式类型</p>
+<table>
+<thead>
+<tr>
+<th>表达式</th>
+<th>参数类型</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>*</td>
+<td>所有</td>
+<td>通配符。例：<code>minutes=*</code>即每分钟触发</td>
+</tr>
+<tr>
+<td>*/a</td>
+<td>所有</td>
+<td>可被a整除的通配符。</td>
+</tr>
+<tr>
+<td>a-b</td>
+<td>所有</td>
+<td>范围a-b触发</td>
+</tr>
+<tr>
+<td>a-b/c</td>
+<td>所有</td>
+<td>范围a-b，且可被c整除时触发</td>
+</tr>
+<tr>
+<td>xth y</td>
+<td>日</td>
+<td>第几个星期几触发。x为第几个，y为星期几</td>
+</tr>
+<tr>
+<td>last x</td>
+<td>日</td>
+<td>一个月中，最后个星期几触发</td>
+</tr>
+<tr>
+<td>last</td>
+<td>日</td>
+<td>一个月最后一天触发</td>
+</tr>
+<tr>
+<td>x,y,z</td>
+<td>所有</td>
+<td>组合表达式，可以组合确定值或上方的表达式</td>
+</tr>
+</tbody>
+</table>
+</li>
+</ol>
+<blockquote>
+<p>注：当设置的时间间隔小于，任务的执行时间，线程会阻塞住，等待执行完了才能执行下一个任务，可以设置<code>max_instance</code>指定一个任务同一时刻有多少个实例在运行，默认为1</p>
+</blockquote>
+<h3 id="四配置调度器">四、配置调度器</h3>
+<p>转自：https://www.jianshu.com/p/4f5305e220f0</p>
+<p>线程池执行器默认为10，内存任务存储器为<code>memoryjobstore</code>,如果想自己配置的话可以执行以下操作</p>
+<p>需求：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-fallback" data-lang="fallback">两个任务储存器分别搭配两个执行器；同时，还要修改任务的默认参数；最后还要改时区
+</code></pre></td></tr></table>
+</div>
+</div><ul>
+<li>名称为“mongo”的<code>MongoDBJobStore</code></li>
+<li>名称为“default”的<code>SQLAlchemyJobStore</code></li>
+<li>名称为“ThreadPoolExecutor ”的<code>ThreadPoolExecutor</code>，最大线程20个</li>
+<li>名称“processpool”的<code>ProcessPoolExecutor</code>，最大进程5个</li>
+<li>UTC时间作为调度器的时区</li>
+<li>默认为新任务关闭<em>合并模式</em>（）</li>
+<li>设置新任务的默认最大实例数为3</li>
+</ul>
+<h5 id="方法一">方法一：</h5>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-python" data-lang="python"><span class="kn">from</span> <span class="nn">pytz</span> <span class="kn">import</span> <span class="n">utc</span>
+
+<span class="kn">from</span> <span class="nn">apscheduler.schedulers.background</span> <span class="kn">import</span> <span class="n">BackgroundScheduler</span>
+<span class="kn">from</span> <span class="nn">apscheduler.jobstores.mongodb</span> <span class="kn">import</span> <span class="n">MongoDBJobStore</span>
+<span class="kn">from</span> <span class="nn">apscheduler.jobstores.sqlalchemy</span> <span class="kn">import</span> <span class="n">SQLAlchemyJobStore</span>
+<span class="kn">from</span> <span class="nn">apscheduler.executors.pool</span> <span class="kn">import</span> <span class="n">ThreadPoolExecutor</span><span class="p">,</span> <span class="n">ProcessPoolExecutor</span>
+
+
+<span class="n">jobstores</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s1">&#39;mongo&#39;</span><span class="p">:</span> <span class="n">MongoDBJobStore</span><span class="p">(),</span>
+    <span class="s1">&#39;default&#39;</span><span class="p">:</span> <span class="n">SQLAlchemyJobStore</span><span class="p">(</span><span class="n">url</span><span class="o">=</span><span class="s1">&#39;sqlite:///jobs.sqlite&#39;</span><span class="p">)</span>
+<span class="p">}</span>
+<span class="n">executors</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s1">&#39;default&#39;</span><span class="p">:</span> <span class="n">ThreadPoolExecutor</span><span class="p">(</span><span class="mi">20</span><span class="p">),</span>
+    <span class="s1">&#39;processpool&#39;</span><span class="p">:</span> <span class="n">ProcessPoolExecutor</span><span class="p">(</span><span class="mi">5</span><span class="p">)</span>
+<span class="p">}</span>
+<span class="n">job_defaults</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s1">&#39;coalesce&#39;</span><span class="p">:</span> <span class="bp">False</span><span class="p">,</span>
+    <span class="s1">&#39;max_instances&#39;</span><span class="p">:</span> <span class="mi">3</span>
+<span class="p">}</span>
+<span class="n">scheduler</span> <span class="o">=</span> <span class="n">BackgroundScheduler</span><span class="p">(</span><span class="n">jobstores</span><span class="o">=</span><span class="n">jobstores</span><span class="p">,</span> <span class="n">executors</span><span class="o">=</span><span class="n">executors</span><span class="p">,</span> <span class="n">job_defaults</span><span class="o">=</span><span class="n">job_defaults</span><span class="p">,</span> <span class="n">timezone</span><span class="o">=</span><span class="n">utc</span><span class="p">)</span>
+</code></pre></td></tr></table>
+</div>
+</div><h5 id="方法二">方法二：</h5>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-python" data-lang="python"><span class="kn">from</span> <span class="nn">apscheduler.schedulers.background</span> <span class="kn">import</span> <span class="n">BackgroundScheduler</span>
+
+
+<span class="c1"># The &#34;apscheduler.&#34; prefix is hard coded</span>
+<span class="n">scheduler</span> <span class="o">=</span> <span class="n">BackgroundScheduler</span><span class="p">({</span>
+    <span class="s1">&#39;apscheduler.jobstores.mongo&#39;</span><span class="p">:</span> <span class="p">{</span>
+         <span class="s1">&#39;type&#39;</span><span class="p">:</span> <span class="s1">&#39;mongodb&#39;</span>
+    <span class="p">},</span>
+    <span class="s1">&#39;apscheduler.jobstores.default&#39;</span><span class="p">:</span> <span class="p">{</span>
+        <span class="s1">&#39;type&#39;</span><span class="p">:</span> <span class="s1">&#39;sqlalchemy&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;url&#39;</span><span class="p">:</span> <span class="s1">&#39;sqlite:///jobs.sqlite&#39;</span>
+    <span class="p">},</span>
+    <span class="s1">&#39;apscheduler.executors.default&#39;</span><span class="p">:</span> <span class="p">{</span>
+        <span class="s1">&#39;class&#39;</span><span class="p">:</span> <span class="s1">&#39;apscheduler.executors.pool:ThreadPoolExecutor&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;max_workers&#39;</span><span class="p">:</span> <span class="s1">&#39;20&#39;</span>
+    <span class="p">},</span>
+    <span class="s1">&#39;apscheduler.executors.processpool&#39;</span><span class="p">:</span> <span class="p">{</span>
+        <span class="s1">&#39;type&#39;</span><span class="p">:</span> <span class="s1">&#39;processpool&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;max_workers&#39;</span><span class="p">:</span> <span class="s1">&#39;5&#39;</span>
+    <span class="p">},</span>
+    <span class="s1">&#39;apscheduler.job_defaults.coalesce&#39;</span><span class="p">:</span> <span class="s1">&#39;false&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;apscheduler.job_defaults.max_instances&#39;</span><span class="p">:</span> <span class="s1">&#39;3&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;apscheduler.timezone&#39;</span><span class="p">:</span> <span class="s1">&#39;UTC&#39;</span><span class="p">,</span>
+<span class="p">})</span>
+
+</code></pre></td></tr></table>
+</div>
+</div><h5 id="方法三">方法三：</h5>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-python" data-lang="python"><span class="kn">from</span> <span class="nn">pytz</span> <span class="kn">import</span> <span class="n">utc</span>
+
+<span class="kn">from</span> <span class="nn">apscheduler.schedulers.background</span> <span class="kn">import</span> <span class="n">BackgroundScheduler</span>
+<span class="kn">from</span> <span class="nn">apscheduler.jobstores.sqlalchemy</span> <span class="kn">import</span> <span class="n">SQLAlchemyJobStore</span>
+<span class="kn">from</span> <span class="nn">apscheduler.executors.pool</span> <span class="kn">import</span> <span class="n">ProcessPoolExecutor</span>
+
+
+<span class="n">jobstores</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s1">&#39;mongo&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;type&#39;</span><span class="p">:</span> <span class="s1">&#39;mongodb&#39;</span><span class="p">},</span>
+    <span class="s1">&#39;default&#39;</span><span class="p">:</span> <span class="n">SQLAlchemyJobStore</span><span class="p">(</span><span class="n">url</span><span class="o">=</span><span class="s1">&#39;sqlite:///jobs.sqlite&#39;</span><span class="p">)</span>
+<span class="p">}</span>
+<span class="n">executors</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s1">&#39;default&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;type&#39;</span><span class="p">:</span> <span class="s1">&#39;threadpool&#39;</span><span class="p">,</span> <span class="s1">&#39;max_workers&#39;</span><span class="p">:</span> <span class="mi">20</span><span class="p">},</span>
+    <span class="s1">&#39;processpool&#39;</span><span class="p">:</span> <span class="n">ProcessPoolExecutor</span><span class="p">(</span><span class="n">max_workers</span><span class="o">=</span><span class="mi">5</span><span class="p">)</span>
+<span class="p">}</span>
+<span class="n">job_defaults</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s1">&#39;coalesce&#39;</span><span class="p">:</span> <span class="bp">False</span><span class="p">,</span>
+    <span class="s1">&#39;max_instances&#39;</span><span class="p">:</span> <span class="mi">3</span>
+<span class="p">}</span>
+<span class="n">scheduler</span> <span class="o">=</span> <span class="n">BackgroundScheduler</span><span class="p">()</span>
+
+<span class="c1"># ..这里可以添加任务</span>
+
+<span class="n">scheduler</span><span class="o">.</span><span class="n">configure</span><span class="p">(</span><span class="n">jobstores</span><span class="o">=</span><span class="n">jobstores</span><span class="p">,</span> <span class="n">executors</span><span class="o">=</span><span class="n">executors</span><span class="p">,</span> <span class="n">job_defaults</span><span class="o">=</span><span class="n">job_defaults</span><span class="p">,</span> <span class="n">timezone</span><span class="o">=</span><span class="n">utc</span><span class="p">)</span>
+
+</code></pre></td></tr></table>
+</div>
+</div><h3 id="五启动调度器">五、启动调度器</h3>
+<p>除了<code>BlockingScheduler</code>外，其他非阻塞的调度器都会立即返回，运行之后的代码。</p>
+<p><code>BlockingScheduler</code>需要将运行的代码放在start()之前</p>
+<h4 id="1添加任务">1.添加任务</h4>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span><span class="lnt">8
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-fallback" data-lang="fallback">1.调用add_job()  #可以传参max_instance,同一任务的运行实例个数
+  当有任务中途中断，后面恢复后，有N个任务没有执行  
+    coalesce：true ，恢复的任务会执行一次
+    coalesce：false，恢复后的任务会执行N次配合misfire_grace_time使用
+    misfire_grace_time设置时间差值，由于某些原因没有运行，再次提交时，大于设置的时间，实例不会运行。
+2.装饰器scheduled_job()
+立即运行可以不设置trigger参数
+
+</code></pre></td></tr></table>
+</div>
+</div><h4 id="2移除任务">2.移除任务</h4>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span><span class="lnt">8
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-python" data-lang="python"><span class="c1"># 根据任务实例删除</span>
+<span class="n">job</span> <span class="o">=</span> <span class="n">scheduler</span><span class="o">.</span><span class="n">add_job</span><span class="p">(</span><span class="n">myfunc</span><span class="p">,</span> <span class="s1">&#39;interval&#39;</span><span class="p">,</span> <span class="n">minutes</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+<span class="n">job</span><span class="o">.</span><span class="n">remove</span><span class="p">()</span>
+
+<span class="c1"># 根据任务id删除</span>
+<span class="n">scheduler</span><span class="o">.</span><span class="n">add_job</span><span class="p">(</span><span class="n">myfunc</span><span class="p">,</span> <span class="s1">&#39;interval&#39;</span><span class="p">,</span> <span class="n">minutes</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="nb">id</span><span class="o">=</span><span class="s1">&#39;my_job_id&#39;</span><span class="p">)</span>
+<span class="n">scheduler</span><span class="o">.</span><span class="n">remove_job</span><span class="p">(</span><span class="s1">&#39;my_job_id&#39;</span><span class="p">)</span>
+
+</code></pre></td></tr></table>
+</div>
+</div><h4 id="3暂停任务">3.暂停任务</h4>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-python" data-lang="python"><span class="n">job</span> <span class="o">=</span> <span class="n">scheduler</span><span class="o">.</span><span class="n">add_job</span><span class="p">(</span><span class="n">myfunc</span><span class="p">,</span> <span class="s1">&#39;interval&#39;</span><span class="p">,</span> <span class="n">minutes</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+<span class="c1"># 根据任务实例</span>
+<span class="n">job</span><span class="o">.</span><span class="n">pause</span><span class="p">()</span>  <span class="c1">#暂停</span>
+<span class="n">job</span><span class="o">.</span><span class="n">resume</span><span class="p">()</span> <span class="c1">#继续</span>
+
+<span class="c1"># 根据任务id暂停</span>
+<span class="n">scheduler</span><span class="o">.</span><span class="n">add_job</span><span class="p">(</span><span class="n">myfunc</span><span class="p">,</span> <span class="s1">&#39;interval&#39;</span><span class="p">,</span> <span class="n">minutes</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="nb">id</span><span class="o">=</span><span class="s1">&#39;my_job_id&#39;</span><span class="p">)</span>
+<span class="n">scheduler</span><span class="o">.</span><span class="n">pause_job</span><span class="p">(</span><span class="s1">&#39;my_job_id&#39;</span><span class="p">)</span>
+<span class="n">scheduler</span><span class="o">.</span><span class="n">resume_job</span><span class="p">(</span><span class="s1">&#39;my_job_id&#39;</span><span class="p">)</span>
+
+</code></pre></td></tr></table>
+</div>
+</div><h4 id="4调度器操作">4.调度器操作</h4>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-python" data-lang="python"><span class="n">scheduler</span><span class="o">.</span><span class="n">start</span><span class="p">()</span> <span class="c1">#开启</span>
+<span class="n">scheduler</span><span class="o">.</span><span class="n">shotdown</span><span class="p">(</span><span class="n">wait</span><span class="o">=</span><span class="bp">True</span><span class="o">|</span><span class="bp">False</span><span class="p">)</span> <span class="c1">#关闭  False 无论任务是否执行，强制关闭</span>
+
+</code></pre></td></tr></table>
+</div>
+</div><h4 id="异常捕获">异常捕获</h4>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-python" data-lang="python"><span class="c1"># 可以添加apscheduler日志至DEBUG级别，这样就能捕获异常信息</span>
+<span class="kn">import</span> <span class="nn">logging</span>
+
+<span class="n">logging</span><span class="o">.</span><span class="n">basicConfig</span><span class="p">()</span>
+<span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="s1">&#39;apscheduler&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">setLevel</span><span class="p">(</span><span class="n">logging</span><span class="o">.</span><span class="n">DEBUG</span><span class="p">)</span>
+
+</code></pre></td></tr></table>
+</div>
+</div></div><div class="post-footer" id="post-footer">
+    <div class="post-info">
+        <div class="post-info-line">
+            <div class="post-info-mod">
+                <span>更新于 2019-07-15</span>
+            </div>
+            <div class="post-info-license"></div>
+        </div>
+        <div class="post-info-line">
+            <div class="post-info-md"><span>
+                            <a class="link-to-markdown" href="/python%E5%AE%9A%E6%97%B6%E4%BB%BB%E5%8A%A1apscheduler/index.md" target="_blank">阅读原始文档</a>
+                        </span></div>
+            <div class="post-info-share">
+                <span><a href="javascript:void(0);" title="分享到 Twitter" data-sharer="twitter" data-url="http://101.35.190.67/python%E5%AE%9A%E6%97%B6%E4%BB%BB%E5%8A%A1apscheduler/" data-title="python定时任务APScheduler" data-via="xxxx" data-hashtags="APScheduler,python"><i class="fab fa-twitter fa-fw"></i></a><a href="javascript:void(0);" title="分享到 Facebook" data-sharer="facebook" data-url="http://101.35.190.67/python%E5%AE%9A%E6%97%B6%E4%BB%BB%E5%8A%A1apscheduler/" data-hashtag="APScheduler"><i class="fab fa-facebook-square fa-fw"></i></a><a href="javascript:void(0);" title="分享到 WhatsApp" data-sharer="whatsapp" data-url="http://101.35.190.67/python%E5%AE%9A%E6%97%B6%E4%BB%BB%E5%8A%A1apscheduler/" data-title="python定时任务APScheduler" data-web><i class="fab fa-whatsapp fa-fw"></i></a><a href="javascript:void(0);" title="分享到 Line" data-sharer="line" data-url="http://101.35.190.67/python%E5%AE%9A%E6%97%B6%E4%BB%BB%E5%8A%A1apscheduler/" data-title="python定时任务APScheduler"><i data-svg-src="/lib/simple-icons/icons/line.min.svg"></i></a><a href="javascript:void(0);" title="分享到 微博" data-sharer="weibo" data-url="http://101.35.190.67/python%E5%AE%9A%E6%97%B6%E4%BB%BB%E5%8A%A1apscheduler/" data-title="python定时任务APScheduler"><i class="fab fa-weibo fa-fw"></i></a><a href="javascript:void(0);" title="分享到 Myspace" data-sharer="myspace" data-url="http://101.35.190.67/python%E5%AE%9A%E6%97%B6%E4%BB%BB%E5%8A%A1apscheduler/" data-title="python定时任务APScheduler" data-description=""><i data-svg-src="/lib/simple-icons/icons/myspace.min.svg"></i></a><a href="javascript:void(0);" title="分享到 Blogger" data-sharer="blogger" data-url="http://101.35.190.67/python%E5%AE%9A%E6%97%B6%E4%BB%BB%E5%8A%A1apscheduler/" data-title="python定时任务APScheduler" data-description=""><i class="fab fa-blogger fa-fw"></i></a><a href="javascript:void(0);" title="分享到 Evernote" data-sharer="evernote" data-url="http://101.35.190.67/python%E5%AE%9A%E6%97%B6%E4%BB%BB%E5%8A%A1apscheduler/" data-title="python定时任务APScheduler"><i class="fab fa-evernote fa-fw"></i></a></span>
+            </div>
+        </div>
+    </div>
+
+    <div class="post-info-more">
+        <section class="post-tags"><i class="fas fa-tags fa-fw"></i>&nbsp;<a href="/tags/apscheduler/">APScheduler</a>,&nbsp;<a href="/tags/python/">python</a></section>
+        <section>
+            <span><a href="javascript:void(0);" onclick="window.history.back();">返回</a></span>&nbsp;|&nbsp;<span><a href="/">主页</a></span>
+        </section>
+    </div>
+
+    <div class="post-nav"><a href="/git%E5%B8%B8%E7%94%A8%E6%93%8D%E4%BD%9C/" class="prev" rel="prev" title="GIT常用操作"><i class="fas fa-angle-left fa-fw"></i>GIT常用操作</a>
+            <a href="/python%E9%80%9A%E8%BF%87timedrotatingfilehandler%E6%8C%89%E6%97%B6%E9%97%B4%E5%88%87%E5%89%B2%E6%97%A5%E5%BF%97/" class="next" rel="next" title="python通过TimedRotatingFileHandler按时间切割日志">python通过TimedRotatingFileHandler按时间切割日志<i class="fas fa-angle-right fa-fw"></i></a></div>
+</div>
+<div id="comments"><div id="valine" class="comment"></div><noscript>
+                Please enable JavaScript to view the comments powered by <a href="https://valine.js.org/">Valine</a>.
+            </noscript></div></article></div>
+            </main><footer class="footer">
+        <div class="footer-container"><div class="footer-line">由 <a href="https://gohugo.io/" target="_blank" rel="noopener noreffer" title="Hugo 0.68.3">Hugo</a> 强力驱动 | 主题 - <a href="https://github.com/dillonzq/LoveIt" target="_blank" rel="noopener noreffer" title="LoveIt 0.2.10"><i class="far fa-kiss-wink-heart fa-fw"></i> LoveIt</a>
+                </div><div class="footer-line"><i class="far fa-copyright fa-fw"></i><span itemprop="copyrightYear">2019 - 2022</span><span class="author" itemprop="copyrightHolder">&nbsp;<a href="/" target="_blank">bone</a></span>&nbsp;|&nbsp;<span class="license"><a rel="license external nofollow noopener noreffer" href="https://creativecommons.org/licenses/by-nc/4.0/" target="_blank">CC BY-NC 4.0</a></span></div>
+        </div>
+    </footer></div>
+
+        <div id="fixed-buttons"><a href="#" id="back-to-top" class="fixed-button" title="回到顶部">
+                <i class="fas fa-arrow-up fa-fw"></i>
+            </a><a href="#" id="view-comments" class="fixed-button" title="查看评论">
+                <i class="fas fa-comment fa-fw"></i>
+            </a>
+        </div><link rel="stylesheet" href="/lib/valine/valine.min.css"><link rel="stylesheet" href="/lib/katex/katex.min.css"><link rel="stylesheet" href="/lib/katex/copy-tex.min.css"><link rel="stylesheet" href="/lib/cookieconsent/cookieconsent.min.css"><script type="text/javascript" src="/lib/valine/Valine.min.js"></script><script type="text/javascript" src="/lib/smooth-scroll/smooth-scroll.min.js"></script><script type="text/javascript" src="/lib/autocomplete/autocomplete.min.js"></script><script type="text/javascript" src="/lib/lunr/lunr.min.js"></script><script type="text/javascript" src="/lib/lunr/lunr.stemmer.support.min.js"></script><script type="text/javascript" src="/lib/lunr/lunr.zh.min.js"></script><script type="text/javascript" src="/lib/lazysizes/lazysizes.min.js"></script><script type="text/javascript" src="/lib/twemoji/twemoji.min.js"></script><script type="text/javascript" src="/lib/clipboard/clipboard.min.js"></script><script type="text/javascript" src="/lib/sharer/sharer.min.js"></script><script type="text/javascript" src="/lib/typeit/typeit.min.js"></script><script type="text/javascript" src="/lib/katex/katex.min.js"></script><script type="text/javascript" src="/lib/katex/auto-render.min.js"></script><script type="text/javascript" src="/lib/katex/copy-tex.min.js"></script><script type="text/javascript" src="/lib/katex/mhchem.min.js"></script><script type="text/javascript" src="/lib/cookieconsent/cookieconsent.min.js"></script><script type="text/javascript">window.config={"code":{"copyTitle":"复制到剪贴板","maxShownLines":10},"comment":{"valine":{"appId":"","appKey":"","avatar":"mp","el":"#valine","emojiCDN":"https://cdn.jsdelivr.net/npm/emoji-datasource-google@5.0.1/img/google/64/","emojiMaps":{"100":"1f4af.png","alien":"1f47d.png","anger":"1f4a2.png","angry":"1f620.png","anguished":"1f627.png","astonished":"1f632.png","black_heart":"1f5a4.png","blue_heart":"1f499.png","blush":"1f60a.png","bomb":"1f4a3.png","boom":"1f4a5.png","broken_heart":"1f494.png","brown_heart":"1f90e.png","clown_face":"1f921.png","cold_face":"1f976.png","cold_sweat":"1f630.png","confounded":"1f616.png","confused":"1f615.png","cry":"1f622.png","crying_cat_face":"1f63f.png","cupid":"1f498.png","dash":"1f4a8.png","disappointed":"1f61e.png","disappointed_relieved":"1f625.png","dizzy":"1f4ab.png","dizzy_face":"1f635.png","drooling_face":"1f924.png","exploding_head":"1f92f.png","expressionless":"1f611.png","face_vomiting":"1f92e.png","face_with_cowboy_hat":"1f920.png","face_with_hand_over_mouth":"1f92d.png","face_with_head_bandage":"1f915.png","face_with_monocle":"1f9d0.png","face_with_raised_eyebrow":"1f928.png","face_with_rolling_eyes":"1f644.png","face_with_symbols_on_mouth":"1f92c.png","face_with_thermometer":"1f912.png","fearful":"1f628.png","flushed":"1f633.png","frowning":"1f626.png","ghost":"1f47b.png","gift_heart":"1f49d.png","green_heart":"1f49a.png","grimacing":"1f62c.png","grin":"1f601.png","grinning":"1f600.png","hankey":"1f4a9.png","hear_no_evil":"1f649.png","heart":"2764-fe0f.png","heart_decoration":"1f49f.png","heart_eyes":"1f60d.png","heart_eyes_cat":"1f63b.png","heartbeat":"1f493.png","heartpulse":"1f497.png","heavy_heart_exclamation_mark_ornament":"2763-fe0f.png","hole":"1f573-fe0f.png","hot_face":"1f975.png","hugging_face":"1f917.png","hushed":"1f62f.png","imp":"1f47f.png","innocent":"1f607.png","japanese_goblin":"1f47a.png","japanese_ogre":"1f479.png","joy":"1f602.png","joy_cat":"1f639.png","kiss":"1f48b.png","kissing":"1f617.png","kissing_cat":"1f63d.png","kissing_closed_eyes":"1f61a.png","kissing_heart":"1f618.png","kissing_smiling_eyes":"1f619.png","laughing":"1f606.png","left_speech_bubble":"1f5e8-fe0f.png","love_letter":"1f48c.png","lying_face":"1f925.png","mask":"1f637.png","money_mouth_face":"1f911.png","nauseated_face":"1f922.png","nerd_face":"1f913.png","neutral_face":"1f610.png","no_mouth":"1f636.png","open_mouth":"1f62e.png","orange_heart":"1f9e1.png","partying_face":"1f973.png","pensive":"1f614.png","persevere":"1f623.png","pleading_face":"1f97a.png","pouting_cat":"1f63e.png","purple_heart":"1f49c.png","rage":"1f621.png","relaxed":"263a-fe0f.png","relieved":"1f60c.png","revolving_hearts":"1f49e.png","right_anger_bubble":"1f5ef-fe0f.png","robot_face":"1f916.png","rolling_on_the_floor_laughing":"1f923.png","scream":"1f631.png","scream_cat":"1f640.png","see_no_evil":"1f648.png","shushing_face":"1f92b.png","skull":"1f480.png","skull_and_crossbones":"2620-fe0f.png","sleeping":"1f634.png","sleepy":"1f62a.png","slightly_frowning_face":"1f641.png","slightly_smiling_face":"1f642.png","smile":"1f604.png","smile_cat":"1f638.png","smiley":"1f603.png","smiley_cat":"1f63a.png","smiling_face_with_3_hearts":"1f970.png","smiling_imp":"1f608.png","smirk":"1f60f.png","smirk_cat":"1f63c.png","sneezing_face":"1f927.png","sob":"1f62d.png","space_invader":"1f47e.png","sparkling_heart":"1f496.png","speak_no_evil":"1f64a.png","speech_balloon":"1f4ac.png","star-struck":"1f929.png","stuck_out_tongue":"1f61b.png","stuck_out_tongue_closed_eyes":"1f61d.png","stuck_out_tongue_winking_eye":"1f61c.png","sunglasses":"1f60e.png","sweat":"1f613.png","sweat_drops":"1f4a6.png","sweat_smile":"1f605.png","thinking_face":"1f914.png","thought_balloon":"1f4ad.png","tired_face":"1f62b.png","triumph":"1f624.png","two_hearts":"1f495.png","unamused":"1f612.png","upside_down_face":"1f643.png","weary":"1f629.png","white_frowning_face":"2639-fe0f.png","white_heart":"1f90d.png","wink":"1f609.png","woozy_face":"1f974.png","worried":"1f61f.png","yawning_face":"1f971.png","yellow_heart":"1f49b.png","yum":"1f60b.png","zany_face":"1f92a.png","zipper_mouth_face":"1f910.png","zzz":"1f4a4.png"},"enableQQ":true,"highlight":true,"lang":"zh-cn","pageSize":10,"placeholder":"你的评论 ...","recordIP":true,"visitor":true}},"cookieconsent":{"content":{"dismiss":"同意","link":"了解更多","message":"本网站使用 Cookies 来改善您的浏览体验."},"enable":true,"palette":{"button":{"background":"#f0f0f0"},"popup":{"background":"#1aa3ff"}},"theme":"edgeless"},"data":{"id-1":"bone的博客","id-2":"bone的博客"},"math":{"delimiters":[{"display":true,"left":"$$","right":"$$"},{"display":true,"left":"\\[","right":"\\]"},{"display":false,"left":"$","right":"$"},{"display":false,"left":"\\(","right":"\\)"}],"strict":false},"search":{"highlightTag":"em","lunrIndexURL":"/index.json","lunrLanguageCode":"zh","lunrSegmentitURL":"/lib/lunr/lunr.segmentit.js","maxResultLength":10,"noResultsFound":"没有找到结果","snippetLength":50,"type":"lunr"},"twemoji":true,"typeit":{"cursorChar":"|","cursorSpeed":1000,"data":{"id-1":["id-1"],"id-2":["id-2"]},"duration":-1,"speed":100}};</script><script type="text/javascript" src="/js/theme.min.js"></script></body>
+</html>

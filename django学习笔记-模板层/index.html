@@ -1,0 +1,1203 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="robots" content="noodp" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge, chrome=1">
+        <title>django学习笔记-模板层 - mine blog</title><meta name="Description" content="这是我的全新 Hugo 网站"><meta property="og:title" content="django学习笔记-模板层" />
+<meta property="og:description" content="模板层 1 将Python嵌入到HTML中。 模板简介 将HTML硬解码到视图并不是那么完美原因如下： 对页面设计时也需要对python代码进行相应的" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="http://101.35.190.67/django%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0-%E6%A8%A1%E6%9D%BF%E5%B1%82/" />
+<meta property="og:image" content="https://blogimg-1256896917.cos.ap-shanghai.myqcloud.com/blog/2022-02-22-favicon.ico"/>
+<meta property="article:published_time" content="2018-11-12T07:28:00+00:00" />
+<meta property="article:modified_time" content="2018-11-12T07:28:00+00:00" />
+<meta name="twitter:card" content="summary_large_image"/>
+<meta name="twitter:image" content="https://blogimg-1256896917.cos.ap-shanghai.myqcloud.com/blog/2022-02-22-favicon.ico"/>
+
+<meta name="twitter:title" content="django学习笔记-模板层"/>
+<meta name="twitter:description" content="模板层 1 将Python嵌入到HTML中。 模板简介 将HTML硬解码到视图并不是那么完美原因如下： 对页面设计时也需要对python代码进行相应的"/>
+<meta name="application-name" content="mine blog">
+<meta name="apple-mobile-web-app-title" content="mine blog"><link rel="shortcut icon" type="image/x-icon" href="/favicon.ico" />
+        <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+        <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png"><link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"><link rel="manifest" href="/site.webmanifest"><link rel="canonical" href="http://101.35.190.67/django%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0-%E6%A8%A1%E6%9D%BF%E5%B1%82/" /><link rel="prev" href="http://101.35.190.67/django-%E8%A7%86%E5%9B%BE%E5%B1%82view/" /><link rel="next" href="http://101.35.190.67/django-orm-%E5%8D%95%E8%A1%A8%E6%93%8D%E4%BD%9C/" /><link rel="stylesheet" href="/lib/normalize/normalize.min.css"><link rel="stylesheet" href="/css/style.min.css"><link rel="stylesheet" href="/lib/fontawesome-free/all.min.css"><link rel="stylesheet" href="/lib/animate/animate.min.css"><script type="application/ld+json">
+    {
+        "@context": "http://schema.org",
+        "@type": "BlogPosting",
+        "headline": "django学习笔记-模板层",
+        "inLanguage": "zh-CN",
+        "mainEntityOfPage": {
+            "@type": "WebPage",
+            "@id": "http:\/\/101.35.190.67\/django%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0-%E6%A8%A1%E6%9D%BF%E5%B1%82\/"
+        },"genre": "posts","keywords": "python, django","wordcount":  4426 ,
+        "url": "http:\/\/101.35.190.67\/django%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0-%E6%A8%A1%E6%9D%BF%E5%B1%82\/","datePublished": "2018-11-12T07:28:00+00:00","dateModified": "2018-11-12T07:28:00+00:00","publisher": {
+            "@type": "Organization",
+            "name": ""},"author": {
+                "@type": "Person",
+                "name": "bone"
+            },"description": ""
+    }
+    </script></head>
+    <body header-desktop="fixed" header-mobile="auto"><script type="text/javascript">(window.localStorage && localStorage.getItem('theme') ? localStorage.getItem('theme') === 'dark' : ('dark' === 'auto' ? window.matchMedia('(prefers-color-scheme: dark)').matches : 'dark' === 'dark')) && document.body.setAttribute('theme', 'dark');</script>
+
+        <div id="mask"></div><div class="wrapper"><header class="desktop" id="header-desktop">
+    <div class="header-wrapper">
+        <div class="header-title">
+            <a href="/" title="mine blog"><img
+        class="lazyload logo"
+        src="/svg/loading.min.svg"
+        data-src="https://blogimg-1256896917.cos.ap-shanghai.myqcloud.com/blog/2022-02-22-favicon.ico"
+        data-srcset="https://blogimg-1256896917.cos.ap-shanghai.myqcloud.com/blog/2022-02-22-favicon.ico, https://blogimg-1256896917.cos.ap-shanghai.myqcloud.com/blog/2022-02-22-favicon.ico 1.5x, https://blogimg-1256896917.cos.ap-shanghai.myqcloud.com/blog/2022-02-22-favicon.ico 2x"
+        data-sizes="auto"
+        alt="https://blogimg-1256896917.cos.ap-shanghai.myqcloud.com/blog/2022-02-22-favicon.ico"
+        title="https://blogimg-1256896917.cos.ap-shanghai.myqcloud.com/blog/2022-02-22-favicon.ico" /><span id="id-1" class="typeit"></span></a>
+        </div>
+        <div class="menu">
+            <div class="menu-inner"><a class="menu-item" href="/posts/"> 文章 </a><a class="menu-item" href="/tags/"> 标签 </a><a class="menu-item" href="/categories/"> 分类 </a><a class="menu-item" href="/about/"> 关于 </a><span class="menu-item delimiter"></span><span class="menu-item search" id="search-desktop">
+                        <input type="text" placeholder="搜索文章标题或内容..." id="search-input-desktop">
+                        <a href="javascript:void(0);" class="search-button search-toggle" id="search-toggle-desktop" title="搜索">
+                            <i class="fas fa-search fa-fw"></i>
+                        </a>
+                        <a href="javascript:void(0);" class="search-button search-clear" id="search-clear-desktop" title="清空">
+                            <i class="fas fa-times-circle fa-fw"></i>
+                        </a>
+                        <span class="search-button search-loading" id="search-loading-desktop">
+                            <i class="fas fa-spinner fa-fw fa-spin"></i>
+                        </span>
+                    </span><a href="javascript:void(0);" class="menu-item theme-switch" title="切换主题">
+                    <i class="fas fa-adjust fa-fw"></i>
+                </a>
+            </div>
+        </div>
+    </div>
+</header><header class="mobile" id="header-mobile">
+    <div class="header-container">
+        <div class="header-wrapper">
+            <div class="header-title">
+                <a href="/" title="mine blog"><img
+        class="lazyload logo"
+        src="/svg/loading.min.svg"
+        data-src="https://blogimg-1256896917.cos.ap-shanghai.myqcloud.com/blog/2022-02-22-favicon.ico"
+        data-srcset="https://blogimg-1256896917.cos.ap-shanghai.myqcloud.com/blog/2022-02-22-favicon.ico, https://blogimg-1256896917.cos.ap-shanghai.myqcloud.com/blog/2022-02-22-favicon.ico 1.5x, https://blogimg-1256896917.cos.ap-shanghai.myqcloud.com/blog/2022-02-22-favicon.ico 2x"
+        data-sizes="auto"
+        alt="https://blogimg-1256896917.cos.ap-shanghai.myqcloud.com/blog/2022-02-22-favicon.ico"
+        title="https://blogimg-1256896917.cos.ap-shanghai.myqcloud.com/blog/2022-02-22-favicon.ico" /><span id="id-2" class="typeit"></span></a>
+            </div>
+            <div class="menu-toggle" id="menu-toggle-mobile">
+                <span></span><span></span><span></span>
+            </div>
+        </div>
+        <div class="menu" id="menu-mobile"><div class="search-wrapper">
+                    <div class="search mobile" id="search-mobile">
+                        <input type="text" placeholder="搜索文章标题或内容..." id="search-input-mobile">
+                        <a href="javascript:void(0);" class="search-button search-toggle" id="search-toggle-mobile" title="搜索">
+                            <i class="fas fa-search fa-fw"></i>
+                        </a>
+                        <a href="javascript:void(0);" class="search-button search-clear" id="search-clear-mobile" title="清空">
+                            <i class="fas fa-times-circle fa-fw"></i>
+                        </a>
+                        <span class="search-button search-loading" id="search-loading-mobile">
+                            <i class="fas fa-spinner fa-fw fa-spin"></i>
+                        </span>
+                    </div>
+                    <a href="javascript:void(0);" class="search-cancel" id="search-cancel-mobile">
+                        取消
+                    </a>
+                </div><a class="menu-item" href="/posts/" title="">文章</a><a class="menu-item" href="/tags/" title="">标签</a><a class="menu-item" href="/categories/" title="">分类</a><a class="menu-item" href="/about/" title="">关于</a><a href="javascript:void(0);" class="menu-item theme-switch" title="切换主题">
+                <i class="fas fa-adjust fa-fw"></i>
+            </a></div>
+    </div>
+</header>
+<div class="search-dropdown desktop">
+    <div id="search-dropdown-desktop"></div>
+</div>
+<div class="search-dropdown mobile">
+    <div id="search-dropdown-mobile"></div>
+</div>
+<main class="main">
+                <div class="container"><div class="toc" id="toc-auto">
+            <h2 class="toc-title">目录</h2>
+            <div class="toc-content" id="toc-content-auto"></div>
+        </div><article class="page single"><h1 class="single-title animated flipInX">django学习笔记-模板层</h1><div class="post-meta">
+            <div class="post-meta-line"><span class="post-author"><a href="/" title="Author" rel=" author" class="author"><i class="fas fa-user-circle fa-fw"></i>bone</a></span>&nbsp;<span class="post-category">收录于 <a href="/categories/python/"><i class="far fa-folder fa-fw"></i>python</a></span></div>
+            <div class="post-meta-line"><i class="far fa-calendar-alt fa-fw"></i>&nbsp;<time datetime="2018-11-12">2018-11-12</time>&nbsp;<i class="fas fa-pencil-alt fa-fw"></i>&nbsp;约 4426 字&nbsp;
+                <i class="far fa-clock fa-fw"></i>&nbsp;预计阅读 9 分钟&nbsp;<span id="/django%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0-%E6%A8%A1%E6%9D%BF%E5%B1%82/" class="leancloud_visitors" data-flag-title="django学习笔记-模板层">
+                        <i class="far fa-eye fa-fw"></i>&nbsp;<span class=leancloud-visitors-count></span>&nbsp;次阅读
+                    </span>&nbsp;</div>
+        </div><div class="details toc" id="toc-static"  kept="">
+                <div class="details-summary toc-title">
+                    <span>目录</span>
+                    <span><i class="details-icon fas fa-angle-right"></i></span>
+                </div>
+                <div class="details-content toc-content" id="toc-content-static"><nav id="TableOfContents">
+  <ul>
+    <li><a href="#模板层">模板层</a>
+      <ul>
+        <li><a href="#模板简介">模板简介</a></li>
+      </ul>
+    </li>
+    <li><a href="#二模板语言的注释">二、模板语言的注释</a></li>
+    <li><a href="#三模板语法之变量">三、模板语法之变量</a></li>
+    <li><a href="#四模板语言之过滤器">四、模板语言之过滤器</a>
+      <ul>
+        <li><a href="#1过滤器总览">1.过滤器总览</a></li>
+        <li><a href="#2常用过滤器">2.常用过滤器</a>
+          <ul>
+            <li><a href="#default">default</a></li>
+            <li><a href="#length">length</a></li>
+            <li><a href="#filesizeformat">filesizeformat</a></li>
+            <li><a href="#date">date</a></li>
+            <li><a href="#slice">slice</a></li>
+            <li><a href="#truncatechars">truncatechars</a></li>
+            <li><a href="#safe">safe</a></li>
+          </ul>
+        </li>
+      </ul>
+    </li>
+    <li><a href="#五模板之标签">五、模板之标签</a>
+      <ul>
+        <li><a href="#1内置标签总览">1.内置标签总览</a></li>
+        <li><a href="#2常用标签">2.常用标签</a>
+          <ul>
+            <li><a href="#for标签">for标签</a></li>
+            <li><a href="#forempty">for&hellip;empty</a></li>
+            <li><a href="#if">if</a></li>
+            <li><a href="#with">with</a></li>
+          </ul>
+        </li>
+      </ul>
+    </li>
+    <li><a href="#六自定义标签和过滤器">六、自定义标签和过滤器</a>
+      <ul>
+        <li><a href="#一前置步骤">（一）、前置步骤</a></li>
+        <li><a href="#二自定义模板过滤器">（二）、自定义模板过滤器</a>
+          <ul>
+            <li><a href="#1编写过滤器">1.编写过滤器</a></li>
+            <li><a href="#2注册过滤器">2.注册过滤器</a></li>
+            <li><a href="#3过滤器的使用方法">3.过滤器的使用方法</a></li>
+          </ul>
+        </li>
+        <li><a href="#三自定义模板标签">（三）、自定义模板标签</a></li>
+      </ul>
+    </li>
+    <li><a href="#七模板继承">七、模板继承</a>
+      <ul>
+        <li><a href="#1模板导入">1.模板导入</a></li>
+        <li><a href="#2子模板中使用">2.子模板中使用</a></li>
+      </ul>
+    </li>
+    <li><a href="#八静态文件相关">八、静态文件相关</a></li>
+  </ul>
+</nav></div>
+            </div><div class="content" id="content"><h2 id="模板层">模板层</h2>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-fallback" data-lang="fallback">将Python嵌入到HTML中。
+</code></pre></td></tr></table>
+</div>
+</div><h3 id="模板简介">模板简介</h3>
+<p>将HTML硬解码到视图并不是那么完美原因如下：</p>
+<ul>
+<li>对页面设计时也需要对python代码进行相应的修改，模板可以不就行python代码修改的情况下变更设计。</li>
+<li>编写python和HTML设计是两项不同的工作，应该明确分工。</li>
+<li>两项同时进行效率最高。</li>
+</ul>
+<p><strong>模板：HTML代码+模板语法</strong></p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-fallback" data-lang="fallback">def current_time(req):
+    # ================================原始的视图函数
+    # import datetime
+    # now=datetime.datetime.now()
+    # html=&#34;&lt;html&gt;&lt;body&gt;现在时刻：&lt;h1&gt;%s.&lt;/h1&gt;&lt;/body&gt;&lt;/html&gt;&#34; %now
+    # return HttpResponse(html)
+    
+    #另一种写法(推荐)
+    import datetime
+    now=datetime.datetime.now()
+    return render(req, &#39;current_datetime.html&#39;, {&#39;current_date&#39;:str(now)[:19]})
+</code></pre></td></tr></table>
+</div>
+</div><p><strong>模板语法的重点：</strong></p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-fallback" data-lang="fallback">变量：{{ 变量名 }}
+	1.深度查询用句点符
+	2.过滤器
+标签：{%  %}
+</code></pre></td></tr></table>
+</div>
+</div><h2 id="二模板语言的注释">二、模板语言的注释</h2>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-fallback" data-lang="fallback">{# this won&#39;t be rendered #}  单行注释
+</code></pre></td></tr></table>
+</div>
+</div><p>注释多行使用comment标签</p>
+<h2 id="三模板语法之变量">三、模板语法之变量</h2>
+<p>在django模板中遍历复杂数据结构的关键是句点字符，语法：{{ 变量名 }}。变量类似于python中的变量。</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-fallback" data-lang="fallback">变量的命名包括任何字母数字以及下划线(&#34;_&#34;)的组合。点(&#34;.&#34;)也有可能会在变量名中出现，不过它有特殊的含义。最重要的是，变量名称中不能有空格或标点符号。
+</code></pre></td></tr></table>
+</div>
+</div><p><strong>views.py:</strong></p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-python" data-lang="python"><span class="n">name</span><span class="o">=</span><span class="s1">&#39;abc&#39;</span>
+<span class="n">age</span><span class="o">=</span><span class="mi">18</span>
+<span class="n">li</span><span class="o">=</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="s1">&#39;3&#39;</span><span class="p">,</span><span class="s1">&#39;4&#39;</span><span class="p">]</span>
+<span class="n">dic</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;name&#39;</span><span class="p">:</span><span class="s1">&#39;abc&#39;</span><span class="p">,</span><span class="s1">&#39;age&#39;</span><span class="p">:</span><span class="mi">18</span><span class="p">,</span><span class="s1">&#39;&#39;</span><span class="n">li</span><span class="p">:[</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">4</span><span class="p">]}</span>
+<span class="k">def</span> <span class="nf">test</span><span class="p">():</span>  <span class="c1">#函数</span>
+    <span class="k">print</span><span class="p">(</span><span class="s1">&#39;abc&#39;</span><span class="p">)</span>
+    <span class="k">return</span> <span class="s1">&#39;abchahahah&#39;</span>
+<span class="k">class</span> <span class="nc">Person</span><span class="p">():</span>
+	<span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">name</span><span class="p">,</span><span class="n">age</span><span class="p">)</span>
+    	<span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="o">=</span><span class="n">name</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">age</span><span class="o">=</span><span class="n">age</span>
+    <span class="k">def</span> <span class="nf">get_name</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">name</span>
+    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">cls_test</span><span class="p">(</span><span class="bp">cls</span><span class="p">):</span>
+        <span class="k">return</span> <span class="s1">&#39;cls&#39;</span>
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">static_test</span><span class="p">():</span>
+        <span class="k">return</span> <span class="s1">&#39;static&#39;</span>
+    <span class="o">---------</span>
+    <span class="c1"># 模板里不支持带参数</span>
+    <span class="k">def</span> <span class="nf">get_name_cs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">ttt</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">name</span>
+    <span class="o">----------</span>
+    
+<span class="n">zfj</span><span class="o">=</span><span class="n">Person</span><span class="p">(</span><span class="s1">&#39;zfj&#39;</span><span class="p">,</span><span class="mi">18</span><span class="p">)</span>
+<span class="n">qer</span><span class="o">=</span><span class="n">Person</span><span class="p">(</span><span class="s1">&#39;qwe&#39;</span><span class="p">,</span><span class="mi">28</span><span class="p">)</span>
+<span class="n">person_list</span><span class="o">=</span><span class="p">[</span><span class="n">zfj</span><span class="p">,</span><span class="n">qwe</span><span class="p">]</span>
+</code></pre></td></tr></table>
+</div>
+</div><p><strong>html：</strong></p>
+<p><strong>相当于print了该变量</strong></p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-html" data-lang="html"><span class="p">&lt;</span><span class="nt">p</span><span class="p">&gt;</span>字符串:{{ name }}<span class="p">&lt;/</span><span class="nt">p</span><span class="p">&gt;</span>
+<span class="p">&lt;</span><span class="nt">p</span><span class="p">&gt;</span>数字:{{ age }}<span class="p">&lt;/</span><span class="nt">p</span><span class="p">&gt;</span>
+<span class="p">&lt;</span><span class="nt">p</span><span class="p">&gt;</span>列表:{{ li }}<span class="p">&lt;/</span><span class="nt">p</span><span class="p">&gt;</span>
+<span class="p">&lt;</span><span class="nt">p</span><span class="p">&gt;</span>元祖:{{ tu }}<span class="p">&lt;/</span><span class="nt">p</span><span class="p">&gt;</span>
+<span class="p">&lt;</span><span class="nt">p</span><span class="p">&gt;</span>字典:{{ dic }}<span class="p">&lt;/</span><span class="nt">p</span><span class="p">&gt;</span>
+<span class="p">&lt;</span><span class="nt">p</span><span class="p">&gt;</span>函数:{{ test }}<span class="p">&lt;/</span><span class="nt">p</span><span class="p">&gt;</span>  {#只写函数名:相当于函数名(),返回函数执行结果#}
+<span class="p">&lt;</span><span class="nt">p</span><span class="p">&gt;</span>对象:{{ zfj }}<span class="p">&lt;/</span><span class="nt">p</span><span class="p">&gt;</span>   {#对象内存地址#}
+</code></pre></td></tr></table>
+</div>
+</div><p><strong>深度查询：</strong></p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span><span class="lnt">8
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-html" data-lang="html"><span class="p">&lt;</span><span class="nt">p</span><span class="p">&gt;</span>列表第1个值:{{ ll.0 }}<span class="p">&lt;/</span><span class="nt">p</span><span class="p">&gt;</span>
+<span class="p">&lt;</span><span class="nt">p</span><span class="p">&gt;</span>列表第4个值:{{ ll.3 }}<span class="p">&lt;/</span><span class="nt">p</span><span class="p">&gt;</span>
+<span class="p">&lt;</span><span class="nt">p</span><span class="p">&gt;</span>字典取值:{{ dic.name }}<span class="p">&lt;/</span><span class="nt">p</span><span class="p">&gt;</span>
+<span class="p">&lt;</span><span class="nt">p</span><span class="p">&gt;</span>字典取列表值:{{ dic.li }}<span class="p">&lt;/</span><span class="nt">p</span><span class="p">&gt;</span>
+<span class="p">&lt;</span><span class="nt">p</span><span class="p">&gt;</span>对象取数据属性:{{ zfj.name }}<span class="p">&lt;/</span><span class="nt">p</span><span class="p">&gt;</span>
+<span class="p">&lt;</span><span class="nt">p</span><span class="p">&gt;</span>对象取绑定给对象的函数属性:{{ zfj.get_name }}<span class="p">&lt;/</span><span class="nt">p</span><span class="p">&gt;</span>
+<span class="p">&lt;</span><span class="nt">p</span><span class="p">&gt;</span>对象取绑定给类的函数属性:{{ zfj.cls_test }}<span class="p">&lt;/</span><span class="nt">p</span><span class="p">&gt;</span>
+<span class="p">&lt;</span><span class="nt">p</span><span class="p">&gt;</span>对象取静态方法:{{ zfj.static_test }}<span class="p">&lt;/</span><span class="nt">p</span><span class="p">&gt;</span>
+</code></pre></td></tr></table>
+</div>
+</div><h2 id="四模板语言之过滤器">四、模板语言之过滤器</h2>
+<p><strong>语法：</strong></p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-fallback" data-lang="fallback">{{变量名|过滤器名称：属性值}}
+</code></pre></td></tr></table>
+</div>
+</div><p>过滤器可以“链接”，一个过滤器的输出应用于下一个过滤器<code>{{text|escape|linebreaks}}</code>,先转移文本内容，然后把文本转成<code>&lt;p&gt;</code>标签。</p>
+<p><strong>注：过滤器参数包含空格，必须用引号抱起来。</strong></p>
+<h3 id="1过滤器总览">1.过滤器总览</h3>
+<table>
+<thead>
+<tr>
+<th>过滤器</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>add</td>
+<td>加法</td>
+</tr>
+<tr>
+<td>addslashes</td>
+<td>添加斜杠</td>
+</tr>
+<tr>
+<td>capfirst</td>
+<td>首字母大写</td>
+</tr>
+<tr>
+<td>center</td>
+<td>文本居中</td>
+</tr>
+<tr>
+<td>cut</td>
+<td>切除字符</td>
+</tr>
+<tr>
+<td>date</td>
+<td>日期格式化</td>
+</tr>
+<tr>
+<td>default</td>
+<td>设置默认值</td>
+</tr>
+<tr>
+<td>default_if_none</td>
+<td>为None设置默认值</td>
+</tr>
+<tr>
+<td>dictsort</td>
+<td>字典排序</td>
+</tr>
+<tr>
+<td>dictsortreversed</td>
+<td>字典反向排序</td>
+</tr>
+<tr>
+<td>divisibleby</td>
+<td>整除判断</td>
+</tr>
+<tr>
+<td>escape</td>
+<td>转义</td>
+</tr>
+<tr>
+<td>escapejs</td>
+<td>转义js代码</td>
+</tr>
+<tr>
+<td>filesizeformat</td>
+<td>文件尺寸人性化显示</td>
+</tr>
+<tr>
+<td>first</td>
+<td>第一个元素</td>
+</tr>
+<tr>
+<td>floatformat</td>
+<td>浮点数格式化</td>
+</tr>
+<tr>
+<td>force_escape</td>
+<td>强制立刻转义</td>
+</tr>
+<tr>
+<td>get_digit</td>
+<td>获取数字</td>
+</tr>
+<tr>
+<td>iriencode</td>
+<td>转换IRI</td>
+</tr>
+<tr>
+<td>join</td>
+<td>字符列表链接</td>
+</tr>
+<tr>
+<td>last</td>
+<td>最后一个</td>
+</tr>
+<tr>
+<td>length</td>
+<td>长度</td>
+</tr>
+<tr>
+<td>length_is</td>
+<td>长度等于</td>
+</tr>
+<tr>
+<td>linebreaks</td>
+<td>行转换</td>
+</tr>
+<tr>
+<td>linebreaksbr</td>
+<td>行转换</td>
+</tr>
+<tr>
+<td>linenumbers</td>
+<td>行号</td>
+</tr>
+<tr>
+<td>ljust</td>
+<td>左对齐</td>
+</tr>
+<tr>
+<td>lower</td>
+<td>小写</td>
+</tr>
+<tr>
+<td>make_list</td>
+<td>分割成字符列表</td>
+</tr>
+<tr>
+<td>phone2numeric</td>
+<td>电话号码</td>
+</tr>
+<tr>
+<td>pluralize</td>
+<td>复数形式</td>
+</tr>
+<tr>
+<td>pprint</td>
+<td>调试</td>
+</tr>
+<tr>
+<td>random</td>
+<td>随机获取</td>
+</tr>
+<tr>
+<td>rjust</td>
+<td>右对齐</td>
+</tr>
+<tr>
+<td>safe</td>
+<td>安全确认</td>
+</tr>
+<tr>
+<td>safeseq</td>
+<td>列表安全确认</td>
+</tr>
+<tr>
+<td>slice</td>
+<td>切片</td>
+</tr>
+<tr>
+<td>slugify</td>
+<td>转换成ASCII</td>
+</tr>
+<tr>
+<td>stringformat</td>
+<td>字符串格式化</td>
+</tr>
+<tr>
+<td>striptags</td>
+<td>去除HTML中的标签</td>
+</tr>
+<tr>
+<td>time</td>
+<td>时间格式化</td>
+</tr>
+<tr>
+<td>timesince</td>
+<td>从何时开始</td>
+</tr>
+<tr>
+<td>timeuntil</td>
+<td>到何时多久</td>
+</tr>
+<tr>
+<td>title</td>
+<td>所有单词首字母大写</td>
+</tr>
+<tr>
+<td>truncatechars</td>
+<td>截断字符</td>
+</tr>
+<tr>
+<td>truncatechars_html</td>
+<td>截断字符</td>
+</tr>
+<tr>
+<td>truncatewords</td>
+<td>截断单词</td>
+</tr>
+<tr>
+<td>truncatewords_html</td>
+<td>截断单词</td>
+</tr>
+<tr>
+<td>unordered_list</td>
+<td>无序列表</td>
+</tr>
+<tr>
+<td>upper</td>
+<td>大写</td>
+</tr>
+<tr>
+<td>urlencode</td>
+<td>转义url</td>
+</tr>
+<tr>
+<td>urlize</td>
+<td>url转成可点击的链接</td>
+</tr>
+<tr>
+<td>urlizetrunc</td>
+<td>urlize的截断方式</td>
+</tr>
+<tr>
+<td>wordcount</td>
+<td>单词计数</td>
+</tr>
+<tr>
+<td>wordwrap</td>
+<td>单词包裹</td>
+</tr>
+<tr>
+<td>yesno</td>
+<td>将True，False和None，映射成字符串‘yes’，‘no’，‘maybe’</td>
+</tr>
+</tbody>
+</table>
+<h3 id="2常用过滤器">2.常用过滤器</h3>
+<h4 id="default">default</h4>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-fallback" data-lang="fallback">如果变量是false或者为空，则使用给定的默认值。
+</code></pre></td></tr></table>
+</div>
+</div><p><code>{{ value|default:'nothing'}}</code></p>
+<h4 id="length">length</h4>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-fallback" data-lang="fallback">返回值的长度，对字符串和列表都起作用
+</code></pre></td></tr></table>
+</div>
+</div><p><code>{{ value|length}}</code>  如果value是<code>[1,2,3,4]</code>,那么输出是4</p>
+<h4 id="filesizeformat">filesizeformat</h4>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-fallback" data-lang="fallback">将值格式化成&#39;人类可读的&#39;文件尺寸。例如：
+{{1024|filesizeformat}}  输出为1kb
+</code></pre></td></tr></table>
+</div>
+</div><h4 id="date">date</h4>
+<p>如果<code>value=datetime.datetime.now()</code></p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-fallback" data-lang="fallback">{{ value|date:&#34;Y-m-d&#34;}}
+</code></pre></td></tr></table>
+</div>
+</div><h4 id="slice">slice</h4>
+<p>切片</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-fallback" data-lang="fallback">{{ name|slice:&#39;0:3:3&#39; }}
+</code></pre></td></tr></table>
+</div>
+</div><h4 id="truncatechars">truncatechars</h4>
+<p>如果字符串多余指定字符数量，多余会被截断，替换成(&quot;&hellip;&quot;)结尾。</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-fallback" data-lang="fallback">{{ value|truncatechars:9}}
+</code></pre></td></tr></table>
+</div>
+</div><h4 id="safe">safe</h4>
+<p>Django模板为了安全默认会对HTML标签和js等语法标签进行转义，有时候我们不希望这些元素被转义，可以通过设置过滤器。</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-fallback" data-lang="fallback">script=&#34;&#39;&lt;script&gt;alert(111)&lt;/script&gt;&#34;
+{{ script|safe }}
+</code></pre></td></tr></table>
+</div>
+</div><h2 id="五模板之标签">五、模板之标签</h2>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-fallback" data-lang="fallback">一些在输出中创建文本，一些通过循环或逻辑来控制流程，一些加载其后的变量将使用到的额外信息到模版中。一些标签需要开始和结束标签 （例如{% tag %} ...标签 内容 ... {% endtag %}）。
+{% tag %}
+</code></pre></td></tr></table>
+</div>
+</div><h3 id="1内置标签总览">1.内置标签总览</h3>
+<table>
+<thead>
+<tr>
+<th>标签</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>autoescape</td>
+<td>自动转义开关</td>
+</tr>
+<tr>
+<td>block</td>
+<td>块引用</td>
+</tr>
+<tr>
+<td>comment</td>
+<td>注释</td>
+</tr>
+<tr>
+<td>csrf_token</td>
+<td>CSRF令牌</td>
+</tr>
+<tr>
+<td>cycle</td>
+<td>循环对象的值</td>
+</tr>
+<tr>
+<td>debug</td>
+<td>调试模式</td>
+</tr>
+<tr>
+<td>extends</td>
+<td>继承模版</td>
+</tr>
+<tr>
+<td>filter</td>
+<td>过滤功能</td>
+</tr>
+<tr>
+<td>firstof</td>
+<td>输出第一个不为False的参数</td>
+</tr>
+<tr>
+<td>for</td>
+<td>循环对象</td>
+</tr>
+<tr>
+<td>for … empty</td>
+<td>带empty说明的循环</td>
+</tr>
+<tr>
+<td>if</td>
+<td>条件判断</td>
+</tr>
+<tr>
+<td>ifequal</td>
+<td>如果等于</td>
+</tr>
+<tr>
+<td>ifnotequal</td>
+<td>如果不等于</td>
+</tr>
+<tr>
+<td>ifchanged</td>
+<td>如果有变化，则..</td>
+</tr>
+<tr>
+<td>include</td>
+<td>导入子模版的内容</td>
+</tr>
+<tr>
+<td>load</td>
+<td>加载标签和过滤器</td>
+</tr>
+<tr>
+<td>lorem</td>
+<td>生成无用的废话</td>
+</tr>
+<tr>
+<td>now</td>
+<td>当前时间</td>
+</tr>
+<tr>
+<td>regroup</td>
+<td>根据对象重组集合</td>
+</tr>
+<tr>
+<td>resetcycle</td>
+<td>重置循环</td>
+</tr>
+<tr>
+<td>spaceless</td>
+<td>去除空白</td>
+</tr>
+<tr>
+<td>templatetag</td>
+<td>转义模版标签符号</td>
+</tr>
+<tr>
+<td>url</td>
+<td>获取url字符串</td>
+</tr>
+<tr>
+<td>verbatim</td>
+<td>禁用模版引擎</td>
+</tr>
+<tr>
+<td>widthratio</td>
+<td>宽度比例</td>
+</tr>
+<tr>
+<td>with</td>
+<td>上下文变量管理器</td>
+</tr>
+</tbody>
+</table>
+<h3 id="2常用标签">2.常用标签</h3>
+<h4 id="for标签">for标签</h4>
+<p>遍历每一个元素</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-django" data-lang="django"><span class="cp">{%</span> <span class="k">for</span> <span class="nv">person</span> <span class="k">in</span> <span class="nv">person_list</span> <span class="cp">%}</span><span class="x">
+</span><span class="x">	&lt;p&gt;</span><span class="cp">{{</span> <span class="nv">person</span> <span class="cp">}}</span><span class="x">&lt;/p&gt;
+</span><span class="x"></span><span class="cp">{%</span> <span class="k">end</span> <span class="nv">for</span><span class="cp">%}</span><span class="x">
+</span></code></pre></td></tr></table>
+</div>
+</div><p>遍历一个字典：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-fallback" data-lang="fallback">{% for k,v in dic.items %}
+	&lt;p&gt;{{ k }}:{{ v }}&lt;/p&gt;
+</code></pre></td></tr></table>
+</div>
+</div><p>下面是Django为for标签内置的一些属性，可以当作变量一样使用<code>{{ }}</code>在模版中使用。</p>
+<ul>
+<li>forloop.counter：循环的当前索引值，从1开始计数；常用于生成一个表格或者列表的序号！</li>
+<li>forloop.counter0：循环的当前索引值，从0开始计数；</li>
+<li>forloop.revcounter： 循环结束的次数（从1开始）</li>
+<li>forloop.revcounter0 循环结束的次数（从0开始）</li>
+<li>forloop.first：判断当前是否循环的第一次，是的话，该变量的值为True。我们经常要为第一行加点特殊的对待，就用得上这个判断了，结合if。</li>
+<li>forloop.last：如果这是最后一次循环，则为真</li>
+<li>forloop.parentloop：对于嵌套循环，返回父循环所在的循环次数。某些场景下，这是个大杀器，能解决你很多头疼的问题。</li>
+</ul>
+<h4 id="forempty">for&hellip;empty</h4>
+<p>for标签带有一个可选的<code>{% empty %}</code>从句，在给出的组是空的或者没有被找到时执行的操作</p>
+<p><strong>注：循环的对象是空，才会走到empty,而不是对象里面的东西为空</strong></p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-django" data-lang="django"><span class="cp">{%</span> <span class="k">for</span> <span class="nv">person</span> <span class="k">in</span> <span class="nv">person_list</span> <span class="cp">%}</span><span class="x">
+</span><span class="x">    &lt;p&gt;</span><span class="cp">{{</span> <span class="nv">person.name</span> <span class="cp">}}</span><span class="x">&lt;/p&gt;
+</span><span class="x">
+</span><span class="x"></span><span class="cp">{%</span> <span class="k">empty</span> <span class="cp">%}</span><span class="x">
+</span><span class="x">    &lt;p&gt;sorry,no person here&lt;/p&gt;
+</span><span class="x"></span><span class="cp">{%</span> <span class="k">endfor</span> <span class="cp">%}</span><span class="x">
+</span></code></pre></td></tr></table>
+</div>
+</div><h4 id="if">if</h4>
+<p><code>{% if %}</code>会对一个变量求值，如果它的值是“True”（存在、不为空、且不是boolean类型的false值），对应的内容块会输出。</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-django" data-lang="django"><span class="cp">{%</span> <span class="k">if</span> <span class="nv">num</span> <span class="o">&gt;</span> <span class="m">100</span> <span class="k">or</span> <span class="nv">num</span> <span class="o">&lt;</span> <span class="m">0</span> <span class="cp">%}</span><span class="x">
+</span><span class="x">    &lt;p&gt;无效&lt;/p&gt;
+</span><span class="x"></span><span class="cp">{%</span> <span class="k">elif</span> <span class="nv">num</span> <span class="o">&gt;</span> <span class="m">80</span> <span class="k">and</span> <span class="nv">num</span> <span class="o">&lt;</span> <span class="m">100</span> <span class="cp">%}</span><span class="x">
+</span><span class="x">    &lt;p&gt;优秀&lt;/p&gt;
+</span><span class="x"></span><span class="cp">{%</span> <span class="k">else</span> <span class="cp">%}</span><span class="x">
+</span><span class="x">    &lt;p&gt;凑活吧&lt;/p&gt;
+</span><span class="x"></span><span class="cp">{%</span> <span class="k">endif</span> <span class="cp">%}</span><span class="x">
+</span></code></pre></td></tr></table>
+</div>
+</div><p><strong>注：在if标签中使用括号是错误的语法，这点不同于Pythonif语句支持 ，优先级可以使用if嵌套。if支持and 、or、==、&gt;、&lt;、!=、&lt;=、&gt;=、in、not in、is、is not判断。</strong></p>
+<h4 id="with">with</h4>
+<p>使用一个简单地名字缓存一个复杂的变量，当你需要使用一个“昂贵的”方法（比如访问数据库）很多次的时候是非常有用的</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-django" data-lang="django"><span class="cp">{%</span> <span class="k">with</span> <span class="nv">total</span><span class="o">=</span><span class="nv">business.employees.count</span> <span class="cp">%}</span><span class="x">
+</span><span class="x">    </span><span class="cp">{{</span> <span class="nv">total</span> <span class="cp">}}</span><span class="x"> employee</span><span class="cp">{{</span> <span class="nv">total</span><span class="o">|</span><span class="nf">pluralize</span> <span class="cp">}}</span><span class="x">
+</span><span class="x"></span><span class="cp">{%</span> <span class="k">endwith</span> <span class="cp">%}</span><span class="x">
+</span></code></pre></td></tr></table>
+</div>
+</div><h2 id="六自定义标签和过滤器">六、自定义标签和过滤器</h2>
+<p>Django为我们提供了自定义的机制，可以通过使用Python代码，自定义标签和过滤器来扩展模板引擎，然后使用{% load %}标签。</p>
+<h3 id="一前置步骤">（一）、前置步骤</h3>
+<ol>
+<li>
+<p>在settings中的<code>INSTALLED_APPS</code>配置当前app，不然django无法找到自定义的simple_tag.</p>
+</li>
+<li>
+<p>在app中新建一个<code>templatetags</code>包(名字固定)，与views.py、models.py等文件在同一目录下</p>
+<p><strong>注：添加templatetags包后，需要重新启动服务器，然后才能在模板中使用标签或过滤器</strong></p>
+</li>
+<li>
+<p>创建任意 .py 文件，如：my_tags.py</p>
+</li>
+<li>
+<p>要在模块内自定义标签，首先，<strong>这个模块必须包含一个名为register的变量，它是template.Library的一个实例</strong>，所有的标签和过滤器都是在其中注册的。 所以把如下的内容放在你的模块的顶部：</p>
+</li>
+</ol>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-fallback" data-lang="fallback">from django.template import Library
+register = Library()
+</code></pre></td></tr></table>
+</div>
+</div><p>templatetags包中放多少个模块没有限制。只需要记住<code>{% load xxx %}</code>将会载入给定模块名中的标签/过滤器，而不是app中所有的标签和过滤器。</p>
+<h3 id="二自定义模板过滤器">（二）、自定义模板过滤器</h3>
+<h4 id="1编写过滤器">1.编写过滤器</h4>
+<p>自定义过滤器就是一个带有一个或两个参数的python函数</p>
+<p><strong>注：函数的第一个参数是要过滤的对象，第二个是自定义参数，函数一共只能有两个参数。</strong></p>
+<ul>
+<li>变量的值：不一定是字符串形式</li>
+<li>可以有一个初始值，或者不需要这个参数</li>
+</ul>
+<p>例子：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-python" data-lang="python"><span class="k">def</span> <span class="nf">filter_multi</span><span class="p">(</span><span class="n">v1</span><span class="p">,</span><span class="n">v2</span><span class="p">):</span>
+    <span class="k">return</span>  <span class="n">v1</span> <span class="o">*</span> <span class="n">v2</span>
+</code></pre></td></tr></table>
+</div>
+</div><h4 id="2注册过滤器">2.注册过滤器</h4>
+<p>定义好过滤器函数之后，需要注册，方法是调用<code>register.filter</code></p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-fallback" data-lang="fallback">register.filter(&#39;filter_multi&#39;,filter_multi)
+</code></pre></td></tr></table>
+</div>
+</div><p><code>Library.filter()</code>方法需要两个参数：</p>
+<ul>
+<li>过滤器的名称：一个字符串对象</li>
+<li>编译的函数 :你刚才写的过滤器函数</li>
+</ul>
+<p>还可以把<code>register.filter()</code>用作装饰器，以如下的方式注册过滤器：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-fallback" data-lang="fallback">@register.filter(name=&#39;yyy&#39;)
+注：没有声明name参数，Django将使用函数名作为过滤器的名字。
+</code></pre></td></tr></table>
+</div>
+</div><h4 id="3过滤器的使用方法">3.过滤器的使用方法</h4>
+<ol>
+<li>
+<p>在要使用自定义过滤器的模板中导入创建的py文件。</p>
+<p>语法：<code>{% load 文件名 %}</code></p>
+</li>
+<li>
+<p>要使用的地方。<code>{{'abc'|yyy:'qwe'}}</code> 结果输出abcqwe</p>
+</li>
+</ol>
+<h3 id="三自定义模板标签">（三）、自定义模板标签</h3>
+<p>除了装饰器，其它步骤与自定义过滤器相似。</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-python" data-lang="python"><span class="nd">@register.simple_tag</span><span class="p">()</span>
+</code></pre></td></tr></table>
+</div>
+</div><p><strong>过滤器只能有两个参数，自定义标签可以传多个值，空格传值。</strong></p>
+<p><strong>注：过滤器可以用在if判断中，标签不能</strong></p>
+<h2 id="七模板继承">七、模板继承</h2>
+<p>模版继承可以让您创建一个基本的“骨架”模版，它包含您站点中的全部元素，并且可以定义能够被子模版覆盖的 blocks 。</p>
+<h3 id="1模板导入">1.模板导入</h3>
+<p>语法：{% include'模板名称&rsquo; %}</p>
+<p>如：{% include &lsquo;base.html&rsquo; %}</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-html" data-lang="html"><span class="cp">&lt;!DOCTYPE html&gt;</span>
+<span class="p">&lt;</span><span class="nt">html</span> <span class="na">lang</span><span class="o">=</span><span class="s">&#34;en&#34;</span><span class="p">&gt;</span>
+<span class="p">&lt;</span><span class="nt">head</span><span class="p">&gt;</span>
+    <span class="p">&lt;</span><span class="nt">link</span> <span class="na">rel</span><span class="o">=</span><span class="s">&#34;stylesheet&#34;</span> <span class="na">href</span><span class="o">=</span><span class="s">&#34;style.css&#34;</span><span class="p">/&gt;</span>
+    <span class="p">&lt;</span><span class="nt">title</span><span class="p">&gt;</span>{% block title %}My amazing site{% endblock %}<span class="p">&lt;/</span><span class="nt">title</span><span class="p">&gt;</span>
+<span class="p">&lt;/</span><span class="nt">head</span><span class="p">&gt;</span>
+
+<span class="p">&lt;</span><span class="nt">body</span><span class="p">&gt;</span>
+<span class="p">&lt;</span><span class="nt">div</span> <span class="na">id</span><span class="o">=</span><span class="s">&#34;sidebar&#34;</span><span class="p">&gt;</span>
+    {% block sidebar %}
+        <span class="p">&lt;</span><span class="nt">ul</span><span class="p">&gt;</span>
+            <span class="p">&lt;</span><span class="nt">li</span><span class="p">&gt;&lt;</span><span class="nt">a</span> <span class="na">href</span><span class="o">=</span><span class="s">&#34;/&#34;</span><span class="p">&gt;</span>Home<span class="p">&lt;/</span><span class="nt">a</span><span class="p">&gt;&lt;/</span><span class="nt">li</span><span class="p">&gt;</span>
+            <span class="p">&lt;</span><span class="nt">li</span><span class="p">&gt;&lt;</span><span class="nt">a</span> <span class="na">href</span><span class="o">=</span><span class="s">&#34;/blog/&#34;</span><span class="p">&gt;</span>Blog<span class="p">&lt;/</span><span class="nt">a</span><span class="p">&gt;&lt;/</span><span class="nt">li</span><span class="p">&gt;</span>
+        <span class="p">&lt;/</span><span class="nt">ul</span><span class="p">&gt;</span>
+    {% endblock %}
+<span class="p">&lt;/</span><span class="nt">div</span><span class="p">&gt;</span>
+
+<span class="p">&lt;</span><span class="nt">div</span> <span class="na">id</span><span class="o">=</span><span class="s">&#34;content&#34;</span><span class="p">&gt;</span>
+    {% block content %}{% endblock %}
+<span class="p">&lt;/</span><span class="nt">div</span><span class="p">&gt;</span>
+<span class="p">&lt;/</span><span class="nt">body</span><span class="p">&gt;</span>
+<span class="p">&lt;/</span><span class="nt">html</span><span class="p">&gt;</span>
+</code></pre></td></tr></table>
+</div>
+</div><p>它定义了一个可以用于两列排版页面的简单HTML骨架。“子模版”的工作是用它们的内容填充空的blocks。</p>
+<h3 id="2子模板中使用">2.子模板中使用</h3>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-fallback" data-lang="fallback">语法:
+{% block名字 %}
+	子模板的内容
+{% endblock %}
+</code></pre></td></tr></table>
+</div>
+</div><div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-html" data-lang="html">{% block content %}
+    <span class="p">&lt;</span><span class="nt">p</span><span class="p">&gt;</span>这是子的区域<span class="p">&lt;/</span><span class="nt">p</span><span class="p">&gt;</span>
+    <span class="p">&lt;</span><span class="nt">p</span><span class="p">&gt;</span>这是子的区域<span class="p">&lt;/</span><span class="nt">p</span><span class="p">&gt;</span>
+    <span class="p">&lt;</span><span class="nt">p</span><span class="p">&gt;</span>这是子的区域<span class="p">&lt;/</span><span class="nt">p</span><span class="p">&gt;</span>
+    <span class="p">&lt;</span><span class="nt">p</span><span class="p">&gt;</span>这是子的区域<span class="p">&lt;/</span><span class="nt">p</span><span class="p">&gt;</span>
+{% endblock content%}
+</code></pre></td></tr></table>
+</div>
+</div><p><strong>注：</strong></p>
+<ul>
+<li>如果在模板中使用<code>{% extends %}</code>标签，它<strong>必须</strong>是模板中的第一个标签</li>
+<li>在base模板中设置越多的<code>{% block %}</code>标签越好，子模板不必定义全部父模板中的blocks</li>
+<li>如果发现有大量的模板存在重复内容，可以定义在父模板的{% block %}中。</li>
+<li>不能再一个模板中定义多个相同名字的block标签</li>
+<li>为了更好的可读性，可以给<code>{% endblock %}</code>设置一个名字</li>
+</ul>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-django" data-lang="django"><span class="cp">{%</span> <span class="k">block</span> <span class="nv">content</span> <span class="cp">%}</span><span class="x">
+</span><span class="x"></span><span class="cp">{%</span> <span class="k">endblock</span> <span class="nv">content</span><span class="cp">%}</span><span class="x">
+</span></code></pre></td></tr></table>
+</div>
+</div><h2 id="八静态文件相关">八、静态文件相关</h2>
+<ol>
+<li>
+<p>写死静态文件:<link rel="stylesheet" href="/static/css/mycss.css"></p>
+</li>
+<li>
+<p>使用 static标签函数:</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-fallback" data-lang="fallback">{% load static %}
+&lt;link rel=&#34;stylesheet&#34; href=&#34;{% static &#39;css/mycss.css&#39; %}&#34;&gt;
+</code></pre></td></tr></table>
+</div>
+</div></li>
+<li>
+<p>使用get_static_prefix 标签</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-fallback" data-lang="fallback">{% load static %}
+&lt;link rel=&#34;stylesheet&#34; href=&#34;{% get_static_prefix %}css/mycss.css&#34;&gt;
+</code></pre></td></tr></table>
+</div>
+</div></li>
+</ol>
+</div><div class="post-footer" id="post-footer">
+    <div class="post-info">
+        <div class="post-info-line">
+            <div class="post-info-mod">
+                <span>更新于 2018-11-12</span>
+            </div>
+            <div class="post-info-license"></div>
+        </div>
+        <div class="post-info-line">
+            <div class="post-info-md"><span>
+                            <a class="link-to-markdown" href="/django%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0-%E6%A8%A1%E6%9D%BF%E5%B1%82/index.md" target="_blank">阅读原始文档</a>
+                        </span></div>
+            <div class="post-info-share">
+                <span><a href="javascript:void(0);" title="分享到 Twitter" data-sharer="twitter" data-url="http://101.35.190.67/django%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0-%E6%A8%A1%E6%9D%BF%E5%B1%82/" data-title="django学习笔记-模板层" data-via="xxxx" data-hashtags="python,django"><i class="fab fa-twitter fa-fw"></i></a><a href="javascript:void(0);" title="分享到 Facebook" data-sharer="facebook" data-url="http://101.35.190.67/django%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0-%E6%A8%A1%E6%9D%BF%E5%B1%82/" data-hashtag="python"><i class="fab fa-facebook-square fa-fw"></i></a><a href="javascript:void(0);" title="分享到 WhatsApp" data-sharer="whatsapp" data-url="http://101.35.190.67/django%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0-%E6%A8%A1%E6%9D%BF%E5%B1%82/" data-title="django学习笔记-模板层" data-web><i class="fab fa-whatsapp fa-fw"></i></a><a href="javascript:void(0);" title="分享到 Line" data-sharer="line" data-url="http://101.35.190.67/django%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0-%E6%A8%A1%E6%9D%BF%E5%B1%82/" data-title="django学习笔记-模板层"><i data-svg-src="/lib/simple-icons/icons/line.min.svg"></i></a><a href="javascript:void(0);" title="分享到 微博" data-sharer="weibo" data-url="http://101.35.190.67/django%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0-%E6%A8%A1%E6%9D%BF%E5%B1%82/" data-title="django学习笔记-模板层"><i class="fab fa-weibo fa-fw"></i></a><a href="javascript:void(0);" title="分享到 Myspace" data-sharer="myspace" data-url="http://101.35.190.67/django%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0-%E6%A8%A1%E6%9D%BF%E5%B1%82/" data-title="django学习笔记-模板层" data-description=""><i data-svg-src="/lib/simple-icons/icons/myspace.min.svg"></i></a><a href="javascript:void(0);" title="分享到 Blogger" data-sharer="blogger" data-url="http://101.35.190.67/django%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0-%E6%A8%A1%E6%9D%BF%E5%B1%82/" data-title="django学习笔记-模板层" data-description=""><i class="fab fa-blogger fa-fw"></i></a><a href="javascript:void(0);" title="分享到 Evernote" data-sharer="evernote" data-url="http://101.35.190.67/django%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0-%E6%A8%A1%E6%9D%BF%E5%B1%82/" data-title="django学习笔记-模板层"><i class="fab fa-evernote fa-fw"></i></a></span>
+            </div>
+        </div>
+    </div>
+
+    <div class="post-info-more">
+        <section class="post-tags"><i class="fas fa-tags fa-fw"></i>&nbsp;<a href="/tags/python/">python</a>,&nbsp;<a href="/tags/django/">django</a></section>
+        <section>
+            <span><a href="javascript:void(0);" onclick="window.history.back();">返回</a></span>&nbsp;|&nbsp;<span><a href="/">主页</a></span>
+        </section>
+    </div>
+
+    <div class="post-nav"><a href="/django-%E8%A7%86%E5%9B%BE%E5%B1%82view/" class="prev" rel="prev" title="Django-视图层(view)"><i class="fas fa-angle-left fa-fw"></i>Django-视图层(view)</a>
+            <a href="/django-orm-%E5%8D%95%E8%A1%A8%E6%93%8D%E4%BD%9C/" class="next" rel="next" title="Django-ORM-单表操作">Django-ORM-单表操作<i class="fas fa-angle-right fa-fw"></i></a></div>
+</div>
+<div id="comments"><div id="valine" class="comment"></div><noscript>
+                Please enable JavaScript to view the comments powered by <a href="https://valine.js.org/">Valine</a>.
+            </noscript></div></article></div>
+            </main><footer class="footer">
+        <div class="footer-container"><div class="footer-line">由 <a href="https://gohugo.io/" target="_blank" rel="noopener noreffer" title="Hugo 0.68.3">Hugo</a> 强力驱动 | 主题 - <a href="https://github.com/dillonzq/LoveIt" target="_blank" rel="noopener noreffer" title="LoveIt 0.2.10"><i class="far fa-kiss-wink-heart fa-fw"></i> LoveIt</a>
+                </div><div class="footer-line"><i class="far fa-copyright fa-fw"></i><span itemprop="copyrightYear">2019 - 2022</span><span class="author" itemprop="copyrightHolder">&nbsp;<a href="/" target="_blank">bone</a></span>&nbsp;|&nbsp;<span class="license"><a rel="license external nofollow noopener noreffer" href="https://creativecommons.org/licenses/by-nc/4.0/" target="_blank">CC BY-NC 4.0</a></span></div>
+        </div>
+    </footer></div>
+
+        <div id="fixed-buttons"><a href="#" id="back-to-top" class="fixed-button" title="回到顶部">
+                <i class="fas fa-arrow-up fa-fw"></i>
+            </a><a href="#" id="view-comments" class="fixed-button" title="查看评论">
+                <i class="fas fa-comment fa-fw"></i>
+            </a>
+        </div><link rel="stylesheet" href="/lib/valine/valine.min.css"><link rel="stylesheet" href="/lib/katex/katex.min.css"><link rel="stylesheet" href="/lib/katex/copy-tex.min.css"><link rel="stylesheet" href="/lib/cookieconsent/cookieconsent.min.css"><script type="text/javascript" src="/lib/valine/Valine.min.js"></script><script type="text/javascript" src="/lib/smooth-scroll/smooth-scroll.min.js"></script><script type="text/javascript" src="/lib/autocomplete/autocomplete.min.js"></script><script type="text/javascript" src="/lib/lunr/lunr.min.js"></script><script type="text/javascript" src="/lib/lunr/lunr.stemmer.support.min.js"></script><script type="text/javascript" src="/lib/lunr/lunr.zh.min.js"></script><script type="text/javascript" src="/lib/lazysizes/lazysizes.min.js"></script><script type="text/javascript" src="/lib/twemoji/twemoji.min.js"></script><script type="text/javascript" src="/lib/clipboard/clipboard.min.js"></script><script type="text/javascript" src="/lib/sharer/sharer.min.js"></script><script type="text/javascript" src="/lib/typeit/typeit.min.js"></script><script type="text/javascript" src="/lib/katex/katex.min.js"></script><script type="text/javascript" src="/lib/katex/auto-render.min.js"></script><script type="text/javascript" src="/lib/katex/copy-tex.min.js"></script><script type="text/javascript" src="/lib/katex/mhchem.min.js"></script><script type="text/javascript" src="/lib/cookieconsent/cookieconsent.min.js"></script><script type="text/javascript">window.config={"code":{"copyTitle":"复制到剪贴板","maxShownLines":10},"comment":{"valine":{"appId":"","appKey":"","avatar":"mp","el":"#valine","emojiCDN":"https://cdn.jsdelivr.net/npm/emoji-datasource-google@5.0.1/img/google/64/","emojiMaps":{"100":"1f4af.png","alien":"1f47d.png","anger":"1f4a2.png","angry":"1f620.png","anguished":"1f627.png","astonished":"1f632.png","black_heart":"1f5a4.png","blue_heart":"1f499.png","blush":"1f60a.png","bomb":"1f4a3.png","boom":"1f4a5.png","broken_heart":"1f494.png","brown_heart":"1f90e.png","clown_face":"1f921.png","cold_face":"1f976.png","cold_sweat":"1f630.png","confounded":"1f616.png","confused":"1f615.png","cry":"1f622.png","crying_cat_face":"1f63f.png","cupid":"1f498.png","dash":"1f4a8.png","disappointed":"1f61e.png","disappointed_relieved":"1f625.png","dizzy":"1f4ab.png","dizzy_face":"1f635.png","drooling_face":"1f924.png","exploding_head":"1f92f.png","expressionless":"1f611.png","face_vomiting":"1f92e.png","face_with_cowboy_hat":"1f920.png","face_with_hand_over_mouth":"1f92d.png","face_with_head_bandage":"1f915.png","face_with_monocle":"1f9d0.png","face_with_raised_eyebrow":"1f928.png","face_with_rolling_eyes":"1f644.png","face_with_symbols_on_mouth":"1f92c.png","face_with_thermometer":"1f912.png","fearful":"1f628.png","flushed":"1f633.png","frowning":"1f626.png","ghost":"1f47b.png","gift_heart":"1f49d.png","green_heart":"1f49a.png","grimacing":"1f62c.png","grin":"1f601.png","grinning":"1f600.png","hankey":"1f4a9.png","hear_no_evil":"1f649.png","heart":"2764-fe0f.png","heart_decoration":"1f49f.png","heart_eyes":"1f60d.png","heart_eyes_cat":"1f63b.png","heartbeat":"1f493.png","heartpulse":"1f497.png","heavy_heart_exclamation_mark_ornament":"2763-fe0f.png","hole":"1f573-fe0f.png","hot_face":"1f975.png","hugging_face":"1f917.png","hushed":"1f62f.png","imp":"1f47f.png","innocent":"1f607.png","japanese_goblin":"1f47a.png","japanese_ogre":"1f479.png","joy":"1f602.png","joy_cat":"1f639.png","kiss":"1f48b.png","kissing":"1f617.png","kissing_cat":"1f63d.png","kissing_closed_eyes":"1f61a.png","kissing_heart":"1f618.png","kissing_smiling_eyes":"1f619.png","laughing":"1f606.png","left_speech_bubble":"1f5e8-fe0f.png","love_letter":"1f48c.png","lying_face":"1f925.png","mask":"1f637.png","money_mouth_face":"1f911.png","nauseated_face":"1f922.png","nerd_face":"1f913.png","neutral_face":"1f610.png","no_mouth":"1f636.png","open_mouth":"1f62e.png","orange_heart":"1f9e1.png","partying_face":"1f973.png","pensive":"1f614.png","persevere":"1f623.png","pleading_face":"1f97a.png","pouting_cat":"1f63e.png","purple_heart":"1f49c.png","rage":"1f621.png","relaxed":"263a-fe0f.png","relieved":"1f60c.png","revolving_hearts":"1f49e.png","right_anger_bubble":"1f5ef-fe0f.png","robot_face":"1f916.png","rolling_on_the_floor_laughing":"1f923.png","scream":"1f631.png","scream_cat":"1f640.png","see_no_evil":"1f648.png","shushing_face":"1f92b.png","skull":"1f480.png","skull_and_crossbones":"2620-fe0f.png","sleeping":"1f634.png","sleepy":"1f62a.png","slightly_frowning_face":"1f641.png","slightly_smiling_face":"1f642.png","smile":"1f604.png","smile_cat":"1f638.png","smiley":"1f603.png","smiley_cat":"1f63a.png","smiling_face_with_3_hearts":"1f970.png","smiling_imp":"1f608.png","smirk":"1f60f.png","smirk_cat":"1f63c.png","sneezing_face":"1f927.png","sob":"1f62d.png","space_invader":"1f47e.png","sparkling_heart":"1f496.png","speak_no_evil":"1f64a.png","speech_balloon":"1f4ac.png","star-struck":"1f929.png","stuck_out_tongue":"1f61b.png","stuck_out_tongue_closed_eyes":"1f61d.png","stuck_out_tongue_winking_eye":"1f61c.png","sunglasses":"1f60e.png","sweat":"1f613.png","sweat_drops":"1f4a6.png","sweat_smile":"1f605.png","thinking_face":"1f914.png","thought_balloon":"1f4ad.png","tired_face":"1f62b.png","triumph":"1f624.png","two_hearts":"1f495.png","unamused":"1f612.png","upside_down_face":"1f643.png","weary":"1f629.png","white_frowning_face":"2639-fe0f.png","white_heart":"1f90d.png","wink":"1f609.png","woozy_face":"1f974.png","worried":"1f61f.png","yawning_face":"1f971.png","yellow_heart":"1f49b.png","yum":"1f60b.png","zany_face":"1f92a.png","zipper_mouth_face":"1f910.png","zzz":"1f4a4.png"},"enableQQ":true,"highlight":true,"lang":"zh-cn","pageSize":10,"placeholder":"你的评论 ...","recordIP":true,"visitor":true}},"cookieconsent":{"content":{"dismiss":"同意","link":"了解更多","message":"本网站使用 Cookies 来改善您的浏览体验."},"enable":true,"palette":{"button":{"background":"#f0f0f0"},"popup":{"background":"#1aa3ff"}},"theme":"edgeless"},"data":{"id-1":"bone的博客","id-2":"bone的博客"},"math":{"delimiters":[{"display":true,"left":"$$","right":"$$"},{"display":true,"left":"\\[","right":"\\]"},{"display":false,"left":"$","right":"$"},{"display":false,"left":"\\(","right":"\\)"}],"strict":false},"search":{"highlightTag":"em","lunrIndexURL":"/index.json","lunrLanguageCode":"zh","lunrSegmentitURL":"/lib/lunr/lunr.segmentit.js","maxResultLength":10,"noResultsFound":"没有找到结果","snippetLength":50,"type":"lunr"},"twemoji":true,"typeit":{"cursorChar":"|","cursorSpeed":1000,"data":{"id-1":["id-1"],"id-2":["id-2"]},"duration":-1,"speed":100}};</script><script type="text/javascript" src="/js/theme.min.js"></script></body>
+</html>

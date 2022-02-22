@@ -1,0 +1,537 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="robots" content="noodp" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge, chrome=1">
+        <title>Django-路由控制 - mine blog</title><meta name="Description" content="这是我的全新 Hugo 网站"><meta property="og:title" content="Django-路由控制" />
+<meta property="og:description" content="Django-路由控制 一、URL路由基础 1 2 URL是web服务的路口，用户通过浏览器发送过来的任何请求都会被发送到一个指定的URL地址里，然" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="http://101.35.190.67/django-%E8%B7%AF%E7%94%B1%E6%8E%A7%E5%88%B6/" />
+<meta property="og:image" content="https://blogimg-1256896917.cos.ap-shanghai.myqcloud.com/blog/2022-02-22-favicon.ico"/>
+<meta property="article:published_time" content="2018-11-07T09:28:00+00:00" />
+<meta property="article:modified_time" content="2018-11-07T09:28:00+00:00" />
+<meta name="twitter:card" content="summary_large_image"/>
+<meta name="twitter:image" content="https://blogimg-1256896917.cos.ap-shanghai.myqcloud.com/blog/2022-02-22-favicon.ico"/>
+
+<meta name="twitter:title" content="Django-路由控制"/>
+<meta name="twitter:description" content="Django-路由控制 一、URL路由基础 1 2 URL是web服务的路口，用户通过浏览器发送过来的任何请求都会被发送到一个指定的URL地址里，然"/>
+<meta name="application-name" content="mine blog">
+<meta name="apple-mobile-web-app-title" content="mine blog"><link rel="shortcut icon" type="image/x-icon" href="/favicon.ico" />
+        <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+        <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png"><link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"><link rel="manifest" href="/site.webmanifest"><link rel="canonical" href="http://101.35.190.67/django-%E8%B7%AF%E7%94%B1%E6%8E%A7%E5%88%B6/" /><link rel="prev" href="http://101.35.190.67/django%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0http%E5%8D%8F%E8%AE%AE%E4%B8%8Edjango%E5%AE%89%E8%A3%85/" /><link rel="next" href="http://101.35.190.67/django-%E8%A7%86%E5%9B%BE%E5%B1%82view/" /><link rel="stylesheet" href="/lib/normalize/normalize.min.css"><link rel="stylesheet" href="/css/style.min.css"><link rel="stylesheet" href="/lib/fontawesome-free/all.min.css"><link rel="stylesheet" href="/lib/animate/animate.min.css"><script type="application/ld+json">
+    {
+        "@context": "http://schema.org",
+        "@type": "BlogPosting",
+        "headline": "Django-路由控制",
+        "inLanguage": "zh-CN",
+        "mainEntityOfPage": {
+            "@type": "WebPage",
+            "@id": "http:\/\/101.35.190.67\/django-%E8%B7%AF%E7%94%B1%E6%8E%A7%E5%88%B6\/"
+        },"genre": "posts","keywords": "python, django","wordcount":  2975 ,
+        "url": "http:\/\/101.35.190.67\/django-%E8%B7%AF%E7%94%B1%E6%8E%A7%E5%88%B6\/","datePublished": "2018-11-07T09:28:00+00:00","dateModified": "2018-11-07T09:28:00+00:00","publisher": {
+            "@type": "Organization",
+            "name": ""},"author": {
+                "@type": "Person",
+                "name": "bone"
+            },"description": ""
+    }
+    </script></head>
+    <body header-desktop="fixed" header-mobile="auto"><script type="text/javascript">(window.localStorage && localStorage.getItem('theme') ? localStorage.getItem('theme') === 'dark' : ('dark' === 'auto' ? window.matchMedia('(prefers-color-scheme: dark)').matches : 'dark' === 'dark')) && document.body.setAttribute('theme', 'dark');</script>
+
+        <div id="mask"></div><div class="wrapper"><header class="desktop" id="header-desktop">
+    <div class="header-wrapper">
+        <div class="header-title">
+            <a href="/" title="mine blog"><img
+        class="lazyload logo"
+        src="/svg/loading.min.svg"
+        data-src="https://blogimg-1256896917.cos.ap-shanghai.myqcloud.com/blog/2022-02-22-favicon.ico"
+        data-srcset="https://blogimg-1256896917.cos.ap-shanghai.myqcloud.com/blog/2022-02-22-favicon.ico, https://blogimg-1256896917.cos.ap-shanghai.myqcloud.com/blog/2022-02-22-favicon.ico 1.5x, https://blogimg-1256896917.cos.ap-shanghai.myqcloud.com/blog/2022-02-22-favicon.ico 2x"
+        data-sizes="auto"
+        alt="https://blogimg-1256896917.cos.ap-shanghai.myqcloud.com/blog/2022-02-22-favicon.ico"
+        title="https://blogimg-1256896917.cos.ap-shanghai.myqcloud.com/blog/2022-02-22-favicon.ico" /><span id="id-1" class="typeit"></span></a>
+        </div>
+        <div class="menu">
+            <div class="menu-inner"><a class="menu-item" href="/posts/"> 文章 </a><a class="menu-item" href="/tags/"> 标签 </a><a class="menu-item" href="/categories/"> 分类 </a><a class="menu-item" href="/about/"> 关于 </a><span class="menu-item delimiter"></span><span class="menu-item search" id="search-desktop">
+                        <input type="text" placeholder="搜索文章标题或内容..." id="search-input-desktop">
+                        <a href="javascript:void(0);" class="search-button search-toggle" id="search-toggle-desktop" title="搜索">
+                            <i class="fas fa-search fa-fw"></i>
+                        </a>
+                        <a href="javascript:void(0);" class="search-button search-clear" id="search-clear-desktop" title="清空">
+                            <i class="fas fa-times-circle fa-fw"></i>
+                        </a>
+                        <span class="search-button search-loading" id="search-loading-desktop">
+                            <i class="fas fa-spinner fa-fw fa-spin"></i>
+                        </span>
+                    </span><a href="javascript:void(0);" class="menu-item theme-switch" title="切换主题">
+                    <i class="fas fa-adjust fa-fw"></i>
+                </a>
+            </div>
+        </div>
+    </div>
+</header><header class="mobile" id="header-mobile">
+    <div class="header-container">
+        <div class="header-wrapper">
+            <div class="header-title">
+                <a href="/" title="mine blog"><img
+        class="lazyload logo"
+        src="/svg/loading.min.svg"
+        data-src="https://blogimg-1256896917.cos.ap-shanghai.myqcloud.com/blog/2022-02-22-favicon.ico"
+        data-srcset="https://blogimg-1256896917.cos.ap-shanghai.myqcloud.com/blog/2022-02-22-favicon.ico, https://blogimg-1256896917.cos.ap-shanghai.myqcloud.com/blog/2022-02-22-favicon.ico 1.5x, https://blogimg-1256896917.cos.ap-shanghai.myqcloud.com/blog/2022-02-22-favicon.ico 2x"
+        data-sizes="auto"
+        alt="https://blogimg-1256896917.cos.ap-shanghai.myqcloud.com/blog/2022-02-22-favicon.ico"
+        title="https://blogimg-1256896917.cos.ap-shanghai.myqcloud.com/blog/2022-02-22-favicon.ico" /><span id="id-2" class="typeit"></span></a>
+            </div>
+            <div class="menu-toggle" id="menu-toggle-mobile">
+                <span></span><span></span><span></span>
+            </div>
+        </div>
+        <div class="menu" id="menu-mobile"><div class="search-wrapper">
+                    <div class="search mobile" id="search-mobile">
+                        <input type="text" placeholder="搜索文章标题或内容..." id="search-input-mobile">
+                        <a href="javascript:void(0);" class="search-button search-toggle" id="search-toggle-mobile" title="搜索">
+                            <i class="fas fa-search fa-fw"></i>
+                        </a>
+                        <a href="javascript:void(0);" class="search-button search-clear" id="search-clear-mobile" title="清空">
+                            <i class="fas fa-times-circle fa-fw"></i>
+                        </a>
+                        <span class="search-button search-loading" id="search-loading-mobile">
+                            <i class="fas fa-spinner fa-fw fa-spin"></i>
+                        </span>
+                    </div>
+                    <a href="javascript:void(0);" class="search-cancel" id="search-cancel-mobile">
+                        取消
+                    </a>
+                </div><a class="menu-item" href="/posts/" title="">文章</a><a class="menu-item" href="/tags/" title="">标签</a><a class="menu-item" href="/categories/" title="">分类</a><a class="menu-item" href="/about/" title="">关于</a><a href="javascript:void(0);" class="menu-item theme-switch" title="切换主题">
+                <i class="fas fa-adjust fa-fw"></i>
+            </a></div>
+    </div>
+</header>
+<div class="search-dropdown desktop">
+    <div id="search-dropdown-desktop"></div>
+</div>
+<div class="search-dropdown mobile">
+    <div id="search-dropdown-mobile"></div>
+</div>
+<main class="main">
+                <div class="container"><div class="toc" id="toc-auto">
+            <h2 class="toc-title">目录</h2>
+            <div class="toc-content" id="toc-content-auto"></div>
+        </div><article class="page single"><h1 class="single-title animated flipInX">Django-路由控制</h1><div class="post-meta">
+            <div class="post-meta-line"><span class="post-author"><a href="/" title="Author" rel=" author" class="author"><i class="fas fa-user-circle fa-fw"></i>bone</a></span>&nbsp;<span class="post-category">收录于 <a href="/categories/python/"><i class="far fa-folder fa-fw"></i>python</a></span></div>
+            <div class="post-meta-line"><i class="far fa-calendar-alt fa-fw"></i>&nbsp;<time datetime="2018-11-07">2018-11-07</time>&nbsp;<i class="fas fa-pencil-alt fa-fw"></i>&nbsp;约 2975 字&nbsp;
+                <i class="far fa-clock fa-fw"></i>&nbsp;预计阅读 6 分钟&nbsp;<span id="/django-%E8%B7%AF%E7%94%B1%E6%8E%A7%E5%88%B6/" class="leancloud_visitors" data-flag-title="Django-路由控制">
+                        <i class="far fa-eye fa-fw"></i>&nbsp;<span class=leancloud-visitors-count></span>&nbsp;次阅读
+                    </span>&nbsp;</div>
+        </div><div class="details toc" id="toc-static"  kept="">
+                <div class="details-summary toc-title">
+                    <span>目录</span>
+                    <span><i class="details-icon fas fa-angle-right"></i></span>
+                </div>
+                <div class="details-content toc-content" id="toc-content-static"><nav id="TableOfContents">
+  <ul>
+    <li><a href="#django-路由控制">Django-路由控制</a>
+      <ul>
+        <li><a href="#一url路由基础">一、URL路由基础</a></li>
+        <li><a href="#二django处理请求">二、Django处理请求</a></li>
+        <li><a href="#三简单的路由配置">三、简单的路由配置</a></li>
+        <li><a href="#四有名分组">四、有名分组</a></li>
+        <li><a href="#五无名分组有名分组总结">五、无名分组有名分组总结</a>
+          <ul>
+            <li><a href="#1无名分组">1.无名分组</a></li>
+            <li><a href="#2有名分组">2.有名分组</a></li>
+          </ul>
+        </li>
+        <li><a href="#六反向解析">六、反向解析</a></li>
+        <li><a href="#七路由分发">七、路由分发</a></li>
+        <li><a href="#八命名空间">八、命名空间</a></li>
+        <li><a href="#九伪静态">九、伪静态</a></li>
+      </ul>
+    </li>
+  </ul>
+</nav></div>
+            </div><div class="content" id="content"><h2 id="django-路由控制">Django-路由控制</h2>
+<h3 id="一url路由基础">一、URL路由基础</h3>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-fallback" data-lang="fallback">	URL是web服务的路口，用户通过浏览器发送过来的任何请求都会被发送到一个指定的URL地址里，然后被响应。
+    在django项目中编写路由就是向外暴露我们接收哪些URL的请求，除此之外任何的URL都不会被处理，URL路由就是web服务对外暴露的API
+</code></pre></td></tr></table>
+</div>
+</div><h3 id="二django处理请求">二、Django处理请求</h3>
+<ol>
+<li>确定要使用的<code>URLconf</code>模块，通常是settings中<code>ROOT_URLCONF</code>设置的值，如果传入的<code>HttpRequest</code>对象具有<code>urlconf</code>属性(中间件设置)，则使用其值代替settings中<code>ROOT_URLCONF</code></li>
+<li>Django加载模块并查找可用的<code>urlpatterns</code>,它是<code>django.conf.urls.url()</code>实例的一个列表</li>
+<li>按顺序运行每个URL模式，匹配成功就停下来，所以<strong>顺序很关键</strong></li>
+<li>匹配成功导入给定的视图，它是一个python函数，或基于类的视图，视图将获得如下参数
+<ul>
+<li>一个<code>HttpRequest</code>实例</li>
+<li>如果匹配的正则表达式返回了无名分组，那么它将作为位置参数提供给视图</li>
+<li>关键字参数由正则的有名分组组成，但是可以被<code>django.conf.urls.url()</code>的可选参数kwargs覆盖</li>
+</ul>
+</li>
+<li>如果没有URL模式匹配，或者过程出错了，将调用错误处理视图</li>
+</ol>
+<h3 id="三简单的路由配置">三、简单的路由配置</h3>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-python" data-lang="python"><span class="kn">from</span> <span class="nn">django.conf.urls</span> <span class="kn">import</span> <span class="n">url</span>
+
+<span class="n">urlpatterns</span><span class="o">=</span><span class="p">[</span>
+    <span class="n">url</span><span class="p">(</span><span class="err">正则表达式，</span><span class="n">view视图函数</span><span class="err">，参数，别名</span><span class="p">)</span>
+<span class="p">]</span>
+</code></pre></td></tr></table>
+</div>
+</div><p>示例的URLconf：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-django" data-lang="django"><span class="x">from django.urls import url
+</span><span class="x">
+</span><span class="x">from . import views
+</span><span class="x">
+</span><span class="x">urlpatterns = [
+</span><span class="x">    url(r&#39;^articles/2003/$&#39;, views.special_case_2003),
+</span><span class="x">    url(r&#39;^articles/([0-9]{4})/$&#39;, views.year_archive),
+</span><span class="x">    url(r&#39;^articles/([0-9]{4})/([0-9]{2})/$&#39;, views.month_archive),
+</span><span class="x">    url(r&#39;^articles/([0-9]{4})/([0-9]{2})/([0-9]+)/$&#39;, views.article_detail),
+</span><span class="x">]
+</span></code></pre></td></tr></table>
+</div>
+</div><p><strong>注：</strong></p>
+<ul>
+<li>
+<p>从URL中捕获一个值，可以加园括号或者尖括号</p>
+</li>
+<li>
+<p>不要添加前导的防斜杠，因为每个URL都有，例如，应该是<code>^articles</code>而不是<code>^/articles</code></p>
+</li>
+<li>
+<p>每个正则表达式前面的&rsquo;r'是可选的，建议添加上，它告诉python这个字符串中的任何字符都不应该被转义</p>
+</li>
+</ul>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-django" data-lang="django"><span class="x">请求的例子及匹配的url
+</span><span class="x">
+</span><span class="x">/articles/2005/03/将匹配列表中的第三个模式。Django将调用函数views.month_archive(request, &#39;2005&#39;, &#39;03&#39;)。
+</span><span class="x">/articles/2005/3/不匹配任何URL模式，因为列表中的第三个模式要求月份是两个数字。
+</span><span class="x">/articles/2003/将匹配列表中的第一个模式不是第二个，因为模式按顺序从上往下匹配，第一个会首先被匹配。Django会调用函数views.special_case_2003(request)
+</span><span class="x">/articles/2003不匹配任何一个模式，因为每个模式都要求URL以一个斜杠结尾。
+</span><span class="x">/articles/2003/03/03/将匹配最后一个模式。Django将调用函数views.article_detail(request, &#39;2003&#39;, &#39;03&#39;, &#39;03&#39;)。
+</span></code></pre></td></tr></table>
+</div>
+</div><p>是否开启URL访问地址后面  不为/跳转至带有/路径的配置项</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-fallback" data-lang="fallback">APPEND_SLASH=True
+Django settings.py配置文件中默认没有 APPEND_SLASH 这个参数，但 Django 默认这个参数为 APPEND_SLASH = True。 其作用就是自动在网址结尾加&#39;/&#39;。
+</code></pre></td></tr></table>
+</div>
+</div><h3 id="四有名分组">四、有名分组</h3>
+<p>有名分组的语法是<code>(?P&lt;name&gt;pattern)</code>,其中name是组的名字，pattern是匹配的模式</p>
+<p>使用有名分组重写上面的URLconf：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-django" data-lang="django"><span class="x">from django.conf.urls import url
+</span><span class="x">
+</span><span class="x">from . import views
+</span><span class="x">
+</span><span class="x">urlpatterns = [
+</span><span class="x">    url(r&#39;^articles/2003/$&#39;, views.special_case_2003),
+</span><span class="x">    url(r&#39;^articles/(?P&lt;year&gt;[0-9]{4})/$&#39;, views.year_archive),
+</span><span class="x">    url(r&#39;^articles/(?P&lt;year&gt;[0-9]{4})/(?P&lt;month&gt;[0-9]{2})/$&#39;, views.month_archive),
+</span><span class="x">    url(r&#39;^articles/(?P&lt;year&gt;[0-9]{4})/(?P&lt;month&gt;[0-9]{2})/(?P&lt;day&gt;[0-9]{2})/$&#39;, views.article_detail),
+</span><span class="x">]
+</span></code></pre></td></tr></table>
+</div>
+</div><p>**注：**捕获的值作为关键字参数而不是位置参数传递给视图函数。</p>
+<p><code>/articles/2005/03/</code>请求将调用<code>views.month_archive(request, year='2005', month='03')</code>函数，而不是<code>views.month_archive(request, '2005', '03')</code>。</p>
+<h3 id="五无名分组有名分组总结">五、无名分组有名分组总结</h3>
+<h4 id="1无名分组">1.无名分组</h4>
+<ul>
+<li>
+<p>按位置传参</p>
+</li>
+<li>
+<p>分组之后，将分组好的数据当做位置传参到视图函数，所以视图函数需要定义形参</p>
+<p>示例：</p>
+<p>​	url:<code>(r'^articles/([0-9]{4})/([0-9]{2})$', views.article_detail)</code></p>
+<p>​	视图函数：<code>def article_detail(request,*args)</code></p>
+</li>
+</ul>
+<h4 id="2有名分组">2.有名分组</h4>
+<ul>
+<li>
+<p>按关键字传参</p>
+</li>
+<li>
+<p>分组后，会把分组出来的数据当做关键字参数传到视图函数，所以视图函数需要定义形参，形参名字和分组的名字相对应，与顺序无关</p>
+<p>示例：</p>
+<p>​	url：<code>(r'^articles/(?P&lt;year&gt;[0-9]{4})/(?P&lt;mounth&gt;[0-9]{2})/$', views.article_detail),</code></p>
+<p>​	视图函数：<code>def article_detail(request,mounth,year)</code></p>
+<p>**注：**有名分组和无名分组最好不要混用</p>
+</li>
+</ul>
+<h3 id="六反向解析">六、反向解析</h3>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-fallback" data-lang="fallback">在django项目中，一个常见的需求是获得URL的最终形式，以用于嵌入到生成的内容中(视图中和显示给用户的URL等)或者用于处理服务器端的导航(重定向)。不希望通过硬编码URL
+</code></pre></td></tr></table>
+</div>
+</div><p>Django提供了一种解决方案，只需在URL中提供一个name参数，并赋值一个你自定义的、好记的、直观的字符串。</p>
+<ul>
+<li>在模板中：使用url模板标签</li>
+<li>在python代码中，使用reverse()函数</li>
+</ul>
+<p>示例：</p>
+<p>url配置：</p>
+<ol>
+<li>无参数：<code>url(r'^publishadd111/$',views.publishadd,name='ddd'),</code></li>
+<li>无名分组:<code>url(r'^publishadd/([0-9]{4})/([0-9]{2})/$', views.publishadd,name='ddd'),</code></li>
+<li>有名分组：<code>url(r'^publishadd/(?P&lt;year&gt;[0-9]{4})/(?P&lt;mounth&gt;[0-9]{2})/$',views.publishadd,name='ddd'),</code></li>
+</ol>
+<p>模板层：</p>
+<ol>
+<li>无参数：<code>{% url 'ddd' %}</code></li>
+<li>无名分组：<code>{% url 'ddd' 2018 12 %}</code>  空格隔开，传多个值</li>
+<li>有名分组：<code>{% url 'ddd' 2018 12 %}</code>  还可以 <code>{% url 'ddd' year=2018 mounth=12 %}</code></li>
+</ol>
+<p>视图层：</p>
+<p>from django.shortcuts import reverse</p>
+<ol>
+<li>无参数：<code>url=reverse('ddd')</code></li>
+<li>无名分组：<code>url=reverse('ddd',args=(2018,12,))</code></li>
+<li>有名分组：<code>url=reverse('ddd',args=(2018,12,)) </code>还可以<code> url=reverse('ddd',kwargs={'year':2018,'mounth':12})</code></li>
+</ol>
+<h3 id="七路由分发">七、路由分发</h3>
+<p>在每个app里各自创建一个urls.py路由模块，然后从根路由出发，将app所属的url请求全部转发到相应的urls.py模块中。</p>
+<p>Django1.1版本的分发</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-fallback" data-lang="fallback">from django.conf.urls import url,include
+</code></pre></td></tr></table>
+</div>
+</div><p>例子：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-fallback" data-lang="fallback">总路由：
+-from django.conf.urls import include 
+-url(r&#39;^blog/&#39;,include(&#39;blog.urls&#39;)),
+-url(r&#39;^app01/&#39;,include(&#39;app01.urls&#39;)),
+各自路由配置url
+app01--url(r&#39;^publish/$&#39;, views.publish,name=&#39;app01_test&#39;),
+blog--url(r&#39;^blogtest/$&#39;, views.test,name=&#39;blog_test&#39;),
+</code></pre></td></tr></table>
+</div>
+</div><p>路由分发使用的是include()方法，需要提前导入，他的参数是转发目的地地路径的字符串。</p>
+<p>**重点：**总路由后面不能加<code>$</code></p>
+<p>两个不同的app，在各自的urlconf中为某一条url取了相同的name，这就会带来麻烦。为了解决这个问题，又引出了下面的命名空间。</p>
+<h3 id="八命名空间">八、命名空间</h3>
+<p>由于name没有作用域，Django在反解URL时，会在项目全局顺序搜索，当查找到第一个name指定URL时，立即返回。URL命名空间可以保证反查到唯一的URL，即使不同的app使用相同的URL名称。</p>
+<p><strong>示例：</strong></p>
+<p>urls.py</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-fallback" data-lang="fallback">url(r&#39;^blog/&#39;,include(&#39;blog.urls&#39;)),
+url(r&#39;^app01/&#39;,include(&#39;app01.urls&#39;)),
+</code></pre></td></tr></table>
+</div>
+</div><p>blog的urls.py</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-fallback" data-lang="fallback">url(r&#39;^blogtest/$&#39;, views.test,name=&#39;test&#39;),
+</code></pre></td></tr></table>
+</div>
+</div><p>app01的urls.py</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-fallback" data-lang="fallback">url(r&#39;^publish/$&#39;, views.publish,name=&#39;test&#39;),
+</code></pre></td></tr></table>
+</div>
+</div><p>blog的视图函数</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-fallback" data-lang="fallback">def test(request):
+	url=reverse(&#39;test&#39;)
+	return HttpResponse(&#39;blog test)
+</code></pre></td></tr></table>
+</div>
+</div><p>app01的视图函数</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-fallback" data-lang="fallback">def test(request):
+	url=reverse(&#39;test&#39;)
+	return HttpResponse(&#39;app01 test)
+</code></pre></td></tr></table>
+</div>
+</div><p>无论如何找index都是找的app01的index。</p>
+<p>解决方法：在总路由分发的时候指定名称空间，实现命名空间的做法很简单，在urlconf文件中添加<code>namespace='xxx'</code>即可。</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-fallback" data-lang="fallback">url(r&#39;^blog/&#39;,include(&#39;blog.urls&#39;,namespace=&#39;blog&#39;)),
+url(r&#39;^app01/&#39;,include(&#39;app01.urls&#39;,namespace=&#39;app01&#39;)),
+</code></pre></td></tr></table>
+</div>
+</div><p>在视图函数反向解析的时候，指定是哪个名称空间下的</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-fallback" data-lang="fallback">url = reverse(&#39;blog:test&#39;)
+</code></pre></td></tr></table>
+</div>
+</div><p>在模板里也指定是</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-fallback" data-lang="fallback">{% url &#39;blog:test&#39;%}
+</code></pre></td></tr></table>
+</div>
+</div><p>不是很推荐使用名称空间，推荐的是在子路由的name中加入app的前缀</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-fallback" data-lang="fallback">url(r&#39;^publish/$&#39;, views.publish,name=&#39;app01_test&#39;),
+</code></pre></td></tr></table>
+</div>
+</div><h3 id="九伪静态">九、伪静态</h3>
+<p>和真静态URL类似。他是通过伪静态规则把动态URL伪装成静态网址。</p>
+<p>在urls.py文件中自己添加匹配<code>.html</code></p>
+<p><code>url(r'^book/(?P&lt;id&gt;\d+.html)',views.book),</code></p>
+</div><div class="post-footer" id="post-footer">
+    <div class="post-info">
+        <div class="post-info-line">
+            <div class="post-info-mod">
+                <span>更新于 2018-11-07</span>
+            </div>
+            <div class="post-info-license"></div>
+        </div>
+        <div class="post-info-line">
+            <div class="post-info-md"><span>
+                            <a class="link-to-markdown" href="/django-%E8%B7%AF%E7%94%B1%E6%8E%A7%E5%88%B6/index.md" target="_blank">阅读原始文档</a>
+                        </span></div>
+            <div class="post-info-share">
+                <span><a href="javascript:void(0);" title="分享到 Twitter" data-sharer="twitter" data-url="http://101.35.190.67/django-%E8%B7%AF%E7%94%B1%E6%8E%A7%E5%88%B6/" data-title="Django-路由控制" data-via="xxxx" data-hashtags="python,django"><i class="fab fa-twitter fa-fw"></i></a><a href="javascript:void(0);" title="分享到 Facebook" data-sharer="facebook" data-url="http://101.35.190.67/django-%E8%B7%AF%E7%94%B1%E6%8E%A7%E5%88%B6/" data-hashtag="python"><i class="fab fa-facebook-square fa-fw"></i></a><a href="javascript:void(0);" title="分享到 WhatsApp" data-sharer="whatsapp" data-url="http://101.35.190.67/django-%E8%B7%AF%E7%94%B1%E6%8E%A7%E5%88%B6/" data-title="Django-路由控制" data-web><i class="fab fa-whatsapp fa-fw"></i></a><a href="javascript:void(0);" title="分享到 Line" data-sharer="line" data-url="http://101.35.190.67/django-%E8%B7%AF%E7%94%B1%E6%8E%A7%E5%88%B6/" data-title="Django-路由控制"><i data-svg-src="/lib/simple-icons/icons/line.min.svg"></i></a><a href="javascript:void(0);" title="分享到 微博" data-sharer="weibo" data-url="http://101.35.190.67/django-%E8%B7%AF%E7%94%B1%E6%8E%A7%E5%88%B6/" data-title="Django-路由控制"><i class="fab fa-weibo fa-fw"></i></a><a href="javascript:void(0);" title="分享到 Myspace" data-sharer="myspace" data-url="http://101.35.190.67/django-%E8%B7%AF%E7%94%B1%E6%8E%A7%E5%88%B6/" data-title="Django-路由控制" data-description=""><i data-svg-src="/lib/simple-icons/icons/myspace.min.svg"></i></a><a href="javascript:void(0);" title="分享到 Blogger" data-sharer="blogger" data-url="http://101.35.190.67/django-%E8%B7%AF%E7%94%B1%E6%8E%A7%E5%88%B6/" data-title="Django-路由控制" data-description=""><i class="fab fa-blogger fa-fw"></i></a><a href="javascript:void(0);" title="分享到 Evernote" data-sharer="evernote" data-url="http://101.35.190.67/django-%E8%B7%AF%E7%94%B1%E6%8E%A7%E5%88%B6/" data-title="Django-路由控制"><i class="fab fa-evernote fa-fw"></i></a></span>
+            </div>
+        </div>
+    </div>
+
+    <div class="post-info-more">
+        <section class="post-tags"><i class="fas fa-tags fa-fw"></i>&nbsp;<a href="/tags/python/">python</a>,&nbsp;<a href="/tags/django/">django</a></section>
+        <section>
+            <span><a href="javascript:void(0);" onclick="window.history.back();">返回</a></span>&nbsp;|&nbsp;<span><a href="/">主页</a></span>
+        </section>
+    </div>
+
+    <div class="post-nav"><a href="/django%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0http%E5%8D%8F%E8%AE%AE%E4%B8%8Edjango%E5%AE%89%E8%A3%85/" class="prev" rel="prev" title="Django学习笔记(http协议与django安装)"><i class="fas fa-angle-left fa-fw"></i>Django学习笔记(http协议与django安装)</a>
+            <a href="/django-%E8%A7%86%E5%9B%BE%E5%B1%82view/" class="next" rel="next" title="Django-视图层(view)">Django-视图层(view)<i class="fas fa-angle-right fa-fw"></i></a></div>
+</div>
+<div id="comments"><div id="valine" class="comment"></div><noscript>
+                Please enable JavaScript to view the comments powered by <a href="https://valine.js.org/">Valine</a>.
+            </noscript></div></article></div>
+            </main><footer class="footer">
+        <div class="footer-container"><div class="footer-line">由 <a href="https://gohugo.io/" target="_blank" rel="noopener noreffer" title="Hugo 0.68.3">Hugo</a> 强力驱动 | 主题 - <a href="https://github.com/dillonzq/LoveIt" target="_blank" rel="noopener noreffer" title="LoveIt 0.2.10"><i class="far fa-kiss-wink-heart fa-fw"></i> LoveIt</a>
+                </div><div class="footer-line"><i class="far fa-copyright fa-fw"></i><span itemprop="copyrightYear">2019 - 2022</span><span class="author" itemprop="copyrightHolder">&nbsp;<a href="/" target="_blank">bone</a></span>&nbsp;|&nbsp;<span class="license"><a rel="license external nofollow noopener noreffer" href="https://creativecommons.org/licenses/by-nc/4.0/" target="_blank">CC BY-NC 4.0</a></span></div>
+        </div>
+    </footer></div>
+
+        <div id="fixed-buttons"><a href="#" id="back-to-top" class="fixed-button" title="回到顶部">
+                <i class="fas fa-arrow-up fa-fw"></i>
+            </a><a href="#" id="view-comments" class="fixed-button" title="查看评论">
+                <i class="fas fa-comment fa-fw"></i>
+            </a>
+        </div><link rel="stylesheet" href="/lib/valine/valine.min.css"><link rel="stylesheet" href="/lib/katex/katex.min.css"><link rel="stylesheet" href="/lib/katex/copy-tex.min.css"><link rel="stylesheet" href="/lib/cookieconsent/cookieconsent.min.css"><script type="text/javascript" src="/lib/valine/Valine.min.js"></script><script type="text/javascript" src="/lib/smooth-scroll/smooth-scroll.min.js"></script><script type="text/javascript" src="/lib/autocomplete/autocomplete.min.js"></script><script type="text/javascript" src="/lib/lunr/lunr.min.js"></script><script type="text/javascript" src="/lib/lunr/lunr.stemmer.support.min.js"></script><script type="text/javascript" src="/lib/lunr/lunr.zh.min.js"></script><script type="text/javascript" src="/lib/lazysizes/lazysizes.min.js"></script><script type="text/javascript" src="/lib/twemoji/twemoji.min.js"></script><script type="text/javascript" src="/lib/clipboard/clipboard.min.js"></script><script type="text/javascript" src="/lib/sharer/sharer.min.js"></script><script type="text/javascript" src="/lib/typeit/typeit.min.js"></script><script type="text/javascript" src="/lib/katex/katex.min.js"></script><script type="text/javascript" src="/lib/katex/auto-render.min.js"></script><script type="text/javascript" src="/lib/katex/copy-tex.min.js"></script><script type="text/javascript" src="/lib/katex/mhchem.min.js"></script><script type="text/javascript" src="/lib/cookieconsent/cookieconsent.min.js"></script><script type="text/javascript">window.config={"code":{"copyTitle":"复制到剪贴板","maxShownLines":10},"comment":{"valine":{"appId":"","appKey":"","avatar":"mp","el":"#valine","emojiCDN":"https://cdn.jsdelivr.net/npm/emoji-datasource-google@5.0.1/img/google/64/","emojiMaps":{"100":"1f4af.png","alien":"1f47d.png","anger":"1f4a2.png","angry":"1f620.png","anguished":"1f627.png","astonished":"1f632.png","black_heart":"1f5a4.png","blue_heart":"1f499.png","blush":"1f60a.png","bomb":"1f4a3.png","boom":"1f4a5.png","broken_heart":"1f494.png","brown_heart":"1f90e.png","clown_face":"1f921.png","cold_face":"1f976.png","cold_sweat":"1f630.png","confounded":"1f616.png","confused":"1f615.png","cry":"1f622.png","crying_cat_face":"1f63f.png","cupid":"1f498.png","dash":"1f4a8.png","disappointed":"1f61e.png","disappointed_relieved":"1f625.png","dizzy":"1f4ab.png","dizzy_face":"1f635.png","drooling_face":"1f924.png","exploding_head":"1f92f.png","expressionless":"1f611.png","face_vomiting":"1f92e.png","face_with_cowboy_hat":"1f920.png","face_with_hand_over_mouth":"1f92d.png","face_with_head_bandage":"1f915.png","face_with_monocle":"1f9d0.png","face_with_raised_eyebrow":"1f928.png","face_with_rolling_eyes":"1f644.png","face_with_symbols_on_mouth":"1f92c.png","face_with_thermometer":"1f912.png","fearful":"1f628.png","flushed":"1f633.png","frowning":"1f626.png","ghost":"1f47b.png","gift_heart":"1f49d.png","green_heart":"1f49a.png","grimacing":"1f62c.png","grin":"1f601.png","grinning":"1f600.png","hankey":"1f4a9.png","hear_no_evil":"1f649.png","heart":"2764-fe0f.png","heart_decoration":"1f49f.png","heart_eyes":"1f60d.png","heart_eyes_cat":"1f63b.png","heartbeat":"1f493.png","heartpulse":"1f497.png","heavy_heart_exclamation_mark_ornament":"2763-fe0f.png","hole":"1f573-fe0f.png","hot_face":"1f975.png","hugging_face":"1f917.png","hushed":"1f62f.png","imp":"1f47f.png","innocent":"1f607.png","japanese_goblin":"1f47a.png","japanese_ogre":"1f479.png","joy":"1f602.png","joy_cat":"1f639.png","kiss":"1f48b.png","kissing":"1f617.png","kissing_cat":"1f63d.png","kissing_closed_eyes":"1f61a.png","kissing_heart":"1f618.png","kissing_smiling_eyes":"1f619.png","laughing":"1f606.png","left_speech_bubble":"1f5e8-fe0f.png","love_letter":"1f48c.png","lying_face":"1f925.png","mask":"1f637.png","money_mouth_face":"1f911.png","nauseated_face":"1f922.png","nerd_face":"1f913.png","neutral_face":"1f610.png","no_mouth":"1f636.png","open_mouth":"1f62e.png","orange_heart":"1f9e1.png","partying_face":"1f973.png","pensive":"1f614.png","persevere":"1f623.png","pleading_face":"1f97a.png","pouting_cat":"1f63e.png","purple_heart":"1f49c.png","rage":"1f621.png","relaxed":"263a-fe0f.png","relieved":"1f60c.png","revolving_hearts":"1f49e.png","right_anger_bubble":"1f5ef-fe0f.png","robot_face":"1f916.png","rolling_on_the_floor_laughing":"1f923.png","scream":"1f631.png","scream_cat":"1f640.png","see_no_evil":"1f648.png","shushing_face":"1f92b.png","skull":"1f480.png","skull_and_crossbones":"2620-fe0f.png","sleeping":"1f634.png","sleepy":"1f62a.png","slightly_frowning_face":"1f641.png","slightly_smiling_face":"1f642.png","smile":"1f604.png","smile_cat":"1f638.png","smiley":"1f603.png","smiley_cat":"1f63a.png","smiling_face_with_3_hearts":"1f970.png","smiling_imp":"1f608.png","smirk":"1f60f.png","smirk_cat":"1f63c.png","sneezing_face":"1f927.png","sob":"1f62d.png","space_invader":"1f47e.png","sparkling_heart":"1f496.png","speak_no_evil":"1f64a.png","speech_balloon":"1f4ac.png","star-struck":"1f929.png","stuck_out_tongue":"1f61b.png","stuck_out_tongue_closed_eyes":"1f61d.png","stuck_out_tongue_winking_eye":"1f61c.png","sunglasses":"1f60e.png","sweat":"1f613.png","sweat_drops":"1f4a6.png","sweat_smile":"1f605.png","thinking_face":"1f914.png","thought_balloon":"1f4ad.png","tired_face":"1f62b.png","triumph":"1f624.png","two_hearts":"1f495.png","unamused":"1f612.png","upside_down_face":"1f643.png","weary":"1f629.png","white_frowning_face":"2639-fe0f.png","white_heart":"1f90d.png","wink":"1f609.png","woozy_face":"1f974.png","worried":"1f61f.png","yawning_face":"1f971.png","yellow_heart":"1f49b.png","yum":"1f60b.png","zany_face":"1f92a.png","zipper_mouth_face":"1f910.png","zzz":"1f4a4.png"},"enableQQ":true,"highlight":true,"lang":"zh-cn","pageSize":10,"placeholder":"你的评论 ...","recordIP":true,"visitor":true}},"cookieconsent":{"content":{"dismiss":"同意","link":"了解更多","message":"本网站使用 Cookies 来改善您的浏览体验."},"enable":true,"palette":{"button":{"background":"#f0f0f0"},"popup":{"background":"#1aa3ff"}},"theme":"edgeless"},"data":{"id-1":"bone的博客","id-2":"bone的博客"},"math":{"delimiters":[{"display":true,"left":"$$","right":"$$"},{"display":true,"left":"\\[","right":"\\]"},{"display":false,"left":"$","right":"$"},{"display":false,"left":"\\(","right":"\\)"}],"strict":false},"search":{"highlightTag":"em","lunrIndexURL":"/index.json","lunrLanguageCode":"zh","lunrSegmentitURL":"/lib/lunr/lunr.segmentit.js","maxResultLength":10,"noResultsFound":"没有找到结果","snippetLength":50,"type":"lunr"},"twemoji":true,"typeit":{"cursorChar":"|","cursorSpeed":1000,"data":{"id-1":["id-1"],"id-2":["id-2"]},"duration":-1,"speed":100}};</script><script type="text/javascript" src="/js/theme.min.js"></script></body>
+</html>

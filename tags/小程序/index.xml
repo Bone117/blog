@@ -1,0 +1,22 @@
+<rss xmlns:atom="http://www.w3.org/2005/Atom" version="2.0">
+    <channel>
+        <title>小程序 - 标签 - mine blog</title>
+        <link>http://101.35.190.67/tags/%E5%B0%8F%E7%A8%8B%E5%BA%8F/</link>
+        <description>小程序 - 标签 - mine blog</description>
+        <generator>Hugo -- gohugo.io</generator><language>zh-CN</language><managingEditor>soufj17857@gmail.com (bone)</managingEditor>
+            <webMaster>soufj17857@gmail.com (bone)</webMaster><lastBuildDate>Thu, 06 Feb 2020 14:24:00 &#43;0000</lastBuildDate><atom:link href="http://101.35.190.67/tags/%E5%B0%8F%E7%A8%8B%E5%BA%8F/" rel="self" type="application/rss+xml" /><item>
+    <title>小程序自定义组件</title>
+    <link>http://101.35.190.67/%E5%B0%8F%E7%A8%8B%E5%BA%8F%E8%87%AA%E5%AE%9A%E4%B9%89%E7%BB%84%E4%BB%B6/</link>
+    <pubDate>Thu, 06 Feb 2020 14:24:00 &#43;0000</pubDate>
+    <author>作者</author>
+    <guid>http://101.35.190.67/%E5%B0%8F%E7%A8%8B%E5%BA%8F%E8%87%AA%E5%AE%9A%E4%B9%89%E7%BB%84%E4%BB%B6/</guid>
+    <description><![CDATA[一、自定义组件的步骤 需要在json文件中进行自定义组件声明(将component字段设置为true)可以将这组文件设置为自定义组件 在wxml]]></description>
+</item><item>
+    <title>小程序的双线程模型</title>
+    <link>http://101.35.190.67/%E5%B0%8F%E7%A8%8B%E5%BA%8F%E7%9A%84%E5%8F%8C%E7%BA%BF%E7%A8%8B%E6%A8%A1%E5%9E%8B/</link>
+    <pubDate>Mon, 27 Jan 2020 12:51:00 &#43;0000</pubDate>
+    <author>作者</author>
+    <guid>http://101.35.190.67/%E5%B0%8F%E7%A8%8B%E5%BA%8F%E7%9A%84%E5%8F%8C%E7%BA%BF%E7%A8%8B%E6%A8%A1%E5%9E%8B/</guid>
+    <description><![CDATA[微信客户端作为小程序的宿主环境，为了能够执行小程序的各种文件(wxml文件、wxss文件、js文件)，提供了双线程模型。 双线程模型： WXML]]></description>
+</item></channel>
+</rss>

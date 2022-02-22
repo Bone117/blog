@@ -1,0 +1,22 @@
+<rss xmlns:atom="http://www.w3.org/2005/Atom" version="2.0">
+    <channel>
+        <title>css - 标签 - mine blog</title>
+        <link>http://101.35.190.67/tags/css/</link>
+        <description>css - 标签 - mine blog</description>
+        <generator>Hugo -- gohugo.io</generator><language>zh-CN</language><managingEditor>soufj17857@gmail.com (bone)</managingEditor>
+            <webMaster>soufj17857@gmail.com (bone)</webMaster><lastBuildDate>Sat, 01 Feb 2020 12:05:00 &#43;0000</lastBuildDate><atom:link href="http://101.35.190.67/tags/css/" rel="self" type="application/rss+xml" /><item>
+    <title>flex布局笔记</title>
+    <link>http://101.35.190.67/flex%E5%B8%83%E5%B1%80%E7%AC%94%E8%AE%B0/</link>
+    <pubDate>Sat, 01 Feb 2020 12:05:00 &#43;0000</pubDate>
+    <author>作者</author>
+    <guid>http://101.35.190.67/flex%E5%B8%83%E5%B1%80%E7%AC%94%E8%AE%B0/</guid>
+    <description><![CDATA[一、简介： flex布局又叫弹性布局，只要将最外层的块级元素display设置为flex，就创建了flex布局。可以把他看成一个盒子，盒子里面]]></description>
+</item><item>
+    <title>高级布局</title>
+    <link>http://101.35.190.67/%E9%AB%98%E7%BA%A7%E5%B8%83%E5%B1%80/</link>
+    <pubDate>Thu, 27 Sep 2018 11:55:00 &#43;0000</pubDate>
+    <author>作者</author>
+    <guid>http://101.35.190.67/%E9%AB%98%E7%BA%A7%E5%B8%83%E5%B1%80/</guid>
+    <description><![CDATA[一、文档流(normal flow) 1.概念 1 将窗体自上而下分成一行一行，块级元素从上至下，行内元素在每行中从左至右顺序排放元素 1 本质为normal f]]></description>
+</item></channel>
+</rss>

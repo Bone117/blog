@@ -1,0 +1,907 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="robots" content="noodp" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge, chrome=1">
+        <title>JS高级 - mine blog</title><meta name="Description" content="这是我的全新 Hugo 网站"><meta property="og:title" content="JS高级" />
+<meta property="og:description" content="一、函数高级 1.函数回调 函数回调的本质：在一个函数中，满足特定条件下，调用另一个函数 1 2 3 4 5 6 7 //&lt;span style=&#34;color: #000000;&#34;&gt; 回调的函数 function callback(data) {} &lt;/span&gt;//&lt;span style=&#34;color: #000000;&#34;&gt; 逻辑函数 function func(callback) {" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="http://101.35.190.67/js%E9%AB%98%E7%BA%A7/" />
+<meta property="og:image" content="https://blogimg-1256896917.cos.ap-shanghai.myqcloud.com/blog/2022-02-22-favicon.ico"/>
+<meta property="article:published_time" content="2018-10-17T13:28:00+00:00" />
+<meta property="article:modified_time" content="2018-10-17T13:28:00+00:00" />
+<meta name="twitter:card" content="summary_large_image"/>
+<meta name="twitter:image" content="https://blogimg-1256896917.cos.ap-shanghai.myqcloud.com/blog/2022-02-22-favicon.ico"/>
+
+<meta name="twitter:title" content="JS高级"/>
+<meta name="twitter:description" content="一、函数高级 1.函数回调 函数回调的本质：在一个函数中，满足特定条件下，调用另一个函数 1 2 3 4 5 6 7 //&lt;span style=&#34;color: #000000;&#34;&gt; 回调的函数 function callback(data) {} &lt;/span&gt;//&lt;span style=&#34;color: #000000;&#34;&gt; 逻辑函数 function func(callback) {"/>
+<meta name="application-name" content="mine blog">
+<meta name="apple-mobile-web-app-title" content="mine blog"><link rel="shortcut icon" type="image/x-icon" href="/favicon.ico" />
+        <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+        <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png"><link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"><link rel="manifest" href="/site.webmanifest"><link rel="canonical" href="http://101.35.190.67/js%E9%AB%98%E7%BA%A7/" /><link rel="prev" href="http://101.35.190.67/js%E5%9F%BA%E7%A1%80%E6%93%8D%E4%BD%9C/" /><link rel="next" href="http://101.35.190.67/js%E4%BA%8B%E4%BB%B6/" /><link rel="stylesheet" href="/lib/normalize/normalize.min.css"><link rel="stylesheet" href="/css/style.min.css"><link rel="stylesheet" href="/lib/fontawesome-free/all.min.css"><link rel="stylesheet" href="/lib/animate/animate.min.css"><script type="application/ld+json">
+    {
+        "@context": "http://schema.org",
+        "@type": "BlogPosting",
+        "headline": "JS高级",
+        "inLanguage": "zh-CN",
+        "mainEntityOfPage": {
+            "@type": "WebPage",
+            "@id": "http:\/\/101.35.190.67\/js%E9%AB%98%E7%BA%A7\/"
+        },"genre": "posts","keywords": "JavaScript","wordcount":  4528 ,
+        "url": "http:\/\/101.35.190.67\/js%E9%AB%98%E7%BA%A7\/","datePublished": "2018-10-17T13:28:00+00:00","dateModified": "2018-10-17T13:28:00+00:00","publisher": {
+            "@type": "Organization",
+            "name": ""},"author": {
+                "@type": "Person",
+                "name": "bone"
+            },"description": ""
+    }
+    </script></head>
+    <body header-desktop="fixed" header-mobile="auto"><script type="text/javascript">(window.localStorage && localStorage.getItem('theme') ? localStorage.getItem('theme') === 'dark' : ('dark' === 'auto' ? window.matchMedia('(prefers-color-scheme: dark)').matches : 'dark' === 'dark')) && document.body.setAttribute('theme', 'dark');</script>
+
+        <div id="mask"></div><div class="wrapper"><header class="desktop" id="header-desktop">
+    <div class="header-wrapper">
+        <div class="header-title">
+            <a href="/" title="mine blog"><img
+        class="lazyload logo"
+        src="/svg/loading.min.svg"
+        data-src="https://blogimg-1256896917.cos.ap-shanghai.myqcloud.com/blog/2022-02-22-favicon.ico"
+        data-srcset="https://blogimg-1256896917.cos.ap-shanghai.myqcloud.com/blog/2022-02-22-favicon.ico, https://blogimg-1256896917.cos.ap-shanghai.myqcloud.com/blog/2022-02-22-favicon.ico 1.5x, https://blogimg-1256896917.cos.ap-shanghai.myqcloud.com/blog/2022-02-22-favicon.ico 2x"
+        data-sizes="auto"
+        alt="https://blogimg-1256896917.cos.ap-shanghai.myqcloud.com/blog/2022-02-22-favicon.ico"
+        title="https://blogimg-1256896917.cos.ap-shanghai.myqcloud.com/blog/2022-02-22-favicon.ico" /><span id="id-1" class="typeit"></span></a>
+        </div>
+        <div class="menu">
+            <div class="menu-inner"><a class="menu-item" href="/posts/"> 文章 </a><a class="menu-item" href="/tags/"> 标签 </a><a class="menu-item" href="/categories/"> 分类 </a><a class="menu-item" href="/about/"> 关于 </a><span class="menu-item delimiter"></span><span class="menu-item search" id="search-desktop">
+                        <input type="text" placeholder="搜索文章标题或内容..." id="search-input-desktop">
+                        <a href="javascript:void(0);" class="search-button search-toggle" id="search-toggle-desktop" title="搜索">
+                            <i class="fas fa-search fa-fw"></i>
+                        </a>
+                        <a href="javascript:void(0);" class="search-button search-clear" id="search-clear-desktop" title="清空">
+                            <i class="fas fa-times-circle fa-fw"></i>
+                        </a>
+                        <span class="search-button search-loading" id="search-loading-desktop">
+                            <i class="fas fa-spinner fa-fw fa-spin"></i>
+                        </span>
+                    </span><a href="javascript:void(0);" class="menu-item theme-switch" title="切换主题">
+                    <i class="fas fa-adjust fa-fw"></i>
+                </a>
+            </div>
+        </div>
+    </div>
+</header><header class="mobile" id="header-mobile">
+    <div class="header-container">
+        <div class="header-wrapper">
+            <div class="header-title">
+                <a href="/" title="mine blog"><img
+        class="lazyload logo"
+        src="/svg/loading.min.svg"
+        data-src="https://blogimg-1256896917.cos.ap-shanghai.myqcloud.com/blog/2022-02-22-favicon.ico"
+        data-srcset="https://blogimg-1256896917.cos.ap-shanghai.myqcloud.com/blog/2022-02-22-favicon.ico, https://blogimg-1256896917.cos.ap-shanghai.myqcloud.com/blog/2022-02-22-favicon.ico 1.5x, https://blogimg-1256896917.cos.ap-shanghai.myqcloud.com/blog/2022-02-22-favicon.ico 2x"
+        data-sizes="auto"
+        alt="https://blogimg-1256896917.cos.ap-shanghai.myqcloud.com/blog/2022-02-22-favicon.ico"
+        title="https://blogimg-1256896917.cos.ap-shanghai.myqcloud.com/blog/2022-02-22-favicon.ico" /><span id="id-2" class="typeit"></span></a>
+            </div>
+            <div class="menu-toggle" id="menu-toggle-mobile">
+                <span></span><span></span><span></span>
+            </div>
+        </div>
+        <div class="menu" id="menu-mobile"><div class="search-wrapper">
+                    <div class="search mobile" id="search-mobile">
+                        <input type="text" placeholder="搜索文章标题或内容..." id="search-input-mobile">
+                        <a href="javascript:void(0);" class="search-button search-toggle" id="search-toggle-mobile" title="搜索">
+                            <i class="fas fa-search fa-fw"></i>
+                        </a>
+                        <a href="javascript:void(0);" class="search-button search-clear" id="search-clear-mobile" title="清空">
+                            <i class="fas fa-times-circle fa-fw"></i>
+                        </a>
+                        <span class="search-button search-loading" id="search-loading-mobile">
+                            <i class="fas fa-spinner fa-fw fa-spin"></i>
+                        </span>
+                    </div>
+                    <a href="javascript:void(0);" class="search-cancel" id="search-cancel-mobile">
+                        取消
+                    </a>
+                </div><a class="menu-item" href="/posts/" title="">文章</a><a class="menu-item" href="/tags/" title="">标签</a><a class="menu-item" href="/categories/" title="">分类</a><a class="menu-item" href="/about/" title="">关于</a><a href="javascript:void(0);" class="menu-item theme-switch" title="切换主题">
+                <i class="fas fa-adjust fa-fw"></i>
+            </a></div>
+    </div>
+</header>
+<div class="search-dropdown desktop">
+    <div id="search-dropdown-desktop"></div>
+</div>
+<div class="search-dropdown mobile">
+    <div id="search-dropdown-mobile"></div>
+</div>
+<main class="main">
+                <div class="container"><div class="toc" id="toc-auto">
+            <h2 class="toc-title">目录</h2>
+            <div class="toc-content" id="toc-content-auto"></div>
+        </div><article class="page single"><h1 class="single-title animated flipInX">JS高级</h1><div class="post-meta">
+            <div class="post-meta-line"><span class="post-author"><a href="/" title="Author" rel=" author" class="author"><i class="fas fa-user-circle fa-fw"></i>bone</a></span>&nbsp;<span class="post-category">收录于 <a href="/categories/%E5%89%8D%E7%AB%AF/"><i class="far fa-folder fa-fw"></i>前端</a></span></div>
+            <div class="post-meta-line"><i class="far fa-calendar-alt fa-fw"></i>&nbsp;<time datetime="2018-10-17">2018-10-17</time>&nbsp;<i class="fas fa-pencil-alt fa-fw"></i>&nbsp;约 4528 字&nbsp;
+                <i class="far fa-clock fa-fw"></i>&nbsp;预计阅读 10 分钟&nbsp;<span id="/js%E9%AB%98%E7%BA%A7/" class="leancloud_visitors" data-flag-title="JS高级">
+                        <i class="far fa-eye fa-fw"></i>&nbsp;<span class=leancloud-visitors-count></span>&nbsp;次阅读
+                    </span>&nbsp;</div>
+        </div><div class="details toc" id="toc-static"  kept="">
+                <div class="details-summary toc-title">
+                    <span>目录</span>
+                    <span><i class="details-icon fas fa-angle-right"></i></span>
+                </div>
+                <div class="details-content toc-content" id="toc-content-static"><nav id="TableOfContents">
+  <ul>
+    <li><a href="#一函数高级">一、函数高级</a>
+      <ul>
+        <li><a href="#1函数回调">1.函数回调</a></li>
+        <li><a href="#2闭包">2.闭包</a>
+          <ul>
+            <li><a href="#21局部变量持久化">2.1局部变量持久化</a></li>
+            <li><a href="#22闭包解决变量污染">2.2闭包解决变量污染</a></li>
+          </ul>
+        </li>
+      </ul>
+    </li>
+    <li><a href="#二js的面向对象">二、JS的面向对象</a>
+      <ul>
+        <li><a href="#1面向对象初始">1.面向对象初始</a></li>
+        <li><a href="#2类字典结构使用">2.类字典结构使用</a></li>
+        <li><a href="#3构造函数">3.构造函数</a></li>
+        <li><a href="#4继承">4.继承</a>
+          <ul>
+            <li><a href="#41-es5的继承">4.1 ES5的继承</a></li>
+            <li><a href="#42-es6继承">4.2 ES6继承</a></li>
+            <li><a href="#5属性解决循环绑定变量污染">5.属性解决循环绑定变量污染</a></li>
+          </ul>
+        </li>
+      </ul>
+    </li>
+    <li><a href="#三定时器">三、定时器</a>
+      <ul>
+        <li>
+          <ul>
+            <li><a href="#清除定时器">清除定时器</a></li>
+          </ul>
+        </li>
+      </ul>
+    </li>
+  </ul>
+</nav></div>
+            </div><div class="content" id="content"><h2 id="一函数高级">一、函数高级</h2>
+<h3 id="1函数回调">1.函数回调</h3>
+<p>函数回调的本质：在一个函数中，满足特定条件下，调用另一个函数</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-fallback" data-lang="fallback">//&lt;span style=&#34;color: #000000;&#34;&gt; 回调的函数
+function callback(data) {}
+&lt;/span&gt;//&lt;span style=&#34;color: #000000;&#34;&gt; 逻辑函数
+function func(callback) {
+    &lt;/span&gt;//&lt;span style=&#34;color: #000000;&#34;&gt; 函数回调
+    &lt;/span&gt;&lt;span style=&#34;color: #0000ff;&#34;&gt;if&lt;/span&gt;&lt;span style=&#34;color: #000000;&#34;&gt; (callback) callback(data);
+}&lt;/span&gt;
+</code></pre></td></tr></table>
+</div>
+</div><p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="http://images.cnblogs.com/OutliningIndicators/ContractedBlock.gif"
+        data-srcset="http://images.cnblogs.com/OutliningIndicators/ContractedBlock.gif, http://images.cnblogs.com/OutliningIndicators/ContractedBlock.gif 1.5x, http://images.cnblogs.com/OutliningIndicators/ContractedBlock.gif 2x"
+        data-sizes="auto"
+        alt="http://images.cnblogs.com/OutliningIndicators/ContractedBlock.gif"
+        title="http://images.cnblogs.com/OutliningIndicators/ContractedBlock.gif" /><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="http://images.cnblogs.com/OutliningIndicators/ExpandedBlockStart.gif"
+        data-srcset="http://images.cnblogs.com/OutliningIndicators/ExpandedBlockStart.gif, http://images.cnblogs.com/OutliningIndicators/ExpandedBlockStart.gif 1.5x, http://images.cnblogs.com/OutliningIndicators/ExpandedBlockStart.gif 2x"
+        data-sizes="auto"
+        alt="http://images.cnblogs.com/OutliningIndicators/ExpandedBlockStart.gif"
+        title="http://images.cnblogs.com/OutliningIndicators/ExpandedBlockStart.gif" /></p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-fallback" data-lang="fallback">&lt;span style=&#34;color: #000000;&#34;&gt;function a_fn(data) {
+        console.log(&lt;/span&gt;&lt;span style=&#34;color: #800000;&#34;&gt;&#39;&lt;/span&gt;&lt;span style=&#34;color: #800000;&#34;&gt;a_fn&lt;/span&gt;&lt;span style=&#34;color: #800000;&#34;&gt;&#39;&lt;/span&gt;&lt;span style=&#34;color: #000000;&#34;&gt;);
+        &lt;/span&gt;//&lt;span style=&#34;color: #000000;&#34;&gt; 如果要使用数据,那么定义形参接收参数
+        console.log(data);
+    }
+
+    function b_fn(a_fn) {
+        var data &lt;/span&gt;= &lt;span style=&#34;color: #800000;&#34;&gt;&#34;&lt;/span&gt;&lt;span style=&#34;color: #800000;&#34;&gt;b_fn 的 数据&lt;/span&gt;&lt;span style=&#34;color: #800000;&#34;&gt;&#34;&lt;/span&gt;&lt;span style=&#34;color: #000000;&#34;&gt;;
+        console.log(&lt;/span&gt;&lt;span style=&#34;color: #800000;&#34;&gt;&#39;&lt;/span&gt;&lt;span style=&#34;color: #800000;&#34;&gt;b_fn&lt;/span&gt;&lt;span style=&#34;color: #800000;&#34;&gt;&#39;&lt;/span&gt;&lt;span style=&#34;color: #000000;&#34;&gt;);
+        &lt;/span&gt;//&lt;span style=&#34;color: #000000;&#34;&gt; 条件: a_fn有值(有函数实现体)
+        &lt;/span&gt;&lt;span style=&#34;color: #0000ff;&#34;&gt;if&lt;/span&gt;&lt;span style=&#34;color: #000000;&#34;&gt; (a_fn) {
+            &lt;/span&gt;//&lt;span style=&#34;color: #000000;&#34;&gt; 调用参数函数
+            a_fn(data);
+        }
+    }
+    b_fn(a_fn);&lt;/span&gt;
+</code></pre></td></tr></table>
+</div>
+</div><p>test</p>
+<p>总结：
+　　 1.一个函数(函数名)作为另外一个函数的参数<br>
+　　 2.满足一定的条件,调用参数函数<br>
+　　 3.形成了函数回调,回调的函数可以获取调用函数的局部变量(将数据携带出去)</p>
+<h3 id="2闭包">2.闭包</h3>
+<p>闭包本质：函数的嵌套定义，内层函数称之为闭包
+闭包目的：不允许提升变量作用域时，该函数的局部变量需要被其他函数使用<br>
+闭包的解决案例：①影响局部变量的生命周期，持久化局部变量；②解决变量污染</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span><span class="lnt">8
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-fallback" data-lang="fallback">&lt;span style=&#34;color: #000000;&#34;&gt;function outer() {
+    var data &lt;/span&gt;=&lt;span style=&#34;color: #000000;&#34;&gt; {}
+    &lt;/span&gt;//&lt;span style=&#34;color: #000000;&#34;&gt;闭包
+    function inner() {
+        &lt;/span&gt;&lt;span style=&#34;color: #0000ff;&#34;&gt;return&lt;/span&gt;&lt;span style=&#34;color: #000000;&#34;&gt; data;
+    }
+    &lt;/span&gt;&lt;span style=&#34;color: #0000ff;&#34;&gt;return&lt;/span&gt;&lt;span style=&#34;color: #000000;&#34;&gt; inner;
+}&lt;/span&gt;
+</code></pre></td></tr></table>
+</div>
+</div><p>注：外部使用局部变量的方法: 返回值 | 函数回调 | 闭包 | 提升作用域</p>
+<h4 id="21局部变量持久化">2.1局部变量持久化</h4>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-fallback" data-lang="fallback">&lt;span style=&#34;color: #000000;&#34;&gt; function outer() {
+        &lt;/span&gt;//&lt;span style=&#34;color: #000000;&#34;&gt;eg：请求得到的数据，如果不持久化，方法执行完毕后，数据就会被销毁
+        var data&lt;/span&gt;=[1,2,3,4,5&lt;span style=&#34;color: #000000;&#34;&gt;];
+        console.log(data);
+        &lt;/span&gt;//&lt;span style=&#34;color: #000000;&#34;&gt;通过闭包解决该类问题，所以闭包所有代码均可以随意自定义
+        function inner(){
+            &lt;/span&gt;&lt;span style=&#34;color: #0000ff;&#34;&gt;return&lt;/span&gt;&lt;span style=&#34;color: #000000;&#34;&gt; data;
+        }
+        &lt;/span&gt;//&lt;span style=&#34;color: #000000;&#34;&gt;数据被inner操作返回，inner属于outer，所以需要将inner返回出去(跟外界建立联系)
+        &lt;/span&gt;&lt;span style=&#34;color: #0000ff;&#34;&gt;return&lt;/span&gt;&lt;span style=&#34;color: #000000;&#34;&gt; inner;
+    }
+    &lt;/span&gt;//&lt;span style=&#34;color: #000000;&#34;&gt;将局部变量生命周期提升于inner函数相同，inner存在，局部变量data就一直存在
+    var inner &lt;/span&gt;= outer();
+</code></pre></td></tr></table>
+</div>
+</div><h4 id="22闭包解决变量污染">2.2闭包解决变量污染</h4>
+<p>现有一个列表，点击某个时，弹出下标</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-fallback" data-lang="fallback">&lt;script type=&lt;span style=&#34;color: #800000;&#34;&gt;&#34;&lt;/span&gt;&lt;span style=&#34;color: #800000;&#34;&gt;text/javascript&lt;/span&gt;&lt;span style=&#34;color: #800000;&#34;&gt;&#34;&lt;/span&gt;&gt;
+    // 需求:点击li,打印li在ul中的索引 =&gt; 0, 1, 2, 3, 4
+    // 1&lt;span style=&#34;color: #000000;&#34;&gt;.lis 
+    var lis &lt;/span&gt;= document.querySelectorAll(&lt;span style=&#34;color: #800000;&#34;&gt;&#39;&lt;/span&gt;&lt;span style=&#34;color: #800000;&#34;&gt;ul li&lt;/span&gt;&lt;span style=&#34;color: #800000;&#34;&gt;&#39;&lt;/span&gt;&lt;span style=&#34;color: #000000;&#34;&gt;);
+    &lt;/span&gt;// 2&lt;span style=&#34;color: #000000;&#34;&gt;.循环绑定
+    &lt;/span&gt;&lt;span style=&#34;color: #0000ff;&#34;&gt;for&lt;/span&gt; (var i = 0; i &lt; lis.length; i++&lt;span style=&#34;color: #000000;&#34;&gt;) {
+        &lt;/span&gt;// 解决的原理:一共产生了5个外层函数,存储的形参i的值分别是0, 1, 2, 3, 4
+        //&lt;span style=&#34;color: #000000;&#34;&gt; 内层函数也产生了5个,且和外层函数一一对应,打印的i就是外层函数的形参i
+
+        &lt;/span&gt;//&lt;span style=&#34;color: #000000;&#34;&gt; 外层函数
+        (function (i) {
+            &lt;/span&gt;//&lt;span style=&#34;color: #000000;&#34;&gt; 内层函数:闭包
+            lis[i].onclick &lt;/span&gt;=&lt;span style=&#34;color: #000000;&#34;&gt; function () {
+                alert(i)
+            }
+        })(i)    
+    }
+    console.log(i);  &lt;/span&gt;//&lt;span style=&#34;color: #000000;&#34;&gt; 点击事件触发一定晚于该逻辑语句
+    &lt;/span&gt;//&lt;span style=&#34;color: #000000;&#34;&gt; 所以再去触发点击,弹出i的值,永远是5
+
+    &lt;/span&gt;//&lt;span style=&#34;color: #000000;&#34;&gt; 该类问题就称之为变量污染
+&lt;/span&gt;&lt;/script&gt;
+</code></pre></td></tr></table>
+</div>
+</div><p>ES6的块级作用域的语法也可以解决循环绑定变量污染的问题</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-fallback" data-lang="fallback">let lis = document.querySelectorAll(&lt;span style=&#34;color: #800000;&#34;&gt;&#39;&lt;/span&gt;&lt;span style=&#34;color: #800000;&#34;&gt;li&lt;/span&gt;&lt;span style=&#34;color: #800000;&#34;&gt;&#39;&lt;/span&gt;&lt;span style=&#34;color: #000000;&#34;&gt;);
+    &lt;/span&gt;&lt;span style=&#34;color: #0000ff;&#34;&gt;for&lt;/span&gt; (let i = 0; i &lt; lis.length; i++&lt;span style=&#34;color: #000000;&#34;&gt;) {
+        lis[i].onclick &lt;/span&gt;=&lt;span style=&#34;color: #000000;&#34;&gt; function () {
+            alert(i)
+        }
+    }&lt;/span&gt;
+</code></pre></td></tr></table>
+</div>
+</div><h2 id="二js的面向对象">二、JS的面向对象</h2>
+<h3 id="1面向对象初始">1.面向对象初始</h3>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span><span class="lnt">8
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-fallback" data-lang="fallback">var obj = {}; | var obj =&lt;span style=&#34;color: #000000;&#34;&gt; new Object();
+&lt;/span&gt;//&lt;span style=&#34;color: #000000;&#34;&gt; 属性
+obj.prop &lt;/span&gt;= &lt;span style=&#34;color: #800000;&#34;&gt;&#34;&#34;&lt;/span&gt;;|obj[&lt;span style=&#34;color: #800000;&#34;&gt;&#39;&lt;/span&gt;&lt;span style=&#34;color: #800000;&#34;&gt;name&lt;/span&gt;&lt;span style=&#34;color: #800000;&#34;&gt;&#39;&lt;/span&gt;]=&lt;span style=&#34;color: #800000;&#34;&gt;&#34;&#34;&lt;/span&gt;&lt;span style=&#34;color: #000000;&#34;&gt;;
+&lt;/span&gt;//&lt;span style=&#34;color: #000000;&#34;&gt; 方法
+obj.func &lt;/span&gt;=&lt;span style=&#34;color: #000000;&#34;&gt; function () {}
+&lt;/span&gt;//&lt;span style=&#34;color: #000000;&#34;&gt; 删除属性与方法
+delete obj.prop
+delete obj.func&lt;/span&gt;
+</code></pre></td></tr></table>
+</div>
+</div><h3 id="2类字典结构使用">2.类字典结构使用</h3>
+<p>js中没有字典(键值对存储数据的方式),但可以通过对象实现字典方式存储数据,并使用数据</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-fallback" data-lang="fallback">var dict = {name: &lt;span style=&#34;color: #800000;&#34;&gt;&#34;&lt;/span&gt;&lt;span style=&#34;color: #800000;&#34;&gt;zero&lt;/span&gt;&lt;span style=&#34;color: #800000;&#34;&gt;&#34;&lt;/span&gt;, age: 18&lt;span style=&#34;color: #000000;&#34;&gt;}
+var dict &lt;/span&gt;= {&lt;span style=&#34;color: #800000;&#34;&gt;&#34;&lt;/span&gt;&lt;span style=&#34;color: #800000;&#34;&gt;my-name&lt;/span&gt;&lt;span style=&#34;color: #800000;&#34;&gt;&#34;&lt;/span&gt;: &lt;span style=&#34;color: #800000;&#34;&gt;&#34;&lt;/span&gt;&lt;span style=&#34;color: #800000;&#34;&gt;zero&lt;/span&gt;&lt;span style=&#34;color: #800000;&#34;&gt;&#34;&lt;/span&gt;&lt;span style=&#34;color: #000000;&#34;&gt;, fn: function () {}, fun () {}}
+&lt;/span&gt;//&lt;span style=&#34;color: #000000;&#34;&gt;使用
+dict.name &lt;/span&gt;| dict[&lt;span style=&#34;color: #800000;&#34;&gt;&#34;&lt;/span&gt;&lt;span style=&#34;color: #800000;&#34;&gt;my-name&lt;/span&gt;&lt;span style=&#34;color: #800000;&#34;&gt;&#34;&lt;/span&gt;] | dict.fn()
+</code></pre></td></tr></table>
+</div>
+</div><div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-fallback" data-lang="fallback">总结：&lt;br/&gt;1.key全为字符串形式，但存在两种书写方式&lt;br/&gt;2.key在js语法标识符支持情况下，可以省略引号，但key为js非法标识符的情况下，必须添加引号。&lt;br/&gt;3.value可以为任意类型&lt;br/&gt;4.访问值可以通过字典名(对象名).key语法与[“key”]语法来访问value&lt;br/&gt;5.可以随意添加key与value完成增删改查
+</code></pre></td></tr></table>
+</div>
+</div><div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-fallback" data-lang="fallback">//&lt;span style=&#34;color: #000000;&#34;&gt; 增
+dict.key4 &lt;/span&gt;=&lt;span style=&#34;color: #000000;&#34;&gt; true;
+console.log(dict);
+
+&lt;/span&gt;//&lt;span style=&#34;color: #000000;&#34;&gt; 删
+delete dict.key4;
+console.log(dict);
+
+&lt;/span&gt;//&lt;span style=&#34;color: #000000;&#34;&gt; 改
+dict[&lt;/span&gt;&lt;span style=&#34;color: #800000;&#34;&gt;&#34;&lt;/span&gt;&lt;span style=&#34;color: #800000;&#34;&gt;my-key3&lt;/span&gt;&lt;span style=&#34;color: #800000;&#34;&gt;&#34;&lt;/span&gt;] = [5, 4, 3, 2, 1&lt;span style=&#34;color: #000000;&#34;&gt;];
+console.log(dict);
+
+&lt;/span&gt;//&lt;span style=&#34;color: #000000;&#34;&gt; 查
+console.log(dict.key1);
+console.log(dict[&lt;/span&gt;&lt;span style=&#34;color: #800000;&#34;&gt;&#34;&lt;/span&gt;&lt;span style=&#34;color: #800000;&#34;&gt;key1&lt;/span&gt;&lt;span style=&#34;color: #800000;&#34;&gt;&#34;&lt;/span&gt;]);
+</code></pre></td></tr></table>
+</div>
+</div><h3 id="3构造函数">3.构造函数</h3>
+<p>构造函数其实就是普通函数<br>
+特定的语法与规定:<br>
+1.一般采用首字母大写(大驼峰)<br>
+2.内部可以构建属性与方法,通过this关键词</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-fallback" data-lang="fallback">//&lt;span style=&#34;color: #000000;&#34;&gt; 普通函数
+function fn() {
+    var num &lt;/span&gt;= 10&lt;span style=&#34;color: #000000;&#34;&gt;;
+    console.log(&lt;/span&gt;&lt;span style=&#34;color: #800000;&#34;&gt;&#39;&lt;/span&gt;&lt;span style=&#34;color: #800000;&#34;&gt;普通函数&lt;/span&gt;&lt;span style=&#34;color: #800000;&#34;&gt;&#39;&lt;/span&gt;&lt;span style=&#34;color: #000000;&#34;&gt;);
+}
+fn();
+
+&lt;/span&gt;//&lt;span style=&#34;color: #000000;&#34;&gt;构造函数
+function People(name) {
+    this.name &lt;/span&gt;=&lt;span style=&#34;color: #000000;&#34;&gt; name;
+    this.eat &lt;/span&gt;=&lt;span style=&#34;color: #000000;&#34;&gt; function (agr) {
+        console.log(this.name &lt;/span&gt;+ &lt;span style=&#34;color: #800000;&#34;&gt;&#34;&lt;/span&gt;&lt;span style=&#34;color: #800000;&#34;&gt;吃&lt;/span&gt;&lt;span style=&#34;color: #800000;&#34;&gt;&#34;&lt;/span&gt; +&lt;span style=&#34;color: #000000;&#34;&gt; agr);
+    }
+}&lt;/span&gt;
+</code></pre></td></tr></table>
+</div>
+</div><p>构造函数可以创建多个对象,使用{}构建出的对象是唯一的</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-fallback" data-lang="fallback">&lt;span style=&#34;color: #0000ff;&#34;&gt;var&lt;/span&gt; p1 = &lt;span style=&#34;color: #0000ff;&#34;&gt;new&lt;/span&gt; People(&#34;zero&#34;);  &lt;span style=&#34;color: #008000;&#34;&gt;//&lt;/span&gt;&lt;span style=&#34;color: #008000;&#34;&gt; new关键词, 创建对象并实例化&lt;/span&gt;
+&lt;span style=&#34;color: #0000ff;&#34;&gt;var&lt;/span&gt; p2 = &lt;span style=&#34;color: #0000ff;&#34;&gt;new&lt;/span&gt; People(&#34;seven&#34;&lt;span style=&#34;color: #000000;&#34;&gt;);
+
+&lt;/span&gt;&lt;span style=&#34;color: #0000ff;&#34;&gt;var&lt;/span&gt; obj = {} &lt;span style=&#34;color: #008000;&#34;&gt;//&lt;/span&gt;&lt;span style=&#34;color: #008000;&#34;&gt;对象唯一&lt;/span&gt;
+</code></pre></td></tr></table>
+</div>
+</div><p>构造函数的属性变量与{}的语法规则不一样，构造函数内部通过this，二普通对象直接通过对象名.的方式</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-fallback" data-lang="fallback">&lt;span style=&#34;color: #0000ff;&#34;&gt;function&lt;/span&gt;&lt;span style=&#34;color: #000000;&#34;&gt; People(name) {
+    &lt;/span&gt;&lt;span style=&#34;color: #0000ff;&#34;&gt;this&lt;/span&gt;.name =&lt;span style=&#34;color: #000000;&#34;&gt; name;
+    &lt;/span&gt;&lt;span style=&#34;color: #0000ff;&#34;&gt;this&lt;/span&gt;.eat = &lt;span style=&#34;color: #0000ff;&#34;&gt;function&lt;/span&gt;&lt;span style=&#34;color: #000000;&#34;&gt; (agr) {
+        console.log(&lt;/span&gt;&lt;span style=&#34;color: #0000ff;&#34;&gt;this&lt;/span&gt;.name + &#34;吃&#34; +&lt;span style=&#34;color: #000000;&#34;&gt; agr);
+    }
+}
+
+&lt;/span&gt;&lt;span style=&#34;color: #008000;&#34;&gt;//&lt;/span&gt;&lt;span style=&#34;color: #008000;&#34;&gt;普通对象&lt;/span&gt;
+&lt;span style=&#34;color: #0000ff;&#34;&gt;var&lt;/span&gt; obj =&lt;span style=&#34;color: #000000;&#34;&gt; {
+    index: &lt;/span&gt;&#34;obj对象&#34;&lt;span style=&#34;color: #000000;&#34;&gt;,
+    fn: &lt;/span&gt;&lt;span style=&#34;color: #0000ff;&#34;&gt;function&lt;/span&gt;&lt;span style=&#34;color: #000000;&#34;&gt; () {
+        console.log(&lt;/span&gt;&#34;obj方法&#34;&lt;span style=&#34;color: #000000;&#34;&gt;);
+    }
+};
+&lt;/span&gt;&lt;span style=&#34;color: #008000;&#34;&gt;//&lt;/span&gt;&lt;span style=&#34;color: #008000;&#34;&gt; 使用属性与方法&lt;/span&gt;
+&lt;span style=&#34;color: #000000;&#34;&gt;console.log(obj.index);
+obj.fn();&lt;/span&gt;
+</code></pre></td></tr></table>
+</div>
+</div><h3 id="4继承">4.继承</h3>
+<p>1.完成继承,必须拥有两个构造函数<br>
+2.一个函数要使用另外一个函数的属性与方法,需要对其进行继承(属性与方法的复用)</p>
+<h4 id="41-es5的继承">4.1 ES5的继承</h4>
+<p>属性的继承用call方法,在继承函数中由被继承函数调用,传入继承函数的this与被继承函数创建属性对属性进行赋值的所有需要的数据<br>
+方法的继承prototype原型</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-fallback" data-lang="fallback">    &lt;span style=&#34;color: #008000;&#34;&gt;//&lt;/span&gt;&lt;span style=&#34;color: #008000;&#34;&gt; 类似于父级&lt;/span&gt;
+    &lt;span style=&#34;color: #0000ff;&#34;&gt;function&lt;/span&gt;&lt;span style=&#34;color: #000000;&#34;&gt; Sup(name) {
+        &lt;/span&gt;&lt;span style=&#34;color: #008000;&#34;&gt;//&lt;/span&gt;&lt;span style=&#34;color: #008000;&#34;&gt; 属性存放某个值&lt;/span&gt;
+        &lt;span style=&#34;color: #0000ff;&#34;&gt;this&lt;/span&gt;.name =&lt;span style=&#34;color: #000000;&#34;&gt; name;
+        &lt;/span&gt;&lt;span style=&#34;color: #008000;&#34;&gt;//&lt;/span&gt;&lt;span style=&#34;color: #008000;&#34;&gt; 方法完成某项功能&lt;/span&gt;
+        &lt;span style=&#34;color: #0000ff;&#34;&gt;this&lt;/span&gt;.func = &lt;span style=&#34;color: #0000ff;&#34;&gt;function&lt;/span&gt;&lt;span style=&#34;color: #000000;&#34;&gt; () {
+            console.log(&lt;/span&gt;&#34;func&#34;&lt;span style=&#34;color: #000000;&#34;&gt;);
+        }
+    }
+    &lt;/span&gt;&lt;span style=&#34;color: #0000ff;&#34;&gt;var&lt;/span&gt; sup = &lt;span style=&#34;color: #0000ff;&#34;&gt;new&lt;/span&gt; Sup(&#34;supClass&#34;&lt;span style=&#34;color: #000000;&#34;&gt;);
+    console.log(sup.name);
+    sup.func();
+
+    &lt;/span&gt;&lt;span style=&#34;color: #008000;&#34;&gt;//&lt;/span&gt;&lt;span style=&#34;color: #008000;&#34;&gt; 类似于子级&lt;/span&gt;
+    &lt;span style=&#34;color: #0000ff;&#34;&gt;function&lt;/span&gt;&lt;span style=&#34;color: #000000;&#34;&gt; Sub(name) {
+        &lt;/span&gt;&lt;span style=&#34;color: #008000;&#34;&gt;//&lt;/span&gt;&lt;span style=&#34;color: #008000;&#34;&gt; 属性的继承&lt;/span&gt;
+        Sup.call(&lt;span style=&#34;color: #0000ff;&#34;&gt;this&lt;/span&gt;&lt;span style=&#34;color: #000000;&#34;&gt;, name);//Sup有name属性,那么可以通过call将Sub的name传给Sup
+    }
+    &lt;/span&gt;&lt;span style=&#34;color: #008000;&#34;&gt;//&lt;/span&gt;&lt;span style=&#34;color: #008000;&#34;&gt; 方法的继承&lt;/span&gt;
+    Sub.prototype = &lt;span style=&#34;color: #0000ff;&#34;&gt;new&lt;/span&gt;&lt;span style=&#34;color: #000000;&#34;&gt; Sup; //将new Sup赋值给Sub.prototype
+
+    &lt;/span&gt;&lt;span style=&#34;color: #0000ff;&#34;&gt;var&lt;/span&gt; sub = &lt;span style=&#34;color: #0000ff;&#34;&gt;new&lt;/span&gt; Sub(&#34;subClass&#34;&lt;span style=&#34;color: #000000;&#34;&gt;);
+    console.log(sub.name);
+    sub.func();
+
+    &lt;/span&gt;&lt;span style=&#34;color: #008000;&#34;&gt;//&lt;/span&gt;&lt;span style=&#34;color: #008000;&#34;&gt; 原型&lt;/span&gt;
+    console.log(sup.__proto__);
+</code></pre></td></tr></table>
+</div>
+</div><h4 id="42-es6继承">4.2 ES6继承</h4>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span><span class="lnt">29
+</span><span class="lnt">30
+</span><span class="lnt">31
+</span><span class="lnt">32
+</span><span class="lnt">33
+</span><span class="lnt">34
+</span><span class="lnt">35
+</span><span class="lnt">36
+</span><span class="lnt">37
+</span><span class="lnt">38
+</span><span class="lnt">39
+</span><span class="lnt">40
+</span><span class="lnt">41
+</span><span class="lnt">42
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-fallback" data-lang="fallback">&lt;span style=&#34;color: #008000;&#34;&gt;//&lt;/span&gt;&lt;span style=&#34;color: #008000;&#34;&gt; 多对象 =&gt; 创建类&lt;/span&gt;
+&lt;span style=&#34;color: #000000;&#34;&gt;    class Person {
+        &lt;/span&gt;&lt;span style=&#34;color: #008000;&#34;&gt;//&lt;/span&gt;&lt;span style=&#34;color: #008000;&#34;&gt; 构造器:创建对象完成初始化操作&lt;/span&gt;
+&lt;span style=&#34;color: #000000;&#34;&gt;        constructor (name, age) {
+            &lt;/span&gt;&lt;span style=&#34;color: #0000ff;&#34;&gt;this&lt;/span&gt;.name =&lt;span style=&#34;color: #000000;&#34;&gt; name;
+            &lt;/span&gt;&lt;span style=&#34;color: #0000ff;&#34;&gt;this&lt;/span&gt;.age =&lt;span style=&#34;color: #000000;&#34;&gt; age;
+        }
+        &lt;/span&gt;&lt;span style=&#34;color: #008000;&#34;&gt;//&lt;/span&gt;&lt;span style=&#34;color: #008000;&#34;&gt; 实例方法:只能由对象调用&lt;/span&gt;
+&lt;span style=&#34;color: #000000;&#34;&gt;        eat () {
+            console.log(&lt;/span&gt;&lt;span style=&#34;color: #0000ff;&#34;&gt;this&lt;/span&gt;.name + &#39;吃吃吃&#39;&lt;span style=&#34;color: #000000;&#34;&gt;);
+        }
+        &lt;/span&gt;&lt;span style=&#34;color: #008000;&#34;&gt;//&lt;/span&gt;&lt;span style=&#34;color: #008000;&#34;&gt; 类方法:只能由类调用&lt;/span&gt;
+&lt;span style=&#34;color: #000000;&#34;&gt;        static create () {
+            console.log(&lt;/span&gt;&#39;诞生&#39;&lt;span style=&#34;color: #000000;&#34;&gt;);
+        }
+    }
+    let p1 &lt;/span&gt;= &lt;span style=&#34;color: #0000ff;&#34;&gt;new&lt;/span&gt; Person(&#39;zero&#39;, 8&lt;span style=&#34;color: #000000;&#34;&gt;);
+    let p2 &lt;/span&gt;= &lt;span style=&#34;color: #0000ff;&#34;&gt;new&lt;/span&gt; Person(&#39;seven&#39;, 58&lt;span style=&#34;color: #000000;&#34;&gt;);
+
+    console.log(p1.age);
+    p2.eat();
+    &lt;/span&gt;&lt;span style=&#34;color: #008000;&#34;&gt;//&lt;/span&gt;&lt;span style=&#34;color: #008000;&#34;&gt; Person.eat();&lt;/span&gt;
+&lt;span style=&#34;color: #000000;&#34;&gt;    Person.create();
+    &lt;/span&gt;&lt;span style=&#34;color: #008000;&#34;&gt;//&lt;/span&gt;&lt;span style=&#34;color: #008000;&#34;&gt; p2.create();&lt;/span&gt;
+
+    &lt;span style=&#34;color: #008000;&#34;&gt;//&lt;/span&gt;&lt;span style=&#34;color: #008000;&#34;&gt; 继承&lt;/span&gt;
+&lt;span style=&#34;color: #000000;&#34;&gt;    class Student extends Person {
+        constructor (name, age, sex) {
+            &lt;/span&gt;&lt;span style=&#34;color: #008000;&#34;&gt;//&lt;/span&gt;&lt;span style=&#34;color: #008000;&#34;&gt; super指向父级&lt;/span&gt;
+&lt;span style=&#34;color: #000000;&#34;&gt;            super(name, age);
+            &lt;/span&gt;&lt;span style=&#34;color: #0000ff;&#34;&gt;this&lt;/span&gt;.sex =&lt;span style=&#34;color: #000000;&#34;&gt; sex;
+        }
+    }
+
+    let s1 &lt;/span&gt;= &lt;span style=&#34;color: #0000ff;&#34;&gt;new&lt;/span&gt; Student(&#34;张三&#34;, 18, &#34;男&#34;&lt;span style=&#34;color: #000000;&#34;&gt;);
+    &lt;/span&gt;&lt;span style=&#34;color: #008000;&#34;&gt;//&lt;/span&gt;&lt;span style=&#34;color: #008000;&#34;&gt; 属性的继承&lt;/span&gt;
+&lt;span style=&#34;color: #000000;&#34;&gt;    console.log(s1.name, s1.age, s1.sex);
+    console.log();
+    &lt;/span&gt;&lt;span style=&#34;color: #008000;&#34;&gt;//&lt;/span&gt;&lt;span style=&#34;color: #008000;&#34;&gt; 方法的继承&lt;/span&gt;
+&lt;span style=&#34;color: #000000;&#34;&gt;    s1.eat();
+    &lt;/span&gt;&lt;span style=&#34;color: #008000;&#34;&gt;//&lt;/span&gt;&lt;span style=&#34;color: #008000;&#34;&gt; 继承为全继承&lt;/span&gt;
+    Student.create();
+</code></pre></td></tr></table>
+</div>
+</div><p>补：ES6用箭头语法表示函数</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-fallback" data-lang="fallback">&lt;span style=&#34;color: #008000;&#34;&gt;//&lt;/span&gt;&lt;span style=&#34;color: #008000;&#34;&gt; 函数&lt;/span&gt;
+let f = () =&gt;&lt;span style=&#34;color: #000000;&#34;&gt; {
+}&lt;/span&gt;
+</code></pre></td></tr></table>
+</div>
+</div><h4 id="5属性解决循环绑定变量污染">5.属性解决循环绑定变量污染</h4>
+<p>还是用之前的变量污染的例子，js代码看下面</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-fallback" data-lang="fallback">    &lt;span style=&#34;color: #0000ff;&#34;&gt;var&lt;/span&gt; lis = document.querySelectorAll(&#39;li&#39;&lt;span style=&#34;color: #000000;&#34;&gt;);
+
+    &lt;/span&gt;&lt;span style=&#34;color: #0000ff;&#34;&gt;for&lt;/span&gt; (&lt;span style=&#34;color: #0000ff;&#34;&gt;var&lt;/span&gt; i = 0; i &lt; lis.length; i++&lt;span style=&#34;color: #000000;&#34;&gt;) {
+        &lt;/span&gt;&lt;span style=&#34;color: #008000;&#34;&gt;//&lt;/span&gt;&lt;span style=&#34;color: #008000;&#34;&gt; lis[i]依次代表五个li页面元素对象&lt;/span&gt;
+        &lt;span style=&#34;color: #008000;&#34;&gt;//&lt;/span&gt;&lt;span style=&#34;color: #008000;&#34;&gt; 给每一个li设置一个(临时)属性&lt;/span&gt;
+        lis[i].index = i;  &lt;span style=&#34;color: #008000;&#34;&gt;//&lt;/span&gt;&lt;span style=&#34;color: #008000;&#34;&gt; 第一个li的index属性存储的就是索引0,以此类推,最后一个存储的是索引4&lt;/span&gt;
+&lt;span style=&#34;color: #000000;&#34;&gt;
+        lis[i].onclick &lt;/span&gt;= &lt;span style=&#34;color: #0000ff;&#34;&gt;function&lt;/span&gt;&lt;span style=&#34;color: #000000;&#34;&gt; () {
+            &lt;/span&gt;&lt;span style=&#34;color: #008000;&#34;&gt;//&lt;/span&gt;&lt;span style=&#34;color: #008000;&#34;&gt; var temp = lis[i].index; // lis[i]中的i一样存在变量污染&lt;/span&gt;
+            &lt;span style=&#34;color: #0000ff;&#34;&gt;var&lt;/span&gt; temp = &lt;span style=&#34;color: #0000ff;&#34;&gt;this&lt;/span&gt;.index;  &lt;span style=&#34;color: #008000;&#34;&gt;//&lt;/span&gt;&lt;span style=&#34;color: #008000;&#34;&gt; 当前被点击的li&lt;/span&gt;
+            alert(temp)  &lt;span style=&#34;color: #008000;&#34;&gt;//&lt;/span&gt;&lt;span style=&#34;color: #008000;&#34;&gt; temp =&gt; this.index(lis[i].index) =&gt; i(索引)&lt;/span&gt;
+&lt;span style=&#34;color: #000000;&#34;&gt;        }
+    }&lt;/span&gt;
+</code></pre></td></tr></table>
+</div>
+</div><h2 id="三定时器">三、定时器</h2>
+<p>应用场景：<br>
+1.完成js自启(不需要手动触发)动画<br>
+2.css完成不了的动画</p>
+<ul>
+<li></li>
+</ul>
+<p>setInterval　　一次性定时器</p>
+<ul>
+<li></li>
+</ul>
+<p>setTimeout　　持续性定时器</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-fallback" data-lang="fallback">&lt;span style=&#34;color: #008000;&#34;&gt;//&lt;/span&gt;&lt;span style=&#34;color: #008000;&#34;&gt; 一次性定时器&lt;/span&gt;
+    &lt;span style=&#34;color: #008000;&#34;&gt;/*&lt;/span&gt;&lt;span style=&#34;color: #008000;&#34;&gt; 异步执行
+        setTimeout(函数, 毫秒数, 函数所需参数(可以省略));
+    &lt;/span&gt;&lt;span style=&#34;color: #008000;&#34;&gt;*/&lt;/span&gt;&lt;span style=&#34;color: #000000;&#34;&gt;
+    console.log(&lt;/span&gt;&#34;开始&#34;&lt;span style=&#34;color: #000000;&#34;&gt;);
+    setTimeout(&lt;/span&gt;&lt;span style=&#34;color: #0000ff;&#34;&gt;function&lt;/span&gt;&lt;span style=&#34;color: #000000;&#34;&gt; (data) {
+        console.log(data);
+    }, &lt;/span&gt;1000, &#34;数据&#34;&lt;span style=&#34;color: #000000;&#34;&gt;);
+    console.log(&lt;/span&gt;&#34;结束&#34;&lt;span style=&#34;color: #000000;&#34;&gt;);
+
+    &lt;/span&gt;&lt;span style=&#34;color: #008000;&#34;&gt;//&lt;/span&gt;&lt;span style=&#34;color: #008000;&#34;&gt; 持续性定时器&lt;/span&gt;
+    &lt;span style=&#34;color: #008000;&#34;&gt;/*&lt;/span&gt;&lt;span style=&#34;color: #008000;&#34;&gt;异步执行
+        setInterval(函数, 毫秒数, 函数所需参数(可以省略));
+    &lt;/span&gt;&lt;span style=&#34;color: #008000;&#34;&gt;*/&lt;/span&gt;&lt;span style=&#34;color: #000000;&#34;&gt;
+    console.log(&lt;/span&gt;&#34;又开始&#34;&lt;span style=&#34;color: #000000;&#34;&gt;);
+    &lt;/span&gt;&lt;span style=&#34;color: #0000ff;&#34;&gt;var&lt;/span&gt; timer = setInterval(&lt;span style=&#34;color: #0000ff;&#34;&gt;function&lt;/span&gt;&lt;span style=&#34;color: #000000;&#34;&gt;() {
+        console.log(&lt;/span&gt;&#34;呵呵&#34;&lt;span style=&#34;color: #000000;&#34;&gt;);
+    }, &lt;/span&gt;1000&lt;span style=&#34;color: #000000;&#34;&gt;)
+    console.log(timer);
+    console.log(&lt;/span&gt;&#34;又结束&#34;);
+</code></pre></td></tr></table>
+</div>
+</div><h4 id="清除定时器">清除定时器</h4>
+<p>1.持续性与一次性定时器通常都应该有清除定时器操作<br>
+2.清除定时器操作可以混用 clearTimeout() | clearInterval()<br>
+3.定时器的返回值就是定时器编号,就是普普通通的数字类型</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-fallback" data-lang="fallback">    document.onclick = &lt;span style=&#34;color: #0000ff;&#34;&gt;function&lt;/span&gt;&lt;span style=&#34;color: #000000;&#34;&gt; () {
+        console.log(&lt;/span&gt;&#34;定时器清除了&#34;&lt;span style=&#34;color: #000000;&#34;&gt;);
+        clearInterval(timer);
+        &lt;/span&gt;&lt;span style=&#34;color: #008000;&#34;&gt;//&lt;/span&gt;&lt;span style=&#34;color: #008000;&#34;&gt; clearTimeout(timer);&lt;/span&gt;
+&lt;span style=&#34;color: #000000;&#34;&gt;    }
+
+    &lt;/span&gt;&lt;span style=&#34;color: #008000;&#34;&gt;//&lt;/span&gt;&lt;span style=&#34;color: #008000;&#34;&gt; 清除所有定时器&lt;/span&gt;
+    &lt;span style=&#34;color: #008000;&#34;&gt;//&lt;/span&gt;&lt;span style=&#34;color: #008000;&#34;&gt; 如果上方创建过n个定时器,那么timeout值为n+1&lt;/span&gt;
+    &lt;span style=&#34;color: #0000ff;&#34;&gt;var&lt;/span&gt; timeout = setTimeout(&lt;span style=&#34;color: #0000ff;&#34;&gt;function&lt;/span&gt;(){}, 1&lt;span style=&#34;color: #000000;&#34;&gt;);
+    &lt;/span&gt;&lt;span style=&#34;color: #0000ff;&#34;&gt;for&lt;/span&gt; (&lt;span style=&#34;color: #0000ff;&#34;&gt;var&lt;/span&gt; i = 0; i &lt; timeout; i++&lt;span style=&#34;color: #000000;&#34;&gt;) {
+        &lt;/span&gt;&lt;span style=&#34;color: #008000;&#34;&gt;//&lt;/span&gt;&lt;span style=&#34;color: #008000;&#34;&gt; 循环将编号[0, n]所有定时器都清除一次&lt;/span&gt;
+&lt;span style=&#34;color: #000000;&#34;&gt;        clearTimeout(i)
+    }
+    &lt;/span&gt;&lt;span style=&#34;color: #008000;&#34;&gt;//&lt;/span&gt;&lt;span style=&#34;color: #008000;&#34;&gt; 1.允许重复清除&lt;/span&gt;
+    &lt;span style=&#34;color: #008000;&#34;&gt;//&lt;/span&gt;&lt;span style=&#34;color: #008000;&#34;&gt; 2.允许清除不存在的定时器编号&lt;/span&gt;
+</code></pre></td></tr></table>
+</div>
+</div><p> </p>
+</div><div class="post-footer" id="post-footer">
+    <div class="post-info">
+        <div class="post-info-line">
+            <div class="post-info-mod">
+                <span>更新于 2018-10-17</span>
+            </div>
+            <div class="post-info-license"></div>
+        </div>
+        <div class="post-info-line">
+            <div class="post-info-md"><span>
+                            <a class="link-to-markdown" href="/js%E9%AB%98%E7%BA%A7/index.md" target="_blank">阅读原始文档</a>
+                        </span></div>
+            <div class="post-info-share">
+                <span><a href="javascript:void(0);" title="分享到 Twitter" data-sharer="twitter" data-url="http://101.35.190.67/js%E9%AB%98%E7%BA%A7/" data-title="JS高级" data-via="xxxx" data-hashtags="JavaScript"><i class="fab fa-twitter fa-fw"></i></a><a href="javascript:void(0);" title="分享到 Facebook" data-sharer="facebook" data-url="http://101.35.190.67/js%E9%AB%98%E7%BA%A7/" data-hashtag="JavaScript"><i class="fab fa-facebook-square fa-fw"></i></a><a href="javascript:void(0);" title="分享到 WhatsApp" data-sharer="whatsapp" data-url="http://101.35.190.67/js%E9%AB%98%E7%BA%A7/" data-title="JS高级" data-web><i class="fab fa-whatsapp fa-fw"></i></a><a href="javascript:void(0);" title="分享到 Line" data-sharer="line" data-url="http://101.35.190.67/js%E9%AB%98%E7%BA%A7/" data-title="JS高级"><i data-svg-src="/lib/simple-icons/icons/line.min.svg"></i></a><a href="javascript:void(0);" title="分享到 微博" data-sharer="weibo" data-url="http://101.35.190.67/js%E9%AB%98%E7%BA%A7/" data-title="JS高级"><i class="fab fa-weibo fa-fw"></i></a><a href="javascript:void(0);" title="分享到 Myspace" data-sharer="myspace" data-url="http://101.35.190.67/js%E9%AB%98%E7%BA%A7/" data-title="JS高级" data-description=""><i data-svg-src="/lib/simple-icons/icons/myspace.min.svg"></i></a><a href="javascript:void(0);" title="分享到 Blogger" data-sharer="blogger" data-url="http://101.35.190.67/js%E9%AB%98%E7%BA%A7/" data-title="JS高级" data-description=""><i class="fab fa-blogger fa-fw"></i></a><a href="javascript:void(0);" title="分享到 Evernote" data-sharer="evernote" data-url="http://101.35.190.67/js%E9%AB%98%E7%BA%A7/" data-title="JS高级"><i class="fab fa-evernote fa-fw"></i></a></span>
+            </div>
+        </div>
+    </div>
+
+    <div class="post-info-more">
+        <section class="post-tags"><i class="fas fa-tags fa-fw"></i>&nbsp;<a href="/tags/javascript/">JavaScript</a></section>
+        <section>
+            <span><a href="javascript:void(0);" onclick="window.history.back();">返回</a></span>&nbsp;|&nbsp;<span><a href="/">主页</a></span>
+        </section>
+    </div>
+
+    <div class="post-nav"><a href="/js%E5%9F%BA%E7%A1%80%E6%93%8D%E4%BD%9C/" class="prev" rel="prev" title="JS基础操作"><i class="fas fa-angle-left fa-fw"></i>JS基础操作</a>
+            <a href="/js%E4%BA%8B%E4%BB%B6/" class="next" rel="next" title="JS事件">JS事件<i class="fas fa-angle-right fa-fw"></i></a></div>
+</div>
+<div id="comments"><div id="valine" class="comment"></div><noscript>
+                Please enable JavaScript to view the comments powered by <a href="https://valine.js.org/">Valine</a>.
+            </noscript></div></article></div>
+            </main><footer class="footer">
+        <div class="footer-container"><div class="footer-line">由 <a href="https://gohugo.io/" target="_blank" rel="noopener noreffer" title="Hugo 0.68.3">Hugo</a> 强力驱动 | 主题 - <a href="https://github.com/dillonzq/LoveIt" target="_blank" rel="noopener noreffer" title="LoveIt 0.2.10"><i class="far fa-kiss-wink-heart fa-fw"></i> LoveIt</a>
+                </div><div class="footer-line"><i class="far fa-copyright fa-fw"></i><span itemprop="copyrightYear">2019 - 2022</span><span class="author" itemprop="copyrightHolder">&nbsp;<a href="/" target="_blank">bone</a></span>&nbsp;|&nbsp;<span class="license"><a rel="license external nofollow noopener noreffer" href="https://creativecommons.org/licenses/by-nc/4.0/" target="_blank">CC BY-NC 4.0</a></span></div>
+        </div>
+    </footer></div>
+
+        <div id="fixed-buttons"><a href="#" id="back-to-top" class="fixed-button" title="回到顶部">
+                <i class="fas fa-arrow-up fa-fw"></i>
+            </a><a href="#" id="view-comments" class="fixed-button" title="查看评论">
+                <i class="fas fa-comment fa-fw"></i>
+            </a>
+        </div><link rel="stylesheet" href="/lib/valine/valine.min.css"><link rel="stylesheet" href="/lib/katex/katex.min.css"><link rel="stylesheet" href="/lib/katex/copy-tex.min.css"><link rel="stylesheet" href="/lib/cookieconsent/cookieconsent.min.css"><script type="text/javascript" src="/lib/valine/Valine.min.js"></script><script type="text/javascript" src="/lib/smooth-scroll/smooth-scroll.min.js"></script><script type="text/javascript" src="/lib/autocomplete/autocomplete.min.js"></script><script type="text/javascript" src="/lib/lunr/lunr.min.js"></script><script type="text/javascript" src="/lib/lunr/lunr.stemmer.support.min.js"></script><script type="text/javascript" src="/lib/lunr/lunr.zh.min.js"></script><script type="text/javascript" src="/lib/lazysizes/lazysizes.min.js"></script><script type="text/javascript" src="/lib/twemoji/twemoji.min.js"></script><script type="text/javascript" src="/lib/clipboard/clipboard.min.js"></script><script type="text/javascript" src="/lib/sharer/sharer.min.js"></script><script type="text/javascript" src="/lib/typeit/typeit.min.js"></script><script type="text/javascript" src="/lib/katex/katex.min.js"></script><script type="text/javascript" src="/lib/katex/auto-render.min.js"></script><script type="text/javascript" src="/lib/katex/copy-tex.min.js"></script><script type="text/javascript" src="/lib/katex/mhchem.min.js"></script><script type="text/javascript" src="/lib/cookieconsent/cookieconsent.min.js"></script><script type="text/javascript">window.config={"code":{"copyTitle":"复制到剪贴板","maxShownLines":10},"comment":{"valine":{"appId":"","appKey":"","avatar":"mp","el":"#valine","emojiCDN":"https://cdn.jsdelivr.net/npm/emoji-datasource-google@5.0.1/img/google/64/","emojiMaps":{"100":"1f4af.png","alien":"1f47d.png","anger":"1f4a2.png","angry":"1f620.png","anguished":"1f627.png","astonished":"1f632.png","black_heart":"1f5a4.png","blue_heart":"1f499.png","blush":"1f60a.png","bomb":"1f4a3.png","boom":"1f4a5.png","broken_heart":"1f494.png","brown_heart":"1f90e.png","clown_face":"1f921.png","cold_face":"1f976.png","cold_sweat":"1f630.png","confounded":"1f616.png","confused":"1f615.png","cry":"1f622.png","crying_cat_face":"1f63f.png","cupid":"1f498.png","dash":"1f4a8.png","disappointed":"1f61e.png","disappointed_relieved":"1f625.png","dizzy":"1f4ab.png","dizzy_face":"1f635.png","drooling_face":"1f924.png","exploding_head":"1f92f.png","expressionless":"1f611.png","face_vomiting":"1f92e.png","face_with_cowboy_hat":"1f920.png","face_with_hand_over_mouth":"1f92d.png","face_with_head_bandage":"1f915.png","face_with_monocle":"1f9d0.png","face_with_raised_eyebrow":"1f928.png","face_with_rolling_eyes":"1f644.png","face_with_symbols_on_mouth":"1f92c.png","face_with_thermometer":"1f912.png","fearful":"1f628.png","flushed":"1f633.png","frowning":"1f626.png","ghost":"1f47b.png","gift_heart":"1f49d.png","green_heart":"1f49a.png","grimacing":"1f62c.png","grin":"1f601.png","grinning":"1f600.png","hankey":"1f4a9.png","hear_no_evil":"1f649.png","heart":"2764-fe0f.png","heart_decoration":"1f49f.png","heart_eyes":"1f60d.png","heart_eyes_cat":"1f63b.png","heartbeat":"1f493.png","heartpulse":"1f497.png","heavy_heart_exclamation_mark_ornament":"2763-fe0f.png","hole":"1f573-fe0f.png","hot_face":"1f975.png","hugging_face":"1f917.png","hushed":"1f62f.png","imp":"1f47f.png","innocent":"1f607.png","japanese_goblin":"1f47a.png","japanese_ogre":"1f479.png","joy":"1f602.png","joy_cat":"1f639.png","kiss":"1f48b.png","kissing":"1f617.png","kissing_cat":"1f63d.png","kissing_closed_eyes":"1f61a.png","kissing_heart":"1f618.png","kissing_smiling_eyes":"1f619.png","laughing":"1f606.png","left_speech_bubble":"1f5e8-fe0f.png","love_letter":"1f48c.png","lying_face":"1f925.png","mask":"1f637.png","money_mouth_face":"1f911.png","nauseated_face":"1f922.png","nerd_face":"1f913.png","neutral_face":"1f610.png","no_mouth":"1f636.png","open_mouth":"1f62e.png","orange_heart":"1f9e1.png","partying_face":"1f973.png","pensive":"1f614.png","persevere":"1f623.png","pleading_face":"1f97a.png","pouting_cat":"1f63e.png","purple_heart":"1f49c.png","rage":"1f621.png","relaxed":"263a-fe0f.png","relieved":"1f60c.png","revolving_hearts":"1f49e.png","right_anger_bubble":"1f5ef-fe0f.png","robot_face":"1f916.png","rolling_on_the_floor_laughing":"1f923.png","scream":"1f631.png","scream_cat":"1f640.png","see_no_evil":"1f648.png","shushing_face":"1f92b.png","skull":"1f480.png","skull_and_crossbones":"2620-fe0f.png","sleeping":"1f634.png","sleepy":"1f62a.png","slightly_frowning_face":"1f641.png","slightly_smiling_face":"1f642.png","smile":"1f604.png","smile_cat":"1f638.png","smiley":"1f603.png","smiley_cat":"1f63a.png","smiling_face_with_3_hearts":"1f970.png","smiling_imp":"1f608.png","smirk":"1f60f.png","smirk_cat":"1f63c.png","sneezing_face":"1f927.png","sob":"1f62d.png","space_invader":"1f47e.png","sparkling_heart":"1f496.png","speak_no_evil":"1f64a.png","speech_balloon":"1f4ac.png","star-struck":"1f929.png","stuck_out_tongue":"1f61b.png","stuck_out_tongue_closed_eyes":"1f61d.png","stuck_out_tongue_winking_eye":"1f61c.png","sunglasses":"1f60e.png","sweat":"1f613.png","sweat_drops":"1f4a6.png","sweat_smile":"1f605.png","thinking_face":"1f914.png","thought_balloon":"1f4ad.png","tired_face":"1f62b.png","triumph":"1f624.png","two_hearts":"1f495.png","unamused":"1f612.png","upside_down_face":"1f643.png","weary":"1f629.png","white_frowning_face":"2639-fe0f.png","white_heart":"1f90d.png","wink":"1f609.png","woozy_face":"1f974.png","worried":"1f61f.png","yawning_face":"1f971.png","yellow_heart":"1f49b.png","yum":"1f60b.png","zany_face":"1f92a.png","zipper_mouth_face":"1f910.png","zzz":"1f4a4.png"},"enableQQ":true,"highlight":true,"lang":"zh-cn","pageSize":10,"placeholder":"你的评论 ...","recordIP":true,"visitor":true}},"cookieconsent":{"content":{"dismiss":"同意","link":"了解更多","message":"本网站使用 Cookies 来改善您的浏览体验."},"enable":true,"palette":{"button":{"background":"#f0f0f0"},"popup":{"background":"#1aa3ff"}},"theme":"edgeless"},"data":{"id-1":"bone的博客","id-2":"bone的博客"},"math":{"delimiters":[{"display":true,"left":"$$","right":"$$"},{"display":true,"left":"\\[","right":"\\]"},{"display":false,"left":"$","right":"$"},{"display":false,"left":"\\(","right":"\\)"}],"strict":false},"search":{"highlightTag":"em","lunrIndexURL":"/index.json","lunrLanguageCode":"zh","lunrSegmentitURL":"/lib/lunr/lunr.segmentit.js","maxResultLength":10,"noResultsFound":"没有找到结果","snippetLength":50,"type":"lunr"},"twemoji":true,"typeit":{"cursorChar":"|","cursorSpeed":1000,"data":{"id-1":["id-1"],"id-2":["id-2"]},"duration":-1,"speed":100}};</script><script type="text/javascript" src="/js/theme.min.js"></script></body>
+</html>

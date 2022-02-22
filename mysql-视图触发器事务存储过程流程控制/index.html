@@ -1,0 +1,948 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="robots" content="noodp" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge, chrome=1">
+        <title>mysql-视图、触发器、事务、存储过程、流程控制 - mine blog</title><meta name="Description" content="这是我的全新 Hugo 网站"><meta property="og:title" content="mysql-视图、触发器、事务、存储过程、流程控制" />
+<meta property="og:description" content="目录 视图 触发器 事务 存储过程 流程控制 一、视图 视图是由查询结果构成的一张虚拟表，和真实的表一样，带有名称的列和行数据 强调：视图是永久存储的，但是" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="http://101.35.190.67/mysql-%E8%A7%86%E5%9B%BE%E8%A7%A6%E5%8F%91%E5%99%A8%E4%BA%8B%E5%8A%A1%E5%AD%98%E5%82%A8%E8%BF%87%E7%A8%8B%E6%B5%81%E7%A8%8B%E6%8E%A7%E5%88%B6/" />
+<meta property="og:image" content="https://blogimg-1256896917.cos.ap-shanghai.myqcloud.com/blog/2022-02-22-favicon.ico"/>
+<meta property="article:published_time" content="2018-09-18T12:55:00+00:00" />
+<meta property="article:modified_time" content="2018-09-18T12:55:00+00:00" />
+<meta name="twitter:card" content="summary_large_image"/>
+<meta name="twitter:image" content="https://blogimg-1256896917.cos.ap-shanghai.myqcloud.com/blog/2022-02-22-favicon.ico"/>
+
+<meta name="twitter:title" content="mysql-视图、触发器、事务、存储过程、流程控制"/>
+<meta name="twitter:description" content="目录 视图 触发器 事务 存储过程 流程控制 一、视图 视图是由查询结果构成的一张虚拟表，和真实的表一样，带有名称的列和行数据 强调：视图是永久存储的，但是"/>
+<meta name="application-name" content="mine blog">
+<meta name="apple-mobile-web-app-title" content="mine blog"><link rel="shortcut icon" type="image/x-icon" href="/favicon.ico" />
+        <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+        <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png"><link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"><link rel="manifest" href="/site.webmanifest"><link rel="canonical" href="http://101.35.190.67/mysql-%E8%A7%86%E5%9B%BE%E8%A7%A6%E5%8F%91%E5%99%A8%E4%BA%8B%E5%8A%A1%E5%AD%98%E5%82%A8%E8%BF%87%E7%A8%8B%E6%B5%81%E7%A8%8B%E6%8E%A7%E5%88%B6/" /><link rel="prev" href="http://101.35.190.67/mysql-%E6%95%B0%E6%8D%AE%E8%AE%B0%E5%BD%95%E7%9B%B8%E5%85%B3%E6%93%8D%E4%BD%9C%E5%A2%9E%E5%88%A0%E6%94%B9%E6%9F%A5%E5%8F%8A%E6%9D%83%E9%99%90%E7%AE%A1%E7%90%86/" /><link rel="next" href="http://101.35.190.67/%E9%AB%98%E7%BA%A7%E5%B8%83%E5%B1%80/" /><link rel="stylesheet" href="/lib/normalize/normalize.min.css"><link rel="stylesheet" href="/css/style.min.css"><link rel="stylesheet" href="/lib/fontawesome-free/all.min.css"><link rel="stylesheet" href="/lib/animate/animate.min.css"><script type="application/ld+json">
+    {
+        "@context": "http://schema.org",
+        "@type": "BlogPosting",
+        "headline": "mysql-视图、触发器、事务、存储过程、流程控制",
+        "inLanguage": "zh-CN",
+        "mainEntityOfPage": {
+            "@type": "WebPage",
+            "@id": "http:\/\/101.35.190.67\/mysql-%E8%A7%86%E5%9B%BE%E8%A7%A6%E5%8F%91%E5%99%A8%E4%BA%8B%E5%8A%A1%E5%AD%98%E5%82%A8%E8%BF%87%E7%A8%8B%E6%B5%81%E7%A8%8B%E6%8E%A7%E5%88%B6\/"
+        },"genre": "posts","keywords": "MySql","wordcount":  3932 ,
+        "url": "http:\/\/101.35.190.67\/mysql-%E8%A7%86%E5%9B%BE%E8%A7%A6%E5%8F%91%E5%99%A8%E4%BA%8B%E5%8A%A1%E5%AD%98%E5%82%A8%E8%BF%87%E7%A8%8B%E6%B5%81%E7%A8%8B%E6%8E%A7%E5%88%B6\/","datePublished": "2018-09-18T12:55:00+00:00","dateModified": "2018-09-18T12:55:00+00:00","publisher": {
+            "@type": "Organization",
+            "name": ""},"author": {
+                "@type": "Person",
+                "name": "bone"
+            },"description": ""
+    }
+    </script></head>
+    <body header-desktop="fixed" header-mobile="auto"><script type="text/javascript">(window.localStorage && localStorage.getItem('theme') ? localStorage.getItem('theme') === 'dark' : ('dark' === 'auto' ? window.matchMedia('(prefers-color-scheme: dark)').matches : 'dark' === 'dark')) && document.body.setAttribute('theme', 'dark');</script>
+
+        <div id="mask"></div><div class="wrapper"><header class="desktop" id="header-desktop">
+    <div class="header-wrapper">
+        <div class="header-title">
+            <a href="/" title="mine blog"><img
+        class="lazyload logo"
+        src="/svg/loading.min.svg"
+        data-src="https://blogimg-1256896917.cos.ap-shanghai.myqcloud.com/blog/2022-02-22-favicon.ico"
+        data-srcset="https://blogimg-1256896917.cos.ap-shanghai.myqcloud.com/blog/2022-02-22-favicon.ico, https://blogimg-1256896917.cos.ap-shanghai.myqcloud.com/blog/2022-02-22-favicon.ico 1.5x, https://blogimg-1256896917.cos.ap-shanghai.myqcloud.com/blog/2022-02-22-favicon.ico 2x"
+        data-sizes="auto"
+        alt="https://blogimg-1256896917.cos.ap-shanghai.myqcloud.com/blog/2022-02-22-favicon.ico"
+        title="https://blogimg-1256896917.cos.ap-shanghai.myqcloud.com/blog/2022-02-22-favicon.ico" /><span id="id-1" class="typeit"></span></a>
+        </div>
+        <div class="menu">
+            <div class="menu-inner"><a class="menu-item" href="/posts/"> 文章 </a><a class="menu-item" href="/tags/"> 标签 </a><a class="menu-item" href="/categories/"> 分类 </a><a class="menu-item" href="/about/"> 关于 </a><span class="menu-item delimiter"></span><span class="menu-item search" id="search-desktop">
+                        <input type="text" placeholder="搜索文章标题或内容..." id="search-input-desktop">
+                        <a href="javascript:void(0);" class="search-button search-toggle" id="search-toggle-desktop" title="搜索">
+                            <i class="fas fa-search fa-fw"></i>
+                        </a>
+                        <a href="javascript:void(0);" class="search-button search-clear" id="search-clear-desktop" title="清空">
+                            <i class="fas fa-times-circle fa-fw"></i>
+                        </a>
+                        <span class="search-button search-loading" id="search-loading-desktop">
+                            <i class="fas fa-spinner fa-fw fa-spin"></i>
+                        </span>
+                    </span><a href="javascript:void(0);" class="menu-item theme-switch" title="切换主题">
+                    <i class="fas fa-adjust fa-fw"></i>
+                </a>
+            </div>
+        </div>
+    </div>
+</header><header class="mobile" id="header-mobile">
+    <div class="header-container">
+        <div class="header-wrapper">
+            <div class="header-title">
+                <a href="/" title="mine blog"><img
+        class="lazyload logo"
+        src="/svg/loading.min.svg"
+        data-src="https://blogimg-1256896917.cos.ap-shanghai.myqcloud.com/blog/2022-02-22-favicon.ico"
+        data-srcset="https://blogimg-1256896917.cos.ap-shanghai.myqcloud.com/blog/2022-02-22-favicon.ico, https://blogimg-1256896917.cos.ap-shanghai.myqcloud.com/blog/2022-02-22-favicon.ico 1.5x, https://blogimg-1256896917.cos.ap-shanghai.myqcloud.com/blog/2022-02-22-favicon.ico 2x"
+        data-sizes="auto"
+        alt="https://blogimg-1256896917.cos.ap-shanghai.myqcloud.com/blog/2022-02-22-favicon.ico"
+        title="https://blogimg-1256896917.cos.ap-shanghai.myqcloud.com/blog/2022-02-22-favicon.ico" /><span id="id-2" class="typeit"></span></a>
+            </div>
+            <div class="menu-toggle" id="menu-toggle-mobile">
+                <span></span><span></span><span></span>
+            </div>
+        </div>
+        <div class="menu" id="menu-mobile"><div class="search-wrapper">
+                    <div class="search mobile" id="search-mobile">
+                        <input type="text" placeholder="搜索文章标题或内容..." id="search-input-mobile">
+                        <a href="javascript:void(0);" class="search-button search-toggle" id="search-toggle-mobile" title="搜索">
+                            <i class="fas fa-search fa-fw"></i>
+                        </a>
+                        <a href="javascript:void(0);" class="search-button search-clear" id="search-clear-mobile" title="清空">
+                            <i class="fas fa-times-circle fa-fw"></i>
+                        </a>
+                        <span class="search-button search-loading" id="search-loading-mobile">
+                            <i class="fas fa-spinner fa-fw fa-spin"></i>
+                        </span>
+                    </div>
+                    <a href="javascript:void(0);" class="search-cancel" id="search-cancel-mobile">
+                        取消
+                    </a>
+                </div><a class="menu-item" href="/posts/" title="">文章</a><a class="menu-item" href="/tags/" title="">标签</a><a class="menu-item" href="/categories/" title="">分类</a><a class="menu-item" href="/about/" title="">关于</a><a href="javascript:void(0);" class="menu-item theme-switch" title="切换主题">
+                <i class="fas fa-adjust fa-fw"></i>
+            </a></div>
+    </div>
+</header>
+<div class="search-dropdown desktop">
+    <div id="search-dropdown-desktop"></div>
+</div>
+<div class="search-dropdown mobile">
+    <div id="search-dropdown-mobile"></div>
+</div>
+<main class="main">
+                <div class="container"><div class="toc" id="toc-auto">
+            <h2 class="toc-title">目录</h2>
+            <div class="toc-content" id="toc-content-auto"></div>
+        </div><article class="page single"><h1 class="single-title animated flipInX">mysql-视图、触发器、事务、存储过程、流程控制</h1><div class="post-meta">
+            <div class="post-meta-line"><span class="post-author"><a href="/" title="Author" rel=" author" class="author"><i class="fas fa-user-circle fa-fw"></i>bone</a></span>&nbsp;<span class="post-category">收录于 <a href="/categories/mysql/"><i class="far fa-folder fa-fw"></i>MySql</a></span></div>
+            <div class="post-meta-line"><i class="far fa-calendar-alt fa-fw"></i>&nbsp;<time datetime="2018-09-18">2018-09-18</time>&nbsp;<i class="fas fa-pencil-alt fa-fw"></i>&nbsp;约 3932 字&nbsp;
+                <i class="far fa-clock fa-fw"></i>&nbsp;预计阅读 8 分钟&nbsp;<span id="/mysql-%E8%A7%86%E5%9B%BE%E8%A7%A6%E5%8F%91%E5%99%A8%E4%BA%8B%E5%8A%A1%E5%AD%98%E5%82%A8%E8%BF%87%E7%A8%8B%E6%B5%81%E7%A8%8B%E6%8E%A7%E5%88%B6/" class="leancloud_visitors" data-flag-title="mysql-视图、触发器、事务、存储过程、流程控制">
+                        <i class="far fa-eye fa-fw"></i>&nbsp;<span class=leancloud-visitors-count></span>&nbsp;次阅读
+                    </span>&nbsp;</div>
+        </div><div class="details toc" id="toc-static"  kept="">
+                <div class="details-summary toc-title">
+                    <span>目录</span>
+                    <span><i class="details-icon fas fa-angle-right"></i></span>
+                </div>
+                <div class="details-content toc-content" id="toc-content-static"><nav id="TableOfContents">
+  <ul>
+    <li><a href="#一视图">一、视图</a>
+      <ul>
+        <li><a href="#一创建视图">（一）、创建视图</a></li>
+        <li><a href="#二查询视图">（二）、查询视图</a></li>
+        <li><a href="#三修改视图">（三）、修改视图</a></li>
+        <li><a href="#四删除视图">（四）、删除视图</a></li>
+      </ul>
+    </li>
+    <li><a href="#二触发器">二、触发器</a>
+      <ul>
+        <li><a href="#一创建触发器">（一）、创建触发器</a></li>
+        <li><a href="#二查看触发器">（二）、查看触发器</a></li>
+        <li><a href="#三删除触发器">（三）、删除触发器</a></li>
+      </ul>
+    </li>
+    <li><a href="#三事务">三、事务</a>
+      <ul>
+        <li><a href="#一事务的特性">（一）、事务的特性</a></li>
+        <li><a href="#二事务的隔离级别">（二）、事务的隔离级别</a></li>
+        <li><a href="#三事务操作"> （三）、事务操作</a></li>
+      </ul>
+    </li>
+    <li><a href="#四存储过程">四、存储过程</a>
+      <ul>
+        <li><a href="#一使用存储过程">（一）、使用存储过程</a></li>
+        <li><a href="#二删除存储过程">（二）、删除存储过程</a></li>
+      </ul>
+    </li>
+    <li><a href="#五流程控制">五、流程控制</a>
+      <ul>
+        <li><a href="#一条件语句">（一）、条件语句</a></li>
+        <li><a href="#二循环语句">（二）、循环语句</a></li>
+      </ul>
+    </li>
+  </ul>
+</nav></div>
+            </div><div class="content" id="content"><h1 id="目录">目录</h1>
+<ol>
+<li>视图</li>
+<li>触发器</li>
+<li>事务</li>
+<li>存储过程</li>
+<li>流程控制</li>
+</ol>
+<h2 id="一视图">一、视图</h2>
+<p>视图是由查询结果构成的一张虚拟表，和真实的表一样，带有名称的列和行数据</p>
+<p>强调：视图是永久存储的，但是视图存储的不是数据，只是一条sql语句
+视图的特点：</p>
+<ol>
+<li>视图的列可以来自不同的表，是表的抽象和逻辑意义上建立的新关系。 </li>
+<li>视图是由基本表（实表）产生的表（虚表）。</li>
+<li>视图的建立和删除不影响基本表。 </li>
+<li>对视图内容的更新（添加、删除和修改）直接影响基本表。 </li>
+<li>当视图来自多个基本表时，不允许添加和删除数据。</li>
+</ol>
+<p>优点：</p>
+<ol>
+<li>可以简化查询（多表查询转换为直接通过视图查询）</li>
+<li>可以进行权限控制（把表的权限封闭，开发对应的视图权限）</li>
+</ol>
+<h3 id="一创建视图">（一）、创建视图</h3>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-fallback" data-lang="fallback">&lt;span style=&#34;color: #0000ff;&#34;&gt;create&lt;/span&gt; &lt;span style=&#34;color: #0000ff;&#34;&gt;view&lt;/span&gt; 视图名称  &lt;span style=&#34;color: #0000ff;&#34;&gt;as&lt;/span&gt; sql 查询语句  例子：&lt;span style=&#34;color: #0000ff;&#34;&gt;CREATE&lt;/span&gt; &lt;span style=&#34;color: #0000ff;&#34;&gt;view&lt;/span&gt; test_view &lt;span style=&#34;color: #0000ff;&#34;&gt;as&lt;/span&gt; &lt;span style=&#34;color: #0000ff;&#34;&gt;SELECT&lt;/span&gt; &lt;span style=&#34;color: #808080;&#34;&gt;*&lt;/span&gt; &lt;span style=&#34;color: #0000ff;&#34;&gt;from&lt;/span&gt; test;
+</code></pre></td></tr></table>
+</div>
+</div><h3 id="二查询视图">（二）、查询视图</h3>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-fallback" data-lang="fallback">&lt;span style=&#34;color: #0000ff;&#34;&gt;select&lt;/span&gt; &lt;span style=&#34;color: #808080;&#34;&gt;*&lt;/span&gt; &lt;span style=&#34;color: #0000ff;&#34;&gt;from&lt;/span&gt; 视图名 &lt;span style=&#34;color: #ff0000;&#34;&gt;[&lt;/span&gt;&lt;span style=&#34;color: #ff0000;&#34;&gt;where 条件&lt;/span&gt;&lt;span style=&#34;color: #ff0000;&#34;&gt;]&lt;/span&gt;
+</code></pre></td></tr></table>
+</div>
+</div><h3 id="三修改视图">（三）、修改视图</h3>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-fallback" data-lang="fallback">&lt;span style=&#34;color: #0000ff;&#34;&gt;alter&lt;/span&gt; &lt;span style=&#34;color: #0000ff;&#34;&gt;view&lt;/span&gt; 视图名称 &lt;span style=&#34;color: #0000ff;&#34;&gt;AS&lt;/span&gt; SQL语句； 例子：&lt;span style=&#34;color: #0000ff;&#34;&gt;ALTER&lt;/span&gt; &lt;span style=&#34;color: #0000ff;&#34;&gt;view&lt;/span&gt; test_view &lt;span style=&#34;color: #0000ff;&#34;&gt;as&lt;/span&gt; &lt;span style=&#34;color: #0000ff;&#34;&gt;SELECT&lt;/span&gt; &lt;span style=&#34;color: #808080;&#34;&gt;*&lt;/span&gt; &lt;span style=&#34;color: #0000ff;&#34;&gt;from&lt;/span&gt; test_view &lt;span style=&#34;color: #0000ff;&#34;&gt;WHERE&lt;/span&gt; salary&lt;span style=&#34;color: #808080;&#34;&gt;&gt;&lt;/span&gt;&lt;span style=&#34;color: #800000; font-weight: bold;&#34;&gt;10000&lt;/span&gt;
+</code></pre></td></tr></table>
+</div>
+</div><h3 id="四删除视图">（四）、删除视图</h3>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-fallback" data-lang="fallback">&lt;span style=&#34;color: #0000ff;&#34;&gt;drop&lt;/span&gt; &lt;span style=&#34;color: #0000ff;&#34;&gt;view&lt;/span&gt;&lt;span style=&#34;color: #000000;&#34;&gt; 视图名称; 
+例子：&lt;/span&gt;&lt;span style=&#34;color: #0000ff;&#34;&gt;drop&lt;/span&gt; &lt;span style=&#34;color: #0000ff;&#34;&gt;view&lt;/span&gt; test_view
+</code></pre></td></tr></table>
+</div>
+</div><h2 id="二触发器">二、触发器</h2>
+<p>触发器可以监视用户对表的增、删、改操作，并触发某种操作（没有查），自动执行，无法直接调用。
+创建触发器语法的四要素：
+　　1.监视地点（table）
+　　2.监视事件（insert/update/delete）
+　　3.触发时间（before/after）
+　　4.触发事件（insert/update/delete）</p>
+<h3 id="一创建触发器">（一）、创建触发器</h3>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="http://images.cnblogs.com/OutliningIndicators/ContractedBlock.gif"
+        data-srcset="http://images.cnblogs.com/OutliningIndicators/ContractedBlock.gif, http://images.cnblogs.com/OutliningIndicators/ContractedBlock.gif 1.5x, http://images.cnblogs.com/OutliningIndicators/ContractedBlock.gif 2x"
+        data-sizes="auto"
+        alt="http://images.cnblogs.com/OutliningIndicators/ContractedBlock.gif"
+        title="http://images.cnblogs.com/OutliningIndicators/ContractedBlock.gif" /><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="http://images.cnblogs.com/OutliningIndicators/ExpandedBlockStart.gif"
+        data-srcset="http://images.cnblogs.com/OutliningIndicators/ExpandedBlockStart.gif, http://images.cnblogs.com/OutliningIndicators/ExpandedBlockStart.gif 1.5x, http://images.cnblogs.com/OutliningIndicators/ExpandedBlockStart.gif 2x"
+        data-sizes="auto"
+        alt="http://images.cnblogs.com/OutliningIndicators/ExpandedBlockStart.gif"
+        title="http://images.cnblogs.com/OutliningIndicators/ExpandedBlockStart.gif" /></p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span><span class="lnt">29
+</span><span class="lnt">30
+</span><span class="lnt">31
+</span><span class="lnt">32
+</span><span class="lnt">33
+</span><span class="lnt">34
+</span><span class="lnt">35
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-fallback" data-lang="fallback">&lt;span style=&#34;color: #000000;&#34;&gt;# 插入前
+&lt;/span&gt;&lt;span style=&#34;color: #0000ff;&#34;&gt;CREATE&lt;/span&gt; &lt;span style=&#34;color: #0000ff;&#34;&gt;TRIGGER&lt;/span&gt; tri_before_insert_tb1 BEFORE &lt;span style=&#34;color: #0000ff;&#34;&gt;INSERT&lt;/span&gt; &lt;span style=&#34;color: #0000ff;&#34;&gt;ON&lt;/span&gt; tb1 &lt;span style=&#34;color: #0000ff;&#34;&gt;FOR&lt;/span&gt;&lt;span style=&#34;color: #000000;&#34;&gt; EACH ROW
+&lt;/span&gt;&lt;span style=&#34;color: #0000ff;&#34;&gt;BEGIN&lt;/span&gt;&lt;span style=&#34;color: #000000;&#34;&gt;
+    ...
+&lt;/span&gt;&lt;span style=&#34;color: #0000ff;&#34;&gt;END&lt;/span&gt;&lt;span style=&#34;color: #000000;&#34;&gt;
+
+# 插入后
+&lt;/span&gt;&lt;span style=&#34;color: #0000ff;&#34;&gt;CREATE&lt;/span&gt; &lt;span style=&#34;color: #0000ff;&#34;&gt;TRIGGER&lt;/span&gt; tri_after_insert_tb1 AFTER &lt;span style=&#34;color: #0000ff;&#34;&gt;INSERT&lt;/span&gt; &lt;span style=&#34;color: #0000ff;&#34;&gt;ON&lt;/span&gt; tb1 &lt;span style=&#34;color: #0000ff;&#34;&gt;FOR&lt;/span&gt;&lt;span style=&#34;color: #000000;&#34;&gt; EACH ROW
+&lt;/span&gt;&lt;span style=&#34;color: #0000ff;&#34;&gt;BEGIN&lt;/span&gt;&lt;span style=&#34;color: #000000;&#34;&gt;
+    ...
+&lt;/span&gt;&lt;span style=&#34;color: #0000ff;&#34;&gt;END&lt;/span&gt;&lt;span style=&#34;color: #000000;&#34;&gt;
+
+# 删除前
+&lt;/span&gt;&lt;span style=&#34;color: #0000ff;&#34;&gt;CREATE&lt;/span&gt; &lt;span style=&#34;color: #0000ff;&#34;&gt;TRIGGER&lt;/span&gt; tri_before_delete_tb1 BEFORE &lt;span style=&#34;color: #0000ff;&#34;&gt;DELETE&lt;/span&gt; &lt;span style=&#34;color: #0000ff;&#34;&gt;ON&lt;/span&gt; tb1 &lt;span style=&#34;color: #0000ff;&#34;&gt;FOR&lt;/span&gt;&lt;span style=&#34;color: #000000;&#34;&gt; EACH ROW
+&lt;/span&gt;&lt;span style=&#34;color: #0000ff;&#34;&gt;BEGIN&lt;/span&gt;&lt;span style=&#34;color: #000000;&#34;&gt;
+    ...
+&lt;/span&gt;&lt;span style=&#34;color: #0000ff;&#34;&gt;END&lt;/span&gt;&lt;span style=&#34;color: #000000;&#34;&gt;
+
+# 删除后
+&lt;/span&gt;&lt;span style=&#34;color: #0000ff;&#34;&gt;CREATE&lt;/span&gt; &lt;span style=&#34;color: #0000ff;&#34;&gt;TRIGGER&lt;/span&gt; tri_after_delete_tb1 AFTER &lt;span style=&#34;color: #0000ff;&#34;&gt;DELETE&lt;/span&gt; &lt;span style=&#34;color: #0000ff;&#34;&gt;ON&lt;/span&gt; tb1 &lt;span style=&#34;color: #0000ff;&#34;&gt;FOR&lt;/span&gt;&lt;span style=&#34;color: #000000;&#34;&gt; EACH ROW
+&lt;/span&gt;&lt;span style=&#34;color: #0000ff;&#34;&gt;BEGIN&lt;/span&gt;&lt;span style=&#34;color: #000000;&#34;&gt;
+    ...
+&lt;/span&gt;&lt;span style=&#34;color: #0000ff;&#34;&gt;END&lt;/span&gt;&lt;span style=&#34;color: #000000;&#34;&gt;
+
+# 更新前
+&lt;/span&gt;&lt;span style=&#34;color: #0000ff;&#34;&gt;CREATE&lt;/span&gt; &lt;span style=&#34;color: #0000ff;&#34;&gt;TRIGGER&lt;/span&gt; tri_before_update_tb1 BEFORE &lt;span style=&#34;color: #0000ff;&#34;&gt;UPDATE&lt;/span&gt; &lt;span style=&#34;color: #0000ff;&#34;&gt;ON&lt;/span&gt; tb1 &lt;span style=&#34;color: #0000ff;&#34;&gt;FOR&lt;/span&gt;&lt;span style=&#34;color: #000000;&#34;&gt; EACH ROW
+&lt;/span&gt;&lt;span style=&#34;color: #0000ff;&#34;&gt;BEGIN&lt;/span&gt;&lt;span style=&#34;color: #000000;&#34;&gt;
+    ...
+&lt;/span&gt;&lt;span style=&#34;color: #0000ff;&#34;&gt;END&lt;/span&gt;&lt;span style=&#34;color: #000000;&#34;&gt;
+
+# 更新后
+&lt;/span&gt;&lt;span style=&#34;color: #0000ff;&#34;&gt;CREATE&lt;/span&gt; &lt;span style=&#34;color: #0000ff;&#34;&gt;TRIGGER&lt;/span&gt; tri_after_update_tb1 AFTER &lt;span style=&#34;color: #0000ff;&#34;&gt;UPDATE&lt;/span&gt; &lt;span style=&#34;color: #0000ff;&#34;&gt;ON&lt;/span&gt; tb1 &lt;span style=&#34;color: #0000ff;&#34;&gt;FOR&lt;/span&gt;&lt;span style=&#34;color: #000000;&#34;&gt; EACH ROW
+&lt;/span&gt;&lt;span style=&#34;color: #0000ff;&#34;&gt;BEGIN&lt;/span&gt;&lt;span style=&#34;color: #000000;&#34;&gt;
+    ...
+&lt;/span&gt;&lt;span style=&#34;color: #0000ff;&#34;&gt;END&lt;/span&gt;
+</code></pre></td></tr></table>
+</div>
+</div><p>语法</p>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="http://images.cnblogs.com/OutliningIndicators/ContractedBlock.gif"
+        data-srcset="http://images.cnblogs.com/OutliningIndicators/ContractedBlock.gif, http://images.cnblogs.com/OutliningIndicators/ContractedBlock.gif 1.5x, http://images.cnblogs.com/OutliningIndicators/ContractedBlock.gif 2x"
+        data-sizes="auto"
+        alt="http://images.cnblogs.com/OutliningIndicators/ContractedBlock.gif"
+        title="http://images.cnblogs.com/OutliningIndicators/ContractedBlock.gif" /><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="http://images.cnblogs.com/OutliningIndicators/ExpandedBlockStart.gif"
+        data-srcset="http://images.cnblogs.com/OutliningIndicators/ExpandedBlockStart.gif, http://images.cnblogs.com/OutliningIndicators/ExpandedBlockStart.gif 1.5x, http://images.cnblogs.com/OutliningIndicators/ExpandedBlockStart.gif 2x"
+        data-sizes="auto"
+        alt="http://images.cnblogs.com/OutliningIndicators/ExpandedBlockStart.gif"
+        title="http://images.cnblogs.com/OutliningIndicators/ExpandedBlockStart.gif" /></p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span><span class="lnt">29
+</span><span class="lnt">30
+</span><span class="lnt">31
+</span><span class="lnt">32
+</span><span class="lnt">33
+</span><span class="lnt">34
+</span><span class="lnt">35
+</span><span class="lnt">36
+</span><span class="lnt">37
+</span><span class="lnt">38
+</span><span class="lnt">39
+</span><span class="lnt">40
+</span><span class="lnt">41
+</span><span class="lnt">42
+</span><span class="lnt">43
+</span><span class="lnt">44
+</span><span class="lnt">45
+</span><span class="lnt">46
+</span><span class="lnt">47
+</span><span class="lnt">48
+</span><span class="lnt">49
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-fallback" data-lang="fallback">&lt;span style=&#34;color: #000000;&#34;&gt;#准备表
+&lt;/span&gt;&lt;span style=&#34;color: #0000ff;&#34;&gt;CREATE&lt;/span&gt; &lt;span style=&#34;color: #0000ff;&#34;&gt;TABLE&lt;/span&gt;&lt;span style=&#34;color: #000000;&#34;&gt; cmd (
+    id &lt;/span&gt;&lt;span style=&#34;color: #0000ff;&#34;&gt;INT&lt;/span&gt; &lt;span style=&#34;color: #0000ff;&#34;&gt;PRIMARY&lt;/span&gt; &lt;span style=&#34;color: #0000ff;&#34;&gt;KEY&lt;/span&gt;&lt;span style=&#34;color: #000000;&#34;&gt; auto_increment,
+    &lt;/span&gt;&lt;span style=&#34;color: #ff00ff;&#34;&gt;USER&lt;/span&gt; &lt;span style=&#34;color: #0000ff;&#34;&gt;CHAR&lt;/span&gt; (&lt;span style=&#34;color: #800000; font-weight: bold;&#34;&gt;32&lt;/span&gt;&lt;span style=&#34;color: #000000;&#34;&gt;),
+    priv &lt;/span&gt;&lt;span style=&#34;color: #0000ff;&#34;&gt;CHAR&lt;/span&gt; (&lt;span style=&#34;color: #800000; font-weight: bold;&#34;&gt;10&lt;/span&gt;&lt;span style=&#34;color: #000000;&#34;&gt;),
+    cmd &lt;/span&gt;&lt;span style=&#34;color: #0000ff;&#34;&gt;CHAR&lt;/span&gt; (&lt;span style=&#34;color: #800000; font-weight: bold;&#34;&gt;64&lt;/span&gt;&lt;span style=&#34;color: #000000;&#34;&gt;),
+    sub_time &lt;/span&gt;&lt;span style=&#34;color: #0000ff;&#34;&gt;datetime&lt;/span&gt;&lt;span style=&#34;color: #000000;&#34;&gt;, #提交时间
+    success enum (&lt;/span&gt;&lt;span style=&#34;color: #ff0000;&#34;&gt;&#39;&lt;/span&gt;&lt;span style=&#34;color: #ff0000;&#34;&gt;yes&lt;/span&gt;&lt;span style=&#34;color: #ff0000;&#34;&gt;&#39;&lt;/span&gt;, &lt;span style=&#34;color: #ff0000;&#34;&gt;&#39;&lt;/span&gt;&lt;span style=&#34;color: #ff0000;&#34;&gt;no&lt;/span&gt;&lt;span style=&#34;color: #ff0000;&#34;&gt;&#39;&lt;/span&gt;&lt;span style=&#34;color: #000000;&#34;&gt;) #0代表执行失败
+);
+
+&lt;/span&gt;&lt;span style=&#34;color: #0000ff;&#34;&gt;CREATE&lt;/span&gt; &lt;span style=&#34;color: #0000ff;&#34;&gt;TABLE&lt;/span&gt;&lt;span style=&#34;color: #000000;&#34;&gt; errlog (
+    id &lt;/span&gt;&lt;span style=&#34;color: #0000ff;&#34;&gt;INT&lt;/span&gt; &lt;span style=&#34;color: #0000ff;&#34;&gt;PRIMARY&lt;/span&gt; &lt;span style=&#34;color: #0000ff;&#34;&gt;KEY&lt;/span&gt;&lt;span style=&#34;color: #000000;&#34;&gt; auto_increment,
+    err_cmd &lt;/span&gt;&lt;span style=&#34;color: #0000ff;&#34;&gt;CHAR&lt;/span&gt; (&lt;span style=&#34;color: #800000; font-weight: bold;&#34;&gt;64&lt;/span&gt;&lt;span style=&#34;color: #000000;&#34;&gt;),
+    err_time &lt;/span&gt;&lt;span style=&#34;color: #0000ff;&#34;&gt;datetime&lt;/span&gt;&lt;span style=&#34;color: #000000;&#34;&gt;
+);
+
+#创建触发器
+delimiter &lt;/span&gt;&lt;span style=&#34;color: #808080;&#34;&gt;//&lt;/span&gt;
+&lt;span style=&#34;color: #0000ff;&#34;&gt;CREATE&lt;/span&gt; &lt;span style=&#34;color: #0000ff;&#34;&gt;TRIGGER&lt;/span&gt; tri_after_insert_cmd AFTER &lt;span style=&#34;color: #0000ff;&#34;&gt;INSERT&lt;/span&gt; &lt;span style=&#34;color: #0000ff;&#34;&gt;ON&lt;/span&gt; cmd &lt;span style=&#34;color: #0000ff;&#34;&gt;FOR&lt;/span&gt;&lt;span style=&#34;color: #000000;&#34;&gt; EACH ROW
+&lt;/span&gt;&lt;span style=&#34;color: #0000ff;&#34;&gt;BEGIN&lt;/span&gt;
+    &lt;span style=&#34;color: #0000ff;&#34;&gt;IF&lt;/span&gt; NEW.success &lt;span style=&#34;color: #808080;&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color: #ff0000;&#34;&gt;&#39;&lt;/span&gt;&lt;span style=&#34;color: #ff0000;&#34;&gt;no&lt;/span&gt;&lt;span style=&#34;color: #ff0000;&#34;&gt;&#39;&lt;/span&gt; &lt;span style=&#34;color: #0000ff;&#34;&gt;THEN&lt;/span&gt;&lt;span style=&#34;color: #000000;&#34;&gt; #等值判断只有一个等号
+            &lt;/span&gt;&lt;span style=&#34;color: #0000ff;&#34;&gt;INSERT&lt;/span&gt; &lt;span style=&#34;color: #0000ff;&#34;&gt;INTO&lt;/span&gt; errlog(err_cmd, err_time) &lt;span style=&#34;color: #0000ff;&#34;&gt;VALUES&lt;/span&gt;&lt;span style=&#34;color: #000000;&#34;&gt;(NEW.cmd, NEW.sub_time) ; #必须加分号
+      &lt;/span&gt;&lt;span style=&#34;color: #0000ff;&#34;&gt;END&lt;/span&gt; &lt;span style=&#34;color: #0000ff;&#34;&gt;IF&lt;/span&gt;&lt;span style=&#34;color: #000000;&#34;&gt; ; #必须加分号
+&lt;/span&gt;&lt;span style=&#34;color: #0000ff;&#34;&gt;END&lt;/span&gt;&lt;span style=&#34;color: #808080;&#34;&gt;//&lt;/span&gt;&lt;span style=&#34;color: #000000;&#34;&gt;
+delimiter ;
+
+#往表cmd中插入记录，触发触发器，根据IF的条件决定是否插入错误日志
+&lt;/span&gt;&lt;span style=&#34;color: #0000ff;&#34;&gt;INSERT&lt;/span&gt; &lt;span style=&#34;color: #0000ff;&#34;&gt;INTO&lt;/span&gt;&lt;span style=&#34;color: #000000;&#34;&gt; cmd (
+    &lt;/span&gt;&lt;span style=&#34;color: #ff00ff;&#34;&gt;USER&lt;/span&gt;&lt;span style=&#34;color: #000000;&#34;&gt;,
+    priv,
+    cmd,
+    sub_time,
+    success
+)
+&lt;/span&gt;&lt;span style=&#34;color: #0000ff;&#34;&gt;VALUES&lt;/span&gt;&lt;span style=&#34;color: #000000;&#34;&gt;
+    (&lt;/span&gt;&lt;span style=&#34;color: #ff0000;&#34;&gt;&#39;&lt;/span&gt;&lt;span style=&#34;color: #ff0000;&#34;&gt;A&lt;/span&gt;&lt;span style=&#34;color: #ff0000;&#34;&gt;&#39;&lt;/span&gt;,&lt;span style=&#34;color: #ff0000;&#34;&gt;&#39;&lt;/span&gt;&lt;span style=&#34;color: #ff0000;&#34;&gt;0755&lt;/span&gt;&lt;span style=&#34;color: #ff0000;&#34;&gt;&#39;&lt;/span&gt;,&lt;span style=&#34;color: #ff0000;&#34;&gt;&#39;&lt;/span&gt;&lt;span style=&#34;color: #ff0000;&#34;&gt;ls -l /etc&lt;/span&gt;&lt;span style=&#34;color: #ff0000;&#34;&gt;&#39;&lt;/span&gt;,NOW(),&lt;span style=&#34;color: #ff0000;&#34;&gt;&#39;&lt;/span&gt;&lt;span style=&#34;color: #ff0000;&#34;&gt;yes&lt;/span&gt;&lt;span style=&#34;color: #ff0000;&#34;&gt;&#39;&lt;/span&gt;&lt;span style=&#34;color: #000000;&#34;&gt;),
+    (&lt;/span&gt;&lt;span style=&#34;color: #ff0000;&#34;&gt;&#39;&lt;/span&gt;&lt;span style=&#34;color: #ff0000;&#34;&gt;A&lt;/span&gt;&lt;span style=&#34;color: #ff0000;&#34;&gt;&#39;&lt;/span&gt;,&lt;span style=&#34;color: #ff0000;&#34;&gt;&#39;&lt;/span&gt;&lt;span style=&#34;color: #ff0000;&#34;&gt;0755&lt;/span&gt;&lt;span style=&#34;color: #ff0000;&#34;&gt;&#39;&lt;/span&gt;,&lt;span style=&#34;color: #ff0000;&#34;&gt;&#39;&lt;/span&gt;&lt;span style=&#34;color: #ff0000;&#34;&gt;cat /etc/passwd&lt;/span&gt;&lt;span style=&#34;color: #ff0000;&#34;&gt;&#39;&lt;/span&gt;,NOW(),&lt;span style=&#34;color: #ff0000;&#34;&gt;&#39;&lt;/span&gt;&lt;span style=&#34;color: #ff0000;&#34;&gt;no&lt;/span&gt;&lt;span style=&#34;color: #ff0000;&#34;&gt;&#39;&lt;/span&gt;&lt;span style=&#34;color: #000000;&#34;&gt;),
+    (&lt;/span&gt;&lt;span style=&#34;color: #ff0000;&#34;&gt;&#39;&lt;/span&gt;&lt;span style=&#34;color: #ff0000;&#34;&gt;A&lt;/span&gt;&lt;span style=&#34;color: #ff0000;&#34;&gt;&#39;&lt;/span&gt;,&lt;span style=&#34;color: #ff0000;&#34;&gt;&#39;&lt;/span&gt;&lt;span style=&#34;color: #ff0000;&#34;&gt;0755&lt;/span&gt;&lt;span style=&#34;color: #ff0000;&#34;&gt;&#39;&lt;/span&gt;,&lt;span style=&#34;color: #ff0000;&#34;&gt;&#39;&lt;/span&gt;&lt;span style=&#34;color: #ff0000;&#34;&gt;useradd xxx&lt;/span&gt;&lt;span style=&#34;color: #ff0000;&#34;&gt;&#39;&lt;/span&gt;,NOW(),&lt;span style=&#34;color: #ff0000;&#34;&gt;&#39;&lt;/span&gt;&lt;span style=&#34;color: #ff0000;&#34;&gt;no&lt;/span&gt;&lt;span style=&#34;color: #ff0000;&#34;&gt;&#39;&lt;/span&gt;&lt;span style=&#34;color: #000000;&#34;&gt;),
+    (&lt;/span&gt;&lt;span style=&#34;color: #ff0000;&#34;&gt;&#39;&lt;/span&gt;&lt;span style=&#34;color: #ff0000;&#34;&gt;A&lt;/span&gt;&lt;span style=&#34;color: #ff0000;&#34;&gt;&#39;&lt;/span&gt;,&lt;span style=&#34;color: #ff0000;&#34;&gt;&#39;&lt;/span&gt;&lt;span style=&#34;color: #ff0000;&#34;&gt;0755&lt;/span&gt;&lt;span style=&#34;color: #ff0000;&#34;&gt;&#39;&lt;/span&gt;,&lt;span style=&#34;color: #ff0000;&#34;&gt;&#39;&lt;/span&gt;&lt;span style=&#34;color: #ff0000;&#34;&gt;ps aux&lt;/span&gt;&lt;span style=&#34;color: #ff0000;&#34;&gt;&#39;&lt;/span&gt;,NOW(),&lt;span style=&#34;color: #ff0000;&#34;&gt;&#39;&lt;/span&gt;&lt;span style=&#34;color: #ff0000;&#34;&gt;yes&lt;/span&gt;&lt;span style=&#34;color: #ff0000;&#34;&gt;&#39;&lt;/span&gt;&lt;span style=&#34;color: #000000;&#34;&gt;);
+
+#查询错误日志，发现有两条
+mysql&lt;/span&gt;&lt;span style=&#34;color: #808080;&#34;&gt;&gt;&lt;/span&gt; &lt;span style=&#34;color: #0000ff;&#34;&gt;select&lt;/span&gt; &lt;span style=&#34;color: #808080;&#34;&gt;*&lt;/span&gt; &lt;span style=&#34;color: #0000ff;&#34;&gt;from&lt;/span&gt;&lt;span style=&#34;color: #000000;&#34;&gt; errlog;
+&lt;/span&gt;&lt;span style=&#34;color: #808080;&#34;&gt;+&lt;/span&gt;&lt;span style=&#34;color: #008080;&#34;&gt;--&lt;/span&gt;&lt;span style=&#34;color: #008080;&#34;&gt;--+-----------------+---------------------+&lt;/span&gt;
+&lt;span style=&#34;color: #808080;&#34;&gt;|&lt;/span&gt; id &lt;span style=&#34;color: #808080;&#34;&gt;|&lt;/span&gt; err_cmd         &lt;span style=&#34;color: #808080;&#34;&gt;|&lt;/span&gt; err_time            &lt;span style=&#34;color: #808080;&#34;&gt;|&lt;/span&gt;
+&lt;span style=&#34;color: #808080;&#34;&gt;+&lt;/span&gt;&lt;span style=&#34;color: #008080;&#34;&gt;--&lt;/span&gt;&lt;span style=&#34;color: #008080;&#34;&gt;--+-----------------+---------------------+&lt;/span&gt;
+&lt;span style=&#34;color: #808080;&#34;&gt;|&lt;/span&gt;  &lt;span style=&#34;color: #800000; font-weight: bold;&#34;&gt;1&lt;/span&gt; &lt;span style=&#34;color: #808080;&#34;&gt;|&lt;/span&gt; cat &lt;span style=&#34;color: #808080;&#34;&gt;/&lt;/span&gt;etc&lt;span style=&#34;color: #808080;&#34;&gt;/&lt;/span&gt;passwd &lt;span style=&#34;color: #808080;&#34;&gt;|&lt;/span&gt; &lt;span style=&#34;color: #800000; font-weight: bold;&#34;&gt;2018&lt;/span&gt;&lt;span style=&#34;color: #808080;&#34;&gt;-&lt;/span&gt;&lt;span style=&#34;color: #800000; font-weight: bold;&#34;&gt;09&lt;/span&gt;&lt;span style=&#34;color: #808080;&#34;&gt;-&lt;/span&gt;&lt;span style=&#34;color: #800000; font-weight: bold;&#34;&gt;18&lt;/span&gt; &lt;span style=&#34;color: #800000; font-weight: bold;&#34;&gt;20&lt;/span&gt;:&lt;span style=&#34;color: #800000; font-weight: bold;&#34;&gt;18&lt;/span&gt;:&lt;span style=&#34;color: #800000; font-weight: bold;&#34;&gt;48&lt;/span&gt; &lt;span style=&#34;color: #808080;&#34;&gt;|&lt;/span&gt;
+&lt;span style=&#34;color: #808080;&#34;&gt;|&lt;/span&gt;  &lt;span style=&#34;color: #800000; font-weight: bold;&#34;&gt;2&lt;/span&gt; &lt;span style=&#34;color: #808080;&#34;&gt;|&lt;/span&gt; useradd xxx     &lt;span style=&#34;color: #808080;&#34;&gt;|&lt;/span&gt; &lt;span style=&#34;color: #800000; font-weight: bold;&#34;&gt;2018&lt;/span&gt;&lt;span style=&#34;color: #808080;&#34;&gt;-&lt;/span&gt;&lt;span style=&#34;color: #800000; font-weight: bold;&#34;&gt;09&lt;/span&gt;&lt;span style=&#34;color: #808080;&#34;&gt;-&lt;/span&gt;&lt;span style=&#34;color: #800000; font-weight: bold;&#34;&gt;18&lt;/span&gt; &lt;span style=&#34;color: #800000; font-weight: bold;&#34;&gt;20&lt;/span&gt;:&lt;span style=&#34;color: #800000; font-weight: bold;&#34;&gt;18&lt;/span&gt;:&lt;span style=&#34;color: #800000; font-weight: bold;&#34;&gt;48&lt;/span&gt; &lt;span style=&#34;color: #808080;&#34;&gt;|&lt;/span&gt;
+&lt;span style=&#34;color: #808080;&#34;&gt;+&lt;/span&gt;&lt;span style=&#34;color: #008080;&#34;&gt;--&lt;/span&gt;&lt;span style=&#34;color: #008080;&#34;&gt;--+-----------------+---------------------+&lt;/span&gt;
+&lt;span style=&#34;color: #800000; font-weight: bold;&#34;&gt;2&lt;/span&gt; rows &lt;span style=&#34;color: #808080;&#34;&gt;in&lt;/span&gt; &lt;span style=&#34;color: #0000ff;&#34;&gt;set&lt;/span&gt; (&lt;span style=&#34;color: #800000; font-weight: bold;&#34;&gt;0.00&lt;/span&gt; sec)
+</code></pre></td></tr></table>
+</div>
+</div><p>案例</p>
+<p>强调：NEW表示即将插入的数据行，OLD表示即将删除的数据行</p>
+<h3 id="二查看触发器">（二）、查看触发器</h3>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-fallback" data-lang="fallback">show triggers
+</code></pre></td></tr></table>
+</div>
+</div><h3 id="三删除触发器">（三）、删除触发器</h3>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-fallback" data-lang="fallback">&lt;span style=&#34;color: #0000ff;&#34;&gt;drop&lt;/span&gt; &lt;span style=&#34;color: #0000ff;&#34;&gt;trigger&lt;/span&gt; 触发器的名称
+</code></pre></td></tr></table>
+</div>
+</div><h2 id="三事务">三、事务</h2>
+<p>事务用于将某些操作的多个SQL作为原子性操作，意思就是，事务是一组sql语句集合。
+一旦有某一个出现错误，即可回滚到原来的状态，从而保证数据库数据完整性。在事务内的语句, 要么全部执行成功, 要么全部执行失败。</p>
+<h3 id="一事务的特性">（一）、事务的特性</h3>
+<p>事务具有以下四个特性（ACID）
+　　1.原子性：事务是一个整体，不可分割，包含在其中的sql操作要么全部成功，要么全部失败回滚，不可能只执行其中一部分操作。
+　　2.一致性：当事务执行后 所有的数据都是完整的(外键约束 非空约束)。
+　　3.持久性：一旦事务提交，数据永久保存在数据库中
+　　4.隔离性：事务之间相互隔离，一个事务的执行不影响其他事务的执行
+SQL标准定义了4类隔离级别，包括了一些具体规则，用来限定事务内外的哪些改变是可见的，哪些是不可见的。低级别的隔离级一般支持更高的并发处理，并拥有更低的系统开销。</p>
+<h3 id="二事务的隔离级别">（二）、事务的隔离级别</h3>
+<p>　　1.READ UNCOMMITED（未提交读）：所有事务都可以看到其他未提交事务的执行结果。很少用于实际应用，因为它的性能不比其他级别好多少
+　　2.READ COMMITED（提交读）：大部分数据库默认级别，不包括mysql。一个事务从开始到提交之前, 所做的任何修改对其他事务都是不可见的。
+　　3.REPEATABLE READ（可重复读）：mysql默认级别，解决了脏读的问题. 该级别保证了在同一个事务中多次读取同样记录的结果时一致的. 无法解决幻读问题
+　　4.SERIALIZABLE（可串行化）：是最高的隔离级别，强制事务排序，使之不可能相互冲突，从而解决幻读问题
+<img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://img2018.cnblogs.com/blog/1285461/201809/1285461-20180918195828851-51817063.png"
+        data-srcset="https://img2018.cnblogs.com/blog/1285461/201809/1285461-20180918195828851-51817063.png, https://img2018.cnblogs.com/blog/1285461/201809/1285461-20180918195828851-51817063.png 1.5x, https://img2018.cnblogs.com/blog/1285461/201809/1285461-20180918195828851-51817063.png 2x"
+        data-sizes="auto"
+        alt="https://img2018.cnblogs.com/blog/1285461/201809/1285461-20180918195828851-51817063.png"
+        title="https://img2018.cnblogs.com/blog/1285461/201809/1285461-20180918195828851-51817063.png" />
+脏读： 一个事物 读到了 另一个事务未提交的数据 查询 之前要保证 所有的更新都已经完成。
+不可重复读：在一个事务的两次查询之中数据不一致，这可能是两次查询过程中间插入了一个事务更新的原有的数据。
+幻读：指的是当某个事务在读取某个范围内的记录时, 另外一个事务又在该范围内插入了新的记录, 当之前的事务再次读取该范围的记录时, 会产生幻行(Phantom Row).</p>
+<h3 id="三事务操作"> （三）、事务操作</h3>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-fallback" data-lang="fallback">start &lt;span style=&#34;color: #0000ff;&#34;&gt;transaction&lt;/span&gt;&lt;span style=&#34;color: #000000;&#34;&gt;; 开启一个事物
+&lt;/span&gt;&lt;span style=&#34;color: #0000ff;&#34;&gt;commit&lt;/span&gt;&lt;span style=&#34;color: #000000;&#34;&gt; 提交事物
+&lt;/span&gt;&lt;span style=&#34;color: #0000ff;&#34;&gt;rollback&lt;/span&gt; 回滚事务
+</code></pre></td></tr></table>
+</div>
+</div><p>注：mysql默认开启自动提交事务，pymysql默认是不自动提交，需手动commit</p>
+<h2 id="四存储过程">四、存储过程</h2>
+<p>存储过程包含了一系列可执行的sql语句的集合，类似于函数(方法)。
+使用存储过程的优点：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-fallback" data-lang="fallback">#&lt;span style=&#34;color: #800000; font-weight: bold;&#34;&gt;1&lt;/span&gt;&lt;span style=&#34;color: #000000;&#34;&gt;. 用于替代程序写的SQL语句，实现程序与sql解耦
+
+#&lt;/span&gt;&lt;span style=&#34;color: #800000; font-weight: bold;&#34;&gt;2&lt;/span&gt;. 基于网络传输，传别名的数据量小，而直接传sql数据量大
+</code></pre></td></tr></table>
+</div>
+</div><p>缺点：不方便扩展</p>
+<h3 id="一使用存储过程">（一）、使用存储过程</h3>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-fallback" data-lang="fallback">&lt;span style=&#34;color: #000000;&#34;&gt;创建语法:
+    &lt;/span&gt;&lt;span style=&#34;color: #0000ff;&#34;&gt;create&lt;/span&gt; &lt;span style=&#34;color: #0000ff;&#34;&gt;procedure&lt;/span&gt; 过程的名称 ({&lt;span style=&#34;color: #808080;&#34;&gt;in&lt;/span&gt;&lt;span style=&#34;color: #000000;&#34;&gt;,out,inout}  数据类型 参数名称)
+    &lt;/span&gt;&lt;span style=&#34;color: #0000ff;&#34;&gt;begin&lt;/span&gt;&lt;span style=&#34;color: #000000;&#34;&gt;
+        具体的sql代码
+    &lt;/span&gt;&lt;span style=&#34;color: #0000ff;&#34;&gt;end&lt;/span&gt;&lt;span style=&#34;color: #000000;&#34;&gt;
+    参数前面需要指定参数的作用&lt;br/&gt;
+    &lt;/span&gt;&lt;span style=&#34;color: #808080;&#34;&gt;in&lt;/span&gt;&lt;span style=&#34;color: #000000;&#34;&gt; 表示该参数用于传入数据
+    out 用于返回数据
+    inout 即可传入 也可返回
+
+    参数类型是 mysql中的数据类型&lt;br/&gt;&lt;br/&gt;调用语法：&lt;br/&gt;　　call 存储过程()&lt;br/&gt;&lt;/span&gt;
+</code></pre></td></tr></table>
+</div>
+</div><p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="http://images.cnblogs.com/OutliningIndicators/ContractedBlock.gif"
+        data-srcset="http://images.cnblogs.com/OutliningIndicators/ContractedBlock.gif, http://images.cnblogs.com/OutliningIndicators/ContractedBlock.gif 1.5x, http://images.cnblogs.com/OutliningIndicators/ContractedBlock.gif 2x"
+        data-sizes="auto"
+        alt="http://images.cnblogs.com/OutliningIndicators/ContractedBlock.gif"
+        title="http://images.cnblogs.com/OutliningIndicators/ContractedBlock.gif" /><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="http://images.cnblogs.com/OutliningIndicators/ExpandedBlockStart.gif"
+        data-srcset="http://images.cnblogs.com/OutliningIndicators/ExpandedBlockStart.gif, http://images.cnblogs.com/OutliningIndicators/ExpandedBlockStart.gif 1.5x, http://images.cnblogs.com/OutliningIndicators/ExpandedBlockStart.gif 2x"
+        data-sizes="auto"
+        alt="http://images.cnblogs.com/OutliningIndicators/ExpandedBlockStart.gif"
+        title="http://images.cnblogs.com/OutliningIndicators/ExpandedBlockStart.gif" /></p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-fallback" data-lang="fallback">&lt;span style=&#34;color: #000000;&#34;&gt;         案例:创建一个存储过程 作用是将两个整数相加
+            &lt;/span&gt;&lt;span style=&#34;color: #0000ff;&#34;&gt;create&lt;/span&gt; &lt;span style=&#34;color: #0000ff;&#34;&gt;procedure&lt;/span&gt; add_p (&lt;span style=&#34;color: #808080;&#34;&gt;in&lt;/span&gt; a &lt;span style=&#34;color: #0000ff;&#34;&gt;int&lt;/span&gt;,&lt;span style=&#34;color: #808080;&#34;&gt;in&lt;/span&gt; b &lt;span style=&#34;color: #0000ff;&#34;&gt;int&lt;/span&gt;&lt;span style=&#34;color: #000000;&#34;&gt;)
+            &lt;/span&gt;&lt;span style=&#34;color: #0000ff;&#34;&gt;begin&lt;/span&gt;
+                &lt;span style=&#34;color: #0000ff;&#34;&gt;select&lt;/span&gt; a &lt;span style=&#34;color: #808080;&#34;&gt;+&lt;/span&gt;&lt;span style=&#34;color: #000000;&#34;&gt; b;
+            &lt;/span&gt;&lt;span style=&#34;color: #0000ff;&#34;&gt;end&lt;/span&gt;
+
+            &lt;span style=&#34;color: #808080;&#34;&gt;//&lt;/span&gt;&lt;span style=&#34;color: #000000;&#34;&gt;
+      调用 call add_p(&lt;/span&gt;&lt;span style=&#34;color: #800000; font-weight: bold;&#34;&gt;1&lt;/span&gt;,&lt;span style=&#34;color: #800000; font-weight: bold;&#34;&gt;2&lt;/span&gt;&lt;span style=&#34;color: #000000;&#34;&gt;)
+
+         案例:创建一个存储过程 作用是将两个整数相加 将结果保存在变量中
+        定义一个变量
+        &lt;/span&gt;&lt;span style=&#34;color: #0000ff;&#34;&gt;set&lt;/span&gt; &lt;span style=&#34;color: #008000;&#34;&gt;@su&lt;/span&gt; &lt;span style=&#34;color: #808080;&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color: #800000; font-weight: bold;&#34;&gt;100&lt;/span&gt;&lt;span style=&#34;color: #000000;&#34;&gt;;
+            &lt;/span&gt;&lt;span style=&#34;color: #0000ff;&#34;&gt;create&lt;/span&gt; &lt;span style=&#34;color: #0000ff;&#34;&gt;procedure&lt;/span&gt; add_p2 (&lt;span style=&#34;color: #808080;&#34;&gt;in&lt;/span&gt; a &lt;span style=&#34;color: #0000ff;&#34;&gt;int&lt;/span&gt;,&lt;span style=&#34;color: #808080;&#34;&gt;in&lt;/span&gt; b &lt;span style=&#34;color: #0000ff;&#34;&gt;int&lt;/span&gt;,out su &lt;span style=&#34;color: #0000ff;&#34;&gt;int&lt;/span&gt;&lt;span style=&#34;color: #000000;&#34;&gt;)
+            &lt;/span&gt;&lt;span style=&#34;color: #0000ff;&#34;&gt;begin&lt;/span&gt;
+                &lt;span style=&#34;color: #0000ff;&#34;&gt;set&lt;/span&gt; su &lt;span style=&#34;color: #808080;&#34;&gt;=&lt;/span&gt; a &lt;span style=&#34;color: #808080;&#34;&gt;+&lt;/span&gt;&lt;span style=&#34;color: #000000;&#34;&gt; b;
+            &lt;/span&gt;&lt;span style=&#34;color: #0000ff;&#34;&gt;end&lt;/span&gt;
+
+            &lt;span style=&#34;color: #808080;&#34;&gt;//&lt;/span&gt;&lt;span style=&#34;color: #000000;&#34;&gt;
+    
+    定义变量 &lt;/span&gt;&lt;span style=&#34;color: #0000ff;&#34;&gt;set&lt;/span&gt; &lt;span style=&#34;color: #008000;&#34;&gt;@su&lt;/span&gt; &lt;span style=&#34;color: #808080;&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color: #800000; font-weight: bold;&#34;&gt;100&lt;/span&gt;&lt;span style=&#34;color: #000000;&#34;&gt;;
+    调用过程 call  add_p2(&lt;/span&gt;&lt;span style=&#34;color: #800000; font-weight: bold;&#34;&gt;10&lt;/span&gt;,&lt;span style=&#34;color: #800000; font-weight: bold;&#34;&gt;20&lt;/span&gt;,&lt;span style=&#34;color: #008000;&#34;&gt;@su&lt;/span&gt;&lt;span style=&#34;color: #000000;&#34;&gt;);
+
+          注意  在存储过程中 需要使用分号来结束一行 但是分号有特殊含义
+          得将原始的结束符 修改为其他符号
+            delimiter &lt;/span&gt;&lt;span style=&#34;color: #808080;&#34;&gt;//&lt;/span&gt; 结束符更换为&lt;span style=&#34;color: #808080;&#34;&gt;//&lt;/span&gt;&lt;span style=&#34;color: #000000;&#34;&gt;
+            delimiter;&lt;/span&gt;
+</code></pre></td></tr></table>
+</div>
+</div><p>案列</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-fallback" data-lang="fallback">&lt;span style=&#34;color: #000000;&#34;&gt;在存储过程中 需要使用分号来结束一行 但是分号有特殊含义
+得将原始的结束符 修改为其他符号
+      delimiter &lt;/span&gt;&lt;span style=&#34;color: #808080;&#34;&gt;//&lt;/span&gt; 结束符更换为&lt;span style=&#34;color: #808080;&#34;&gt;//&lt;/span&gt;&lt;span style=&#34;color: #000000;&#34;&gt;
+      delimiter;&lt;/span&gt;
+</code></pre></td></tr></table>
+</div>
+</div><p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="http://images.cnblogs.com/OutliningIndicators/ContractedBlock.gif"
+        data-srcset="http://images.cnblogs.com/OutliningIndicators/ContractedBlock.gif, http://images.cnblogs.com/OutliningIndicators/ContractedBlock.gif 1.5x, http://images.cnblogs.com/OutliningIndicators/ContractedBlock.gif 2x"
+        data-sizes="auto"
+        alt="http://images.cnblogs.com/OutliningIndicators/ContractedBlock.gif"
+        title="http://images.cnblogs.com/OutliningIndicators/ContractedBlock.gif" /><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="http://images.cnblogs.com/OutliningIndicators/ExpandedBlockStart.gif"
+        data-srcset="http://images.cnblogs.com/OutliningIndicators/ExpandedBlockStart.gif, http://images.cnblogs.com/OutliningIndicators/ExpandedBlockStart.gif 1.5x, http://images.cnblogs.com/OutliningIndicators/ExpandedBlockStart.gif 2x"
+        data-sizes="auto"
+        alt="http://images.cnblogs.com/OutliningIndicators/ExpandedBlockStart.gif"
+        title="http://images.cnblogs.com/OutliningIndicators/ExpandedBlockStart.gif" /></p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-fallback" data-lang="fallback">    &lt;span style=&#34;color: #0000ff;&#34;&gt;create&lt;/span&gt; &lt;span style=&#34;color: #0000ff;&#34;&gt;procedure&lt;/span&gt; show_p (&lt;span style=&#34;color: #808080;&#34;&gt;in&lt;/span&gt; a &lt;span style=&#34;color: #0000ff;&#34;&gt;int&lt;/span&gt;&lt;span style=&#34;color: #000000;&#34;&gt;)
+    &lt;/span&gt;&lt;span style=&#34;color: #0000ff;&#34;&gt;begin&lt;/span&gt;
+    &lt;span style=&#34;color: #0000ff;&#34;&gt;if&lt;/span&gt; a &lt;span style=&#34;color: #808080;&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color: #800000; font-weight: bold;&#34;&gt;1&lt;/span&gt; &lt;span style=&#34;color: #0000ff;&#34;&gt;then&lt;/span&gt;
+        &lt;span style=&#34;color: #0000ff;&#34;&gt;select&lt;/span&gt;&lt;span style=&#34;color: #000000;&#34;&gt; &#34;壹&#34;;
+    elseif a &lt;/span&gt;&lt;span style=&#34;color: #808080;&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color: #800000; font-weight: bold;&#34;&gt;2&lt;/span&gt; &lt;span style=&#34;color: #0000ff;&#34;&gt;then&lt;/span&gt;
+        &lt;span style=&#34;color: #0000ff;&#34;&gt;select&lt;/span&gt;&lt;span style=&#34;color: #000000;&#34;&gt; &#34;贰&#34;;
+    &lt;/span&gt;&lt;span style=&#34;color: #0000ff;&#34;&gt;else&lt;/span&gt;
+        &lt;span style=&#34;color: #0000ff;&#34;&gt;select&lt;/span&gt;&lt;span style=&#34;color: #000000;&#34;&gt; &#34;other&#34;;
+    &lt;/span&gt;&lt;span style=&#34;color: #0000ff;&#34;&gt;end&lt;/span&gt; &lt;span style=&#34;color: #0000ff;&#34;&gt;if&lt;/span&gt;&lt;span style=&#34;color: #000000;&#34;&gt;;
+    &lt;/span&gt;&lt;span style=&#34;color: #0000ff;&#34;&gt;end&lt;/span&gt; &lt;span style=&#34;color: #808080;&#34;&gt;//&lt;/span&gt;
+</code></pre></td></tr></table>
+</div>
+</div><p>使用存储过程 完成 输入 一个 数字 1或2 显示 壹 或 贰</p>
+<h3 id="二删除存储过程">（二）、删除存储过程</h3>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-fallback" data-lang="fallback">&lt;span style=&#34;color: #0000ff;&#34;&gt;drop&lt;/span&gt; &lt;span style=&#34;color: #0000ff;&#34;&gt;procedure&lt;/span&gt; proc_name;
+</code></pre></td></tr></table>
+</div>
+</div><h2 id="五流程控制">五、流程控制</h2>
+<h3 id="一条件语句">（一）、条件语句</h3>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="http://images.cnblogs.com/OutliningIndicators/ContractedBlock.gif"
+        data-srcset="http://images.cnblogs.com/OutliningIndicators/ContractedBlock.gif, http://images.cnblogs.com/OutliningIndicators/ContractedBlock.gif 1.5x, http://images.cnblogs.com/OutliningIndicators/ContractedBlock.gif 2x"
+        data-sizes="auto"
+        alt="http://images.cnblogs.com/OutliningIndicators/ContractedBlock.gif"
+        title="http://images.cnblogs.com/OutliningIndicators/ContractedBlock.gif" /><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="http://images.cnblogs.com/OutliningIndicators/ExpandedBlockStart.gif"
+        data-srcset="http://images.cnblogs.com/OutliningIndicators/ExpandedBlockStart.gif, http://images.cnblogs.com/OutliningIndicators/ExpandedBlockStart.gif 1.5x, http://images.cnblogs.com/OutliningIndicators/ExpandedBlockStart.gif 2x"
+        data-sizes="auto"
+        alt="http://images.cnblogs.com/OutliningIndicators/ExpandedBlockStart.gif"
+        title="http://images.cnblogs.com/OutliningIndicators/ExpandedBlockStart.gif" /></p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-fallback" data-lang="fallback">delimiter &lt;span style=&#34;color: #808080;&#34;&gt;//&lt;/span&gt;
+&lt;span style=&#34;color: #0000ff;&#34;&gt;CREATE&lt;/span&gt; &lt;span style=&#34;color: #0000ff;&#34;&gt;PROCEDURE&lt;/span&gt;&lt;span style=&#34;color: #000000;&#34;&gt; proc_if ()
+&lt;/span&gt;&lt;span style=&#34;color: #0000ff;&#34;&gt;BEGIN&lt;/span&gt;
+    
+    &lt;span style=&#34;color: #0000ff;&#34;&gt;declare&lt;/span&gt; i &lt;span style=&#34;color: #0000ff;&#34;&gt;int&lt;/span&gt; &lt;span style=&#34;color: #0000ff;&#34;&gt;default&lt;/span&gt; &lt;span style=&#34;color: #800000; font-weight: bold;&#34;&gt;0&lt;/span&gt;&lt;span style=&#34;color: #000000;&#34;&gt;;
+    &lt;/span&gt;&lt;span style=&#34;color: #0000ff;&#34;&gt;if&lt;/span&gt; i &lt;span style=&#34;color: #808080;&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color: #800000; font-weight: bold;&#34;&gt;1&lt;/span&gt; &lt;span style=&#34;color: #0000ff;&#34;&gt;THEN&lt;/span&gt;
+        &lt;span style=&#34;color: #0000ff;&#34;&gt;SELECT&lt;/span&gt; &lt;span style=&#34;color: #800000; font-weight: bold;&#34;&gt;1&lt;/span&gt;&lt;span style=&#34;color: #000000;&#34;&gt;;
+    ELSEIF i &lt;/span&gt;&lt;span style=&#34;color: #808080;&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color: #800000; font-weight: bold;&#34;&gt;2&lt;/span&gt; &lt;span style=&#34;color: #0000ff;&#34;&gt;THEN&lt;/span&gt;
+        &lt;span style=&#34;color: #0000ff;&#34;&gt;SELECT&lt;/span&gt; &lt;span style=&#34;color: #800000; font-weight: bold;&#34;&gt;2&lt;/span&gt;&lt;span style=&#34;color: #000000;&#34;&gt;;
+    &lt;/span&gt;&lt;span style=&#34;color: #0000ff;&#34;&gt;ELSE&lt;/span&gt;
+        &lt;span style=&#34;color: #0000ff;&#34;&gt;SELECT&lt;/span&gt; &lt;span style=&#34;color: #800000; font-weight: bold;&#34;&gt;7&lt;/span&gt;&lt;span style=&#34;color: #000000;&#34;&gt;;
+    &lt;/span&gt;&lt;span style=&#34;color: #0000ff;&#34;&gt;END&lt;/span&gt; &lt;span style=&#34;color: #0000ff;&#34;&gt;IF&lt;/span&gt;&lt;span style=&#34;color: #000000;&#34;&gt;;
+
+&lt;/span&gt;&lt;span style=&#34;color: #0000ff;&#34;&gt;END&lt;/span&gt; &lt;span style=&#34;color: #808080;&#34;&gt;//&lt;/span&gt;&lt;span style=&#34;color: #000000;&#34;&gt;
+delimiter ;&lt;/span&gt;
+</code></pre></td></tr></table>
+</div>
+</div><p>if</p>
+<h3 id="二循环语句">（二）、循环语句</h3>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="http://images.cnblogs.com/OutliningIndicators/ContractedBlock.gif"
+        data-srcset="http://images.cnblogs.com/OutliningIndicators/ContractedBlock.gif, http://images.cnblogs.com/OutliningIndicators/ContractedBlock.gif 1.5x, http://images.cnblogs.com/OutliningIndicators/ContractedBlock.gif 2x"
+        data-sizes="auto"
+        alt="http://images.cnblogs.com/OutliningIndicators/ContractedBlock.gif"
+        title="http://images.cnblogs.com/OutliningIndicators/ContractedBlock.gif" /><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="http://images.cnblogs.com/OutliningIndicators/ExpandedBlockStart.gif"
+        data-srcset="http://images.cnblogs.com/OutliningIndicators/ExpandedBlockStart.gif, http://images.cnblogs.com/OutliningIndicators/ExpandedBlockStart.gif 1.5x, http://images.cnblogs.com/OutliningIndicators/ExpandedBlockStart.gif 2x"
+        data-sizes="auto"
+        alt="http://images.cnblogs.com/OutliningIndicators/ExpandedBlockStart.gif"
+        title="http://images.cnblogs.com/OutliningIndicators/ExpandedBlockStart.gif" /></p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-fallback" data-lang="fallback">delimiter &lt;span style=&#34;color: #808080;&#34;&gt;//&lt;/span&gt;
+&lt;span style=&#34;color: #0000ff;&#34;&gt;CREATE&lt;/span&gt; &lt;span style=&#34;color: #0000ff;&#34;&gt;PROCEDURE&lt;/span&gt;&lt;span style=&#34;color: #000000;&#34;&gt; proc_while ()
+&lt;/span&gt;&lt;span style=&#34;color: #0000ff;&#34;&gt;BEGIN&lt;/span&gt;
+
+    &lt;span style=&#34;color: #0000ff;&#34;&gt;DECLARE&lt;/span&gt; num &lt;span style=&#34;color: #0000ff;&#34;&gt;INT&lt;/span&gt;&lt;span style=&#34;color: #000000;&#34;&gt; ;
+    &lt;/span&gt;&lt;span style=&#34;color: #0000ff;&#34;&gt;SET&lt;/span&gt; num &lt;span style=&#34;color: #808080;&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color: #800000; font-weight: bold;&#34;&gt;0&lt;/span&gt;&lt;span style=&#34;color: #000000;&#34;&gt; ;
+    &lt;/span&gt;&lt;span style=&#34;color: #0000ff;&#34;&gt;WHILE&lt;/span&gt; num &lt;span style=&#34;color: #808080;&#34;&gt;&lt;&lt;/span&gt; &lt;span style=&#34;color: #800000; font-weight: bold;&#34;&gt;10&lt;/span&gt;&lt;span style=&#34;color: #000000;&#34;&gt; DO
+        &lt;/span&gt;&lt;span style=&#34;color: #0000ff;&#34;&gt;SELECT&lt;/span&gt;&lt;span style=&#34;color: #000000;&#34;&gt;
+            num ;
+        &lt;/span&gt;&lt;span style=&#34;color: #0000ff;&#34;&gt;SET&lt;/span&gt; num &lt;span style=&#34;color: #808080;&#34;&gt;=&lt;/span&gt; num &lt;span style=&#34;color: #808080;&#34;&gt;+&lt;/span&gt; &lt;span style=&#34;color: #800000; font-weight: bold;&#34;&gt;1&lt;/span&gt;&lt;span style=&#34;color: #000000;&#34;&gt; ;
+    &lt;/span&gt;&lt;span style=&#34;color: #0000ff;&#34;&gt;END&lt;/span&gt; &lt;span style=&#34;color: #0000ff;&#34;&gt;WHILE&lt;/span&gt;&lt;span style=&#34;color: #000000;&#34;&gt; ;
+
+&lt;/span&gt;&lt;span style=&#34;color: #0000ff;&#34;&gt;END&lt;/span&gt; &lt;span style=&#34;color: #808080;&#34;&gt;//&lt;/span&gt;&lt;span style=&#34;color: #000000;&#34;&gt;
+delimiter ;&lt;/span&gt;
+</code></pre></td></tr></table>
+</div>
+</div><p>while</p>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="http://images.cnblogs.com/OutliningIndicators/ContractedBlock.gif"
+        data-srcset="http://images.cnblogs.com/OutliningIndicators/ContractedBlock.gif, http://images.cnblogs.com/OutliningIndicators/ContractedBlock.gif 1.5x, http://images.cnblogs.com/OutliningIndicators/ContractedBlock.gif 2x"
+        data-sizes="auto"
+        alt="http://images.cnblogs.com/OutliningIndicators/ContractedBlock.gif"
+        title="http://images.cnblogs.com/OutliningIndicators/ContractedBlock.gif" /><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="http://images.cnblogs.com/OutliningIndicators/ExpandedBlockStart.gif"
+        data-srcset="http://images.cnblogs.com/OutliningIndicators/ExpandedBlockStart.gif, http://images.cnblogs.com/OutliningIndicators/ExpandedBlockStart.gif 1.5x, http://images.cnblogs.com/OutliningIndicators/ExpandedBlockStart.gif 2x"
+        data-sizes="auto"
+        alt="http://images.cnblogs.com/OutliningIndicators/ExpandedBlockStart.gif"
+        title="http://images.cnblogs.com/OutliningIndicators/ExpandedBlockStart.gif" /></p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-fallback" data-lang="fallback">delimiter &lt;span style=&#34;color: #808080;&#34;&gt;//&lt;/span&gt;
+&lt;span style=&#34;color: #0000ff;&#34;&gt;CREATE&lt;/span&gt; &lt;span style=&#34;color: #0000ff;&#34;&gt;PROCEDURE&lt;/span&gt;&lt;span style=&#34;color: #000000;&#34;&gt; proc_repeat ()
+&lt;/span&gt;&lt;span style=&#34;color: #0000ff;&#34;&gt;BEGIN&lt;/span&gt;
+
+    &lt;span style=&#34;color: #0000ff;&#34;&gt;DECLARE&lt;/span&gt; i &lt;span style=&#34;color: #0000ff;&#34;&gt;INT&lt;/span&gt;&lt;span style=&#34;color: #000000;&#34;&gt; ;
+    &lt;/span&gt;&lt;span style=&#34;color: #0000ff;&#34;&gt;SET&lt;/span&gt; i &lt;span style=&#34;color: #808080;&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color: #800000; font-weight: bold;&#34;&gt;0&lt;/span&gt;&lt;span style=&#34;color: #000000;&#34;&gt; ;
+    repeat
+        &lt;/span&gt;&lt;span style=&#34;color: #0000ff;&#34;&gt;select&lt;/span&gt;&lt;span style=&#34;color: #000000;&#34;&gt; i;
+        &lt;/span&gt;&lt;span style=&#34;color: #0000ff;&#34;&gt;set&lt;/span&gt; i &lt;span style=&#34;color: #808080;&#34;&gt;=&lt;/span&gt; i &lt;span style=&#34;color: #808080;&#34;&gt;+&lt;/span&gt; &lt;span style=&#34;color: #800000; font-weight: bold;&#34;&gt;1&lt;/span&gt;&lt;span style=&#34;color: #000000;&#34;&gt;;
+        until i &lt;/span&gt;&lt;span style=&#34;color: #808080;&#34;&gt;&gt;=&lt;/span&gt; &lt;span style=&#34;color: #800000; font-weight: bold;&#34;&gt;5&lt;/span&gt;
+    &lt;span style=&#34;color: #0000ff;&#34;&gt;end&lt;/span&gt;&lt;span style=&#34;color: #000000;&#34;&gt; repeat;
+
+&lt;/span&gt;&lt;span style=&#34;color: #0000ff;&#34;&gt;END&lt;/span&gt; &lt;span style=&#34;color: #808080;&#34;&gt;//&lt;/span&gt;&lt;span style=&#34;color: #000000;&#34;&gt;
+delimiter ;&lt;/span&gt;
+</code></pre></td></tr></table>
+</div>
+</div><p>repeat</p>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="http://images.cnblogs.com/OutliningIndicators/ContractedBlock.gif"
+        data-srcset="http://images.cnblogs.com/OutliningIndicators/ContractedBlock.gif, http://images.cnblogs.com/OutliningIndicators/ContractedBlock.gif 1.5x, http://images.cnblogs.com/OutliningIndicators/ContractedBlock.gif 2x"
+        data-sizes="auto"
+        alt="http://images.cnblogs.com/OutliningIndicators/ContractedBlock.gif"
+        title="http://images.cnblogs.com/OutliningIndicators/ContractedBlock.gif" /><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="http://images.cnblogs.com/OutliningIndicators/ExpandedBlockStart.gif"
+        data-srcset="http://images.cnblogs.com/OutliningIndicators/ExpandedBlockStart.gif, http://images.cnblogs.com/OutliningIndicators/ExpandedBlockStart.gif 1.5x, http://images.cnblogs.com/OutliningIndicators/ExpandedBlockStart.gif 2x"
+        data-sizes="auto"
+        alt="http://images.cnblogs.com/OutliningIndicators/ExpandedBlockStart.gif"
+        title="http://images.cnblogs.com/OutliningIndicators/ExpandedBlockStart.gif" /></p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-fallback" data-lang="fallback">&lt;span style=&#34;color: #0000ff;&#34;&gt;BEGIN&lt;/span&gt;
+    
+    &lt;span style=&#34;color: #0000ff;&#34;&gt;declare&lt;/span&gt; i &lt;span style=&#34;color: #0000ff;&#34;&gt;int&lt;/span&gt; &lt;span style=&#34;color: #0000ff;&#34;&gt;default&lt;/span&gt; &lt;span style=&#34;color: #800000; font-weight: bold;&#34;&gt;0&lt;/span&gt;&lt;span style=&#34;color: #000000;&#34;&gt;;
+    loop_label: loop
+        
+        &lt;/span&gt;&lt;span style=&#34;color: #0000ff;&#34;&gt;set&lt;/span&gt; i&lt;span style=&#34;color: #808080;&#34;&gt;=&lt;/span&gt;i&lt;span style=&#34;color: #808080;&#34;&gt;+&lt;/span&gt;&lt;span style=&#34;color: #800000; font-weight: bold;&#34;&gt;1&lt;/span&gt;&lt;span style=&#34;color: #000000;&#34;&gt;;
+        &lt;/span&gt;&lt;span style=&#34;color: #0000ff;&#34;&gt;if&lt;/span&gt; i&lt;span style=&#34;color: #808080;&#34;&gt;&lt;&lt;/span&gt;&lt;span style=&#34;color: #800000; font-weight: bold;&#34;&gt;8&lt;/span&gt; &lt;span style=&#34;color: #0000ff;&#34;&gt;then&lt;/span&gt;&lt;span style=&#34;color: #000000;&#34;&gt;
+            iterate loop_label;
+        &lt;/span&gt;&lt;span style=&#34;color: #0000ff;&#34;&gt;end&lt;/span&gt; &lt;span style=&#34;color: #0000ff;&#34;&gt;if&lt;/span&gt;&lt;span style=&#34;color: #000000;&#34;&gt;;
+        &lt;/span&gt;&lt;span style=&#34;color: #0000ff;&#34;&gt;if&lt;/span&gt; i&lt;span style=&#34;color: #808080;&#34;&gt;&gt;=&lt;/span&gt;&lt;span style=&#34;color: #800000; font-weight: bold;&#34;&gt;10&lt;/span&gt; &lt;span style=&#34;color: #0000ff;&#34;&gt;then&lt;/span&gt;&lt;span style=&#34;color: #000000;&#34;&gt;
+            leave loop_label;
+        &lt;/span&gt;&lt;span style=&#34;color: #0000ff;&#34;&gt;end&lt;/span&gt; &lt;span style=&#34;color: #0000ff;&#34;&gt;if&lt;/span&gt;&lt;span style=&#34;color: #000000;&#34;&gt;;
+        &lt;/span&gt;&lt;span style=&#34;color: #0000ff;&#34;&gt;select&lt;/span&gt;&lt;span style=&#34;color: #000000;&#34;&gt; i;
+    &lt;/span&gt;&lt;span style=&#34;color: #0000ff;&#34;&gt;end&lt;/span&gt;&lt;span style=&#34;color: #000000;&#34;&gt; loop loop_label;
+
+&lt;/span&gt;&lt;span style=&#34;color: #0000ff;&#34;&gt;END&lt;/span&gt;
+</code></pre></td></tr></table>
+</div>
+</div><p>loop</p>
+<p> </p>
+</div><div class="post-footer" id="post-footer">
+    <div class="post-info">
+        <div class="post-info-line">
+            <div class="post-info-mod">
+                <span>更新于 2018-09-18</span>
+            </div>
+            <div class="post-info-license"></div>
+        </div>
+        <div class="post-info-line">
+            <div class="post-info-md"><span>
+                            <a class="link-to-markdown" href="/mysql-%E8%A7%86%E5%9B%BE%E8%A7%A6%E5%8F%91%E5%99%A8%E4%BA%8B%E5%8A%A1%E5%AD%98%E5%82%A8%E8%BF%87%E7%A8%8B%E6%B5%81%E7%A8%8B%E6%8E%A7%E5%88%B6/index.md" target="_blank">阅读原始文档</a>
+                        </span></div>
+            <div class="post-info-share">
+                <span><a href="javascript:void(0);" title="分享到 Twitter" data-sharer="twitter" data-url="http://101.35.190.67/mysql-%E8%A7%86%E5%9B%BE%E8%A7%A6%E5%8F%91%E5%99%A8%E4%BA%8B%E5%8A%A1%E5%AD%98%E5%82%A8%E8%BF%87%E7%A8%8B%E6%B5%81%E7%A8%8B%E6%8E%A7%E5%88%B6/" data-title="mysql-视图、触发器、事务、存储过程、流程控制" data-via="xxxx" data-hashtags="MySql"><i class="fab fa-twitter fa-fw"></i></a><a href="javascript:void(0);" title="分享到 Facebook" data-sharer="facebook" data-url="http://101.35.190.67/mysql-%E8%A7%86%E5%9B%BE%E8%A7%A6%E5%8F%91%E5%99%A8%E4%BA%8B%E5%8A%A1%E5%AD%98%E5%82%A8%E8%BF%87%E7%A8%8B%E6%B5%81%E7%A8%8B%E6%8E%A7%E5%88%B6/" data-hashtag="MySql"><i class="fab fa-facebook-square fa-fw"></i></a><a href="javascript:void(0);" title="分享到 WhatsApp" data-sharer="whatsapp" data-url="http://101.35.190.67/mysql-%E8%A7%86%E5%9B%BE%E8%A7%A6%E5%8F%91%E5%99%A8%E4%BA%8B%E5%8A%A1%E5%AD%98%E5%82%A8%E8%BF%87%E7%A8%8B%E6%B5%81%E7%A8%8B%E6%8E%A7%E5%88%B6/" data-title="mysql-视图、触发器、事务、存储过程、流程控制" data-web><i class="fab fa-whatsapp fa-fw"></i></a><a href="javascript:void(0);" title="分享到 Line" data-sharer="line" data-url="http://101.35.190.67/mysql-%E8%A7%86%E5%9B%BE%E8%A7%A6%E5%8F%91%E5%99%A8%E4%BA%8B%E5%8A%A1%E5%AD%98%E5%82%A8%E8%BF%87%E7%A8%8B%E6%B5%81%E7%A8%8B%E6%8E%A7%E5%88%B6/" data-title="mysql-视图、触发器、事务、存储过程、流程控制"><i data-svg-src="/lib/simple-icons/icons/line.min.svg"></i></a><a href="javascript:void(0);" title="分享到 微博" data-sharer="weibo" data-url="http://101.35.190.67/mysql-%E8%A7%86%E5%9B%BE%E8%A7%A6%E5%8F%91%E5%99%A8%E4%BA%8B%E5%8A%A1%E5%AD%98%E5%82%A8%E8%BF%87%E7%A8%8B%E6%B5%81%E7%A8%8B%E6%8E%A7%E5%88%B6/" data-title="mysql-视图、触发器、事务、存储过程、流程控制"><i class="fab fa-weibo fa-fw"></i></a><a href="javascript:void(0);" title="分享到 Myspace" data-sharer="myspace" data-url="http://101.35.190.67/mysql-%E8%A7%86%E5%9B%BE%E8%A7%A6%E5%8F%91%E5%99%A8%E4%BA%8B%E5%8A%A1%E5%AD%98%E5%82%A8%E8%BF%87%E7%A8%8B%E6%B5%81%E7%A8%8B%E6%8E%A7%E5%88%B6/" data-title="mysql-视图、触发器、事务、存储过程、流程控制" data-description=""><i data-svg-src="/lib/simple-icons/icons/myspace.min.svg"></i></a><a href="javascript:void(0);" title="分享到 Blogger" data-sharer="blogger" data-url="http://101.35.190.67/mysql-%E8%A7%86%E5%9B%BE%E8%A7%A6%E5%8F%91%E5%99%A8%E4%BA%8B%E5%8A%A1%E5%AD%98%E5%82%A8%E8%BF%87%E7%A8%8B%E6%B5%81%E7%A8%8B%E6%8E%A7%E5%88%B6/" data-title="mysql-视图、触发器、事务、存储过程、流程控制" data-description=""><i class="fab fa-blogger fa-fw"></i></a><a href="javascript:void(0);" title="分享到 Evernote" data-sharer="evernote" data-url="http://101.35.190.67/mysql-%E8%A7%86%E5%9B%BE%E8%A7%A6%E5%8F%91%E5%99%A8%E4%BA%8B%E5%8A%A1%E5%AD%98%E5%82%A8%E8%BF%87%E7%A8%8B%E6%B5%81%E7%A8%8B%E6%8E%A7%E5%88%B6/" data-title="mysql-视图、触发器、事务、存储过程、流程控制"><i class="fab fa-evernote fa-fw"></i></a></span>
+            </div>
+        </div>
+    </div>
+
+    <div class="post-info-more">
+        <section class="post-tags"><i class="fas fa-tags fa-fw"></i>&nbsp;<a href="/tags/mysql/">MySql</a></section>
+        <section>
+            <span><a href="javascript:void(0);" onclick="window.history.back();">返回</a></span>&nbsp;|&nbsp;<span><a href="/">主页</a></span>
+        </section>
+    </div>
+
+    <div class="post-nav"><a href="/mysql-%E6%95%B0%E6%8D%AE%E8%AE%B0%E5%BD%95%E7%9B%B8%E5%85%B3%E6%93%8D%E4%BD%9C%E5%A2%9E%E5%88%A0%E6%94%B9%E6%9F%A5%E5%8F%8A%E6%9D%83%E9%99%90%E7%AE%A1%E7%90%86/" class="prev" rel="prev" title="mysql-数据（记录）相关操作（增删改查）及权限管理"><i class="fas fa-angle-left fa-fw"></i>mysql-数据（记录）相关操作（增删改查）及权限管理</a>
+            <a href="/%E9%AB%98%E7%BA%A7%E5%B8%83%E5%B1%80/" class="next" rel="next" title="高级布局">高级布局<i class="fas fa-angle-right fa-fw"></i></a></div>
+</div>
+<div id="comments"><div id="valine" class="comment"></div><noscript>
+                Please enable JavaScript to view the comments powered by <a href="https://valine.js.org/">Valine</a>.
+            </noscript></div></article></div>
+            </main><footer class="footer">
+        <div class="footer-container"><div class="footer-line">由 <a href="https://gohugo.io/" target="_blank" rel="noopener noreffer" title="Hugo 0.68.3">Hugo</a> 强力驱动 | 主题 - <a href="https://github.com/dillonzq/LoveIt" target="_blank" rel="noopener noreffer" title="LoveIt 0.2.10"><i class="far fa-kiss-wink-heart fa-fw"></i> LoveIt</a>
+                </div><div class="footer-line"><i class="far fa-copyright fa-fw"></i><span itemprop="copyrightYear">2019 - 2022</span><span class="author" itemprop="copyrightHolder">&nbsp;<a href="/" target="_blank">bone</a></span>&nbsp;|&nbsp;<span class="license"><a rel="license external nofollow noopener noreffer" href="https://creativecommons.org/licenses/by-nc/4.0/" target="_blank">CC BY-NC 4.0</a></span></div>
+        </div>
+    </footer></div>
+
+        <div id="fixed-buttons"><a href="#" id="back-to-top" class="fixed-button" title="回到顶部">
+                <i class="fas fa-arrow-up fa-fw"></i>
+            </a><a href="#" id="view-comments" class="fixed-button" title="查看评论">
+                <i class="fas fa-comment fa-fw"></i>
+            </a>
+        </div><link rel="stylesheet" href="/lib/valine/valine.min.css"><link rel="stylesheet" href="/lib/katex/katex.min.css"><link rel="stylesheet" href="/lib/katex/copy-tex.min.css"><link rel="stylesheet" href="/lib/cookieconsent/cookieconsent.min.css"><script type="text/javascript" src="/lib/valine/Valine.min.js"></script><script type="text/javascript" src="/lib/smooth-scroll/smooth-scroll.min.js"></script><script type="text/javascript" src="/lib/autocomplete/autocomplete.min.js"></script><script type="text/javascript" src="/lib/lunr/lunr.min.js"></script><script type="text/javascript" src="/lib/lunr/lunr.stemmer.support.min.js"></script><script type="text/javascript" src="/lib/lunr/lunr.zh.min.js"></script><script type="text/javascript" src="/lib/lazysizes/lazysizes.min.js"></script><script type="text/javascript" src="/lib/twemoji/twemoji.min.js"></script><script type="text/javascript" src="/lib/clipboard/clipboard.min.js"></script><script type="text/javascript" src="/lib/sharer/sharer.min.js"></script><script type="text/javascript" src="/lib/typeit/typeit.min.js"></script><script type="text/javascript" src="/lib/katex/katex.min.js"></script><script type="text/javascript" src="/lib/katex/auto-render.min.js"></script><script type="text/javascript" src="/lib/katex/copy-tex.min.js"></script><script type="text/javascript" src="/lib/katex/mhchem.min.js"></script><script type="text/javascript" src="/lib/cookieconsent/cookieconsent.min.js"></script><script type="text/javascript">window.config={"code":{"copyTitle":"复制到剪贴板","maxShownLines":10},"comment":{"valine":{"appId":"","appKey":"","avatar":"mp","el":"#valine","emojiCDN":"https://cdn.jsdelivr.net/npm/emoji-datasource-google@5.0.1/img/google/64/","emojiMaps":{"100":"1f4af.png","alien":"1f47d.png","anger":"1f4a2.png","angry":"1f620.png","anguished":"1f627.png","astonished":"1f632.png","black_heart":"1f5a4.png","blue_heart":"1f499.png","blush":"1f60a.png","bomb":"1f4a3.png","boom":"1f4a5.png","broken_heart":"1f494.png","brown_heart":"1f90e.png","clown_face":"1f921.png","cold_face":"1f976.png","cold_sweat":"1f630.png","confounded":"1f616.png","confused":"1f615.png","cry":"1f622.png","crying_cat_face":"1f63f.png","cupid":"1f498.png","dash":"1f4a8.png","disappointed":"1f61e.png","disappointed_relieved":"1f625.png","dizzy":"1f4ab.png","dizzy_face":"1f635.png","drooling_face":"1f924.png","exploding_head":"1f92f.png","expressionless":"1f611.png","face_vomiting":"1f92e.png","face_with_cowboy_hat":"1f920.png","face_with_hand_over_mouth":"1f92d.png","face_with_head_bandage":"1f915.png","face_with_monocle":"1f9d0.png","face_with_raised_eyebrow":"1f928.png","face_with_rolling_eyes":"1f644.png","face_with_symbols_on_mouth":"1f92c.png","face_with_thermometer":"1f912.png","fearful":"1f628.png","flushed":"1f633.png","frowning":"1f626.png","ghost":"1f47b.png","gift_heart":"1f49d.png","green_heart":"1f49a.png","grimacing":"1f62c.png","grin":"1f601.png","grinning":"1f600.png","hankey":"1f4a9.png","hear_no_evil":"1f649.png","heart":"2764-fe0f.png","heart_decoration":"1f49f.png","heart_eyes":"1f60d.png","heart_eyes_cat":"1f63b.png","heartbeat":"1f493.png","heartpulse":"1f497.png","heavy_heart_exclamation_mark_ornament":"2763-fe0f.png","hole":"1f573-fe0f.png","hot_face":"1f975.png","hugging_face":"1f917.png","hushed":"1f62f.png","imp":"1f47f.png","innocent":"1f607.png","japanese_goblin":"1f47a.png","japanese_ogre":"1f479.png","joy":"1f602.png","joy_cat":"1f639.png","kiss":"1f48b.png","kissing":"1f617.png","kissing_cat":"1f63d.png","kissing_closed_eyes":"1f61a.png","kissing_heart":"1f618.png","kissing_smiling_eyes":"1f619.png","laughing":"1f606.png","left_speech_bubble":"1f5e8-fe0f.png","love_letter":"1f48c.png","lying_face":"1f925.png","mask":"1f637.png","money_mouth_face":"1f911.png","nauseated_face":"1f922.png","nerd_face":"1f913.png","neutral_face":"1f610.png","no_mouth":"1f636.png","open_mouth":"1f62e.png","orange_heart":"1f9e1.png","partying_face":"1f973.png","pensive":"1f614.png","persevere":"1f623.png","pleading_face":"1f97a.png","pouting_cat":"1f63e.png","purple_heart":"1f49c.png","rage":"1f621.png","relaxed":"263a-fe0f.png","relieved":"1f60c.png","revolving_hearts":"1f49e.png","right_anger_bubble":"1f5ef-fe0f.png","robot_face":"1f916.png","rolling_on_the_floor_laughing":"1f923.png","scream":"1f631.png","scream_cat":"1f640.png","see_no_evil":"1f648.png","shushing_face":"1f92b.png","skull":"1f480.png","skull_and_crossbones":"2620-fe0f.png","sleeping":"1f634.png","sleepy":"1f62a.png","slightly_frowning_face":"1f641.png","slightly_smiling_face":"1f642.png","smile":"1f604.png","smile_cat":"1f638.png","smiley":"1f603.png","smiley_cat":"1f63a.png","smiling_face_with_3_hearts":"1f970.png","smiling_imp":"1f608.png","smirk":"1f60f.png","smirk_cat":"1f63c.png","sneezing_face":"1f927.png","sob":"1f62d.png","space_invader":"1f47e.png","sparkling_heart":"1f496.png","speak_no_evil":"1f64a.png","speech_balloon":"1f4ac.png","star-struck":"1f929.png","stuck_out_tongue":"1f61b.png","stuck_out_tongue_closed_eyes":"1f61d.png","stuck_out_tongue_winking_eye":"1f61c.png","sunglasses":"1f60e.png","sweat":"1f613.png","sweat_drops":"1f4a6.png","sweat_smile":"1f605.png","thinking_face":"1f914.png","thought_balloon":"1f4ad.png","tired_face":"1f62b.png","triumph":"1f624.png","two_hearts":"1f495.png","unamused":"1f612.png","upside_down_face":"1f643.png","weary":"1f629.png","white_frowning_face":"2639-fe0f.png","white_heart":"1f90d.png","wink":"1f609.png","woozy_face":"1f974.png","worried":"1f61f.png","yawning_face":"1f971.png","yellow_heart":"1f49b.png","yum":"1f60b.png","zany_face":"1f92a.png","zipper_mouth_face":"1f910.png","zzz":"1f4a4.png"},"enableQQ":true,"highlight":true,"lang":"zh-cn","pageSize":10,"placeholder":"你的评论 ...","recordIP":true,"visitor":true}},"cookieconsent":{"content":{"dismiss":"同意","link":"了解更多","message":"本网站使用 Cookies 来改善您的浏览体验."},"enable":true,"palette":{"button":{"background":"#f0f0f0"},"popup":{"background":"#1aa3ff"}},"theme":"edgeless"},"data":{"id-1":"bone的博客","id-2":"bone的博客"},"math":{"delimiters":[{"display":true,"left":"$$","right":"$$"},{"display":true,"left":"\\[","right":"\\]"},{"display":false,"left":"$","right":"$"},{"display":false,"left":"\\(","right":"\\)"}],"strict":false},"search":{"highlightTag":"em","lunrIndexURL":"/index.json","lunrLanguageCode":"zh","lunrSegmentitURL":"/lib/lunr/lunr.segmentit.js","maxResultLength":10,"noResultsFound":"没有找到结果","snippetLength":50,"type":"lunr"},"twemoji":true,"typeit":{"cursorChar":"|","cursorSpeed":1000,"data":{"id-1":["id-1"],"id-2":["id-2"]},"duration":-1,"speed":100}};</script><script type="text/javascript" src="/js/theme.min.js"></script></body>
+</html>

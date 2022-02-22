@@ -1,0 +1,29 @@
+<rss xmlns:atom="http://www.w3.org/2005/Atom" version="2.0">
+    <channel>
+        <title>逆向 - 分类 - mine blog</title>
+        <link>http://101.35.190.67/categories/%E9%80%86%E5%90%91/</link>
+        <description>逆向 - 分类 - mine blog</description>
+        <generator>Hugo -- gohugo.io</generator><language>zh-CN</language><managingEditor>soufj17857@gmail.com (bone)</managingEditor>
+            <webMaster>soufj17857@gmail.com (bone)</webMaster><lastBuildDate>Sun, 18 Apr 2021 14:53:00 &#43;0000</lastBuildDate><atom:link href="http://101.35.190.67/categories/%E9%80%86%E5%90%91/" rel="self" type="application/rss+xml" /><item>
+    <title>小程序反编译</title>
+    <link>http://101.35.190.67/%E5%B0%8F%E7%A8%8B%E5%BA%8F%E5%8F%8D%E7%BC%96%E8%AF%91/</link>
+    <pubDate>Sun, 18 Apr 2021 14:53:00 &#43;0000</pubDate>
+    <author>作者</author>
+    <guid>http://101.35.190.67/%E5%B0%8F%E7%A8%8B%E5%BA%8F%E5%8F%8D%E7%BC%96%E8%AF%91/</guid>
+    <description><![CDATA[记录一下小程序源文件包的获取过程 1.所需环境 re文件管理器 反编译脚本wxappUnpacker或微信小程序反编译自动化工具 node.js 安装 2.找到小程]]></description>
+</item><item>
+    <title>Android studio中遇到的问题</title>
+    <link>http://101.35.190.67/android-studio%E4%B8%AD%E9%81%87%E5%88%B0%E7%9A%84%E9%97%AE%E9%A2%98/</link>
+    <pubDate>Mon, 02 Sep 2019 04:37:00 &#43;0000</pubDate>
+    <author>作者</author>
+    <guid>http://101.35.190.67/android-studio%E4%B8%AD%E9%81%87%E5%88%B0%E7%9A%84%E9%97%AE%E9%A2%98/</guid>
+    <description><![CDATA[首先声明只是Android studio使用中遇到的问题纯属个人学习笔记，有什么不对的可以留言。 将脱壳后的java文件拖入到Android studio android]]></description>
+</item><item>
+    <title>xposed的基本使用</title>
+    <link>http://101.35.190.67/xposed%E7%9A%84%E5%9F%BA%E6%9C%AC%E4%BD%BF%E7%94%A8/</link>
+    <pubDate>Wed, 19 Jun 2019 14:24:00 &#43;0000</pubDate>
+    <author>作者</author>
+    <guid>http://101.35.190.67/xposed%E7%9A%84%E5%9F%BA%E6%9C%AC%E4%BD%BF%E7%94%A8/</guid>
+    <description><![CDATA[一、原理 Android运行的核心是zygote进程，所有app的进程都是通过zygote fork出来的。通过替换system/bin/下面的]]></description>
+</item></channel>
+</rss>

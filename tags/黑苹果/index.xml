@@ -1,0 +1,15 @@
+<rss xmlns:atom="http://www.w3.org/2005/Atom" version="2.0">
+    <channel>
+        <title>黑苹果 - 标签 - mine blog</title>
+        <link>http://101.35.190.67/tags/%E9%BB%91%E8%8B%B9%E6%9E%9C/</link>
+        <description>黑苹果 - 标签 - mine blog</description>
+        <generator>Hugo -- gohugo.io</generator><language>zh-CN</language><managingEditor>soufj17857@gmail.com (bone)</managingEditor>
+            <webMaster>soufj17857@gmail.com (bone)</webMaster><lastBuildDate>Sun, 16 May 2021 17:21:00 &#43;0000</lastBuildDate><atom:link href="http://101.35.190.67/tags/%E9%BB%91%E8%8B%B9%E6%9E%9C/" rel="self" type="application/rss+xml" /><item>
+    <title>黑苹果_win 双系统 单硬盘安装</title>
+    <link>http://101.35.190.67/%E9%BB%91%E8%8B%B9%E6%9E%9C_win-%E5%8F%8C%E7%B3%BB%E7%BB%9F-%E5%8D%95%E7%A1%AC%E7%9B%98%E5%AE%89%E8%A3%85/</link>
+    <pubDate>Sun, 16 May 2021 17:21:00 &#43;0000</pubDate>
+    <author>作者</author>
+    <guid>http://101.35.190.67/%E9%BB%91%E8%8B%B9%E6%9E%9C_win-%E5%8F%8C%E7%B3%BB%E7%BB%9F-%E5%8D%95%E7%A1%AC%E7%9B%98%E5%AE%89%E8%A3%85/</guid>
+    <description><![CDATA[1.准备工作 需要两个U盘，一个windows的装机盘(我使用了微pe)，一个用来安装macos系统 去黑果小兵下载所需的镜像文件 下载苹果镜像工]]></description>
+</item></channel>
+</rss>

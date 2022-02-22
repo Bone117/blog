@@ -1,0 +1,22 @@
+<rss xmlns:atom="http://www.w3.org/2005/Atom" version="2.0">
+    <channel>
+        <title>scrapy - 标签 - mine blog</title>
+        <link>http://101.35.190.67/tags/scrapy/</link>
+        <description>scrapy - 标签 - mine blog</description>
+        <generator>Hugo -- gohugo.io</generator><language>zh-CN</language><managingEditor>soufj17857@gmail.com (bone)</managingEditor>
+            <webMaster>soufj17857@gmail.com (bone)</webMaster><lastBuildDate>Mon, 05 Aug 2019 06:36:00 &#43;0000</lastBuildDate><atom:link href="http://101.35.190.67/tags/scrapy/" rel="self" type="application/rss+xml" /><item>
+    <title>scrapy中间件中发送邮件</title>
+    <link>http://101.35.190.67/scrapy%E4%B8%AD%E9%97%B4%E4%BB%B6%E4%B8%AD%E5%8F%91%E9%80%81%E9%82%AE%E4%BB%B6/</link>
+    <pubDate>Mon, 05 Aug 2019 06:36:00 &#43;0000</pubDate>
+    <author>作者</author>
+    <guid>http://101.35.190.67/scrapy%E4%B8%AD%E9%97%B4%E4%BB%B6%E4%B8%AD%E5%8F%91%E9%80%81%E9%82%AE%E4%BB%B6/</guid>
+    <description><![CDATA[背景介绍：之前写过通过通过scrapy的扩展发送邮件，在爬虫关闭的时候发送邮件。那个时候有个问题就是MailSender对象需要return]]></description>
+</item><item>
+    <title>scrapy发送邮件</title>
+    <link>http://101.35.190.67/scrapy%E5%8F%91%E9%80%81%E9%82%AE%E4%BB%B6/</link>
+    <pubDate>Mon, 29 Apr 2019 07:24:00 &#43;0000</pubDate>
+    <author>作者</author>
+    <guid>http://101.35.190.67/scrapy%E5%8F%91%E9%80%81%E9%82%AE%E4%BB%B6/</guid>
+    <description><![CDATA[scrapy发送邮件 应用场景：在爬虫关闭或者爬虫空闲时可以通过发送邮件的提醒。 通过twisted的非阻塞IO实现,可以直接写在spider中]]></description>
+</item></channel>
+</rss>

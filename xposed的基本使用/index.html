@@ -1,0 +1,523 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="robots" content="noodp" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge, chrome=1">
+        <title>xposed的基本使用 - mine blog</title><meta name="Description" content="这是我的全新 Hugo 网站"><meta property="og:title" content="xposed的基本使用" />
+<meta property="og:description" content="一、原理 Android运行的核心是zygote进程，所有app的进程都是通过zygote fork出来的。通过替换system/bin/下面的" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="http://101.35.190.67/xposed%E7%9A%84%E5%9F%BA%E6%9C%AC%E4%BD%BF%E7%94%A8/" />
+<meta property="og:image" content="https://blogimg-1256896917.cos.ap-shanghai.myqcloud.com/blog/2022-02-22-favicon.ico"/>
+<meta property="article:published_time" content="2019-06-19T14:24:00+00:00" />
+<meta property="article:modified_time" content="2019-06-19T14:24:00+00:00" />
+<meta name="twitter:card" content="summary_large_image"/>
+<meta name="twitter:image" content="https://blogimg-1256896917.cos.ap-shanghai.myqcloud.com/blog/2022-02-22-favicon.ico"/>
+
+<meta name="twitter:title" content="xposed的基本使用"/>
+<meta name="twitter:description" content="一、原理 Android运行的核心是zygote进程，所有app的进程都是通过zygote fork出来的。通过替换system/bin/下面的"/>
+<meta name="application-name" content="mine blog">
+<meta name="apple-mobile-web-app-title" content="mine blog"><link rel="shortcut icon" type="image/x-icon" href="/favicon.ico" />
+        <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+        <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png"><link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"><link rel="manifest" href="/site.webmanifest"><link rel="canonical" href="http://101.35.190.67/xposed%E7%9A%84%E5%9F%BA%E6%9C%AC%E4%BD%BF%E7%94%A8/" /><link rel="prev" href="http://101.35.190.67/scrapy%E5%8F%91%E9%80%81%E9%82%AE%E4%BB%B6/" /><link rel="next" href="http://101.35.190.67/mac%E5%A4%9Assh-key%E9%85%8D%E7%BD%AE/" /><link rel="stylesheet" href="/lib/normalize/normalize.min.css"><link rel="stylesheet" href="/css/style.min.css"><link rel="stylesheet" href="/lib/fontawesome-free/all.min.css"><link rel="stylesheet" href="/lib/animate/animate.min.css"><script type="application/ld+json">
+    {
+        "@context": "http://schema.org",
+        "@type": "BlogPosting",
+        "headline": "xposed的基本使用",
+        "inLanguage": "zh-CN",
+        "mainEntityOfPage": {
+            "@type": "WebPage",
+            "@id": "http:\/\/101.35.190.67\/xposed%E7%9A%84%E5%9F%BA%E6%9C%AC%E4%BD%BF%E7%94%A8\/"
+        },"genre": "posts","keywords": "逆向","wordcount":  2160 ,
+        "url": "http:\/\/101.35.190.67\/xposed%E7%9A%84%E5%9F%BA%E6%9C%AC%E4%BD%BF%E7%94%A8\/","datePublished": "2019-06-19T14:24:00+00:00","dateModified": "2019-06-19T14:24:00+00:00","publisher": {
+            "@type": "Organization",
+            "name": ""},"author": {
+                "@type": "Person",
+                "name": "bone"
+            },"description": ""
+    }
+    </script></head>
+    <body header-desktop="fixed" header-mobile="auto"><script type="text/javascript">(window.localStorage && localStorage.getItem('theme') ? localStorage.getItem('theme') === 'dark' : ('dark' === 'auto' ? window.matchMedia('(prefers-color-scheme: dark)').matches : 'dark' === 'dark')) && document.body.setAttribute('theme', 'dark');</script>
+
+        <div id="mask"></div><div class="wrapper"><header class="desktop" id="header-desktop">
+    <div class="header-wrapper">
+        <div class="header-title">
+            <a href="/" title="mine blog"><img
+        class="lazyload logo"
+        src="/svg/loading.min.svg"
+        data-src="https://blogimg-1256896917.cos.ap-shanghai.myqcloud.com/blog/2022-02-22-favicon.ico"
+        data-srcset="https://blogimg-1256896917.cos.ap-shanghai.myqcloud.com/blog/2022-02-22-favicon.ico, https://blogimg-1256896917.cos.ap-shanghai.myqcloud.com/blog/2022-02-22-favicon.ico 1.5x, https://blogimg-1256896917.cos.ap-shanghai.myqcloud.com/blog/2022-02-22-favicon.ico 2x"
+        data-sizes="auto"
+        alt="https://blogimg-1256896917.cos.ap-shanghai.myqcloud.com/blog/2022-02-22-favicon.ico"
+        title="https://blogimg-1256896917.cos.ap-shanghai.myqcloud.com/blog/2022-02-22-favicon.ico" /><span id="id-1" class="typeit"></span></a>
+        </div>
+        <div class="menu">
+            <div class="menu-inner"><a class="menu-item" href="/posts/"> 文章 </a><a class="menu-item" href="/tags/"> 标签 </a><a class="menu-item" href="/categories/"> 分类 </a><a class="menu-item" href="/about/"> 关于 </a><span class="menu-item delimiter"></span><span class="menu-item search" id="search-desktop">
+                        <input type="text" placeholder="搜索文章标题或内容..." id="search-input-desktop">
+                        <a href="javascript:void(0);" class="search-button search-toggle" id="search-toggle-desktop" title="搜索">
+                            <i class="fas fa-search fa-fw"></i>
+                        </a>
+                        <a href="javascript:void(0);" class="search-button search-clear" id="search-clear-desktop" title="清空">
+                            <i class="fas fa-times-circle fa-fw"></i>
+                        </a>
+                        <span class="search-button search-loading" id="search-loading-desktop">
+                            <i class="fas fa-spinner fa-fw fa-spin"></i>
+                        </span>
+                    </span><a href="javascript:void(0);" class="menu-item theme-switch" title="切换主题">
+                    <i class="fas fa-adjust fa-fw"></i>
+                </a>
+            </div>
+        </div>
+    </div>
+</header><header class="mobile" id="header-mobile">
+    <div class="header-container">
+        <div class="header-wrapper">
+            <div class="header-title">
+                <a href="/" title="mine blog"><img
+        class="lazyload logo"
+        src="/svg/loading.min.svg"
+        data-src="https://blogimg-1256896917.cos.ap-shanghai.myqcloud.com/blog/2022-02-22-favicon.ico"
+        data-srcset="https://blogimg-1256896917.cos.ap-shanghai.myqcloud.com/blog/2022-02-22-favicon.ico, https://blogimg-1256896917.cos.ap-shanghai.myqcloud.com/blog/2022-02-22-favicon.ico 1.5x, https://blogimg-1256896917.cos.ap-shanghai.myqcloud.com/blog/2022-02-22-favicon.ico 2x"
+        data-sizes="auto"
+        alt="https://blogimg-1256896917.cos.ap-shanghai.myqcloud.com/blog/2022-02-22-favicon.ico"
+        title="https://blogimg-1256896917.cos.ap-shanghai.myqcloud.com/blog/2022-02-22-favicon.ico" /><span id="id-2" class="typeit"></span></a>
+            </div>
+            <div class="menu-toggle" id="menu-toggle-mobile">
+                <span></span><span></span><span></span>
+            </div>
+        </div>
+        <div class="menu" id="menu-mobile"><div class="search-wrapper">
+                    <div class="search mobile" id="search-mobile">
+                        <input type="text" placeholder="搜索文章标题或内容..." id="search-input-mobile">
+                        <a href="javascript:void(0);" class="search-button search-toggle" id="search-toggle-mobile" title="搜索">
+                            <i class="fas fa-search fa-fw"></i>
+                        </a>
+                        <a href="javascript:void(0);" class="search-button search-clear" id="search-clear-mobile" title="清空">
+                            <i class="fas fa-times-circle fa-fw"></i>
+                        </a>
+                        <span class="search-button search-loading" id="search-loading-mobile">
+                            <i class="fas fa-spinner fa-fw fa-spin"></i>
+                        </span>
+                    </div>
+                    <a href="javascript:void(0);" class="search-cancel" id="search-cancel-mobile">
+                        取消
+                    </a>
+                </div><a class="menu-item" href="/posts/" title="">文章</a><a class="menu-item" href="/tags/" title="">标签</a><a class="menu-item" href="/categories/" title="">分类</a><a class="menu-item" href="/about/" title="">关于</a><a href="javascript:void(0);" class="menu-item theme-switch" title="切换主题">
+                <i class="fas fa-adjust fa-fw"></i>
+            </a></div>
+    </div>
+</header>
+<div class="search-dropdown desktop">
+    <div id="search-dropdown-desktop"></div>
+</div>
+<div class="search-dropdown mobile">
+    <div id="search-dropdown-mobile"></div>
+</div>
+<main class="main">
+                <div class="container"><div class="toc" id="toc-auto">
+            <h2 class="toc-title">目录</h2>
+            <div class="toc-content" id="toc-content-auto"></div>
+        </div><article class="page single"><h1 class="single-title animated flipInX">xposed的基本使用</h1><div class="post-meta">
+            <div class="post-meta-line"><span class="post-author"><a href="/" title="Author" rel=" author" class="author"><i class="fas fa-user-circle fa-fw"></i>bone</a></span>&nbsp;<span class="post-category">收录于 <a href="/categories/%E9%80%86%E5%90%91/"><i class="far fa-folder fa-fw"></i>逆向</a></span></div>
+            <div class="post-meta-line"><i class="far fa-calendar-alt fa-fw"></i>&nbsp;<time datetime="2019-06-19">2019-06-19</time>&nbsp;<i class="fas fa-pencil-alt fa-fw"></i>&nbsp;约 2160 字&nbsp;
+                <i class="far fa-clock fa-fw"></i>&nbsp;预计阅读 5 分钟&nbsp;<span id="/xposed%E7%9A%84%E5%9F%BA%E6%9C%AC%E4%BD%BF%E7%94%A8/" class="leancloud_visitors" data-flag-title="xposed的基本使用">
+                        <i class="far fa-eye fa-fw"></i>&nbsp;<span class=leancloud-visitors-count></span>&nbsp;次阅读
+                    </span>&nbsp;</div>
+        </div><div class="details toc" id="toc-static"  kept="">
+                <div class="details-summary toc-title">
+                    <span>目录</span>
+                    <span><i class="details-icon fas fa-angle-right"></i></span>
+                </div>
+                <div class="details-content toc-content" id="toc-content-static"><nav id="TableOfContents">
+  <ul>
+    <li><a href="#一原理">一、原理</a></li>
+    <li><a href="#二xposed安装">二、Xposed安装</a></li>
+    <li><a href="#三xposed代码编写">三、Xposed代码编写</a></li>
+    <li><a href="#四面对加了壳的app">四、面对加了壳的APP</a></li>
+  </ul>
+</nav></div>
+            </div><div class="content" id="content"><h2 id="一原理">一、原理</h2>
+<blockquote>
+<p>Android运行的核心是zygote进程，所有app的进程都是通过zygote fork出来的。通过替换<strong>system/bin/下面的app_process等文件</strong>，相当于替换了zygote进程，实现了控制手机上的所有APP。基本原理是修改了ART/Davilk虚拟机，将需要hook的函数注册为Native层函数，当执行到该函数时，虚拟机会先执行Native层函数，然后执行Java层函数，这样完成hook。</p>
+</blockquote>
+<p>更详细的可以参考：https://blog.csdn.net/wxyyxc1992/article/details/17320911</p>
+<h2 id="二xposed安装">二、Xposed安装</h2>
+<p>环境：网易mumu、Android Studio3.3.1</p>
+<p>github地址：https://github.com/rovo89/XposedInstaller</p>
+<p>Xposedinstaller的apk：https://repo.xposed.info/module/de.robv.android.xposed.installer</p>
+<blockquote>
+<p>在网易mumu中安装好xposedinstaller apk后，关闭应用兼容性(不关闭的话安装xposed框架会出错)，进去之后点击小云彩即可安装完成。</p>
+</blockquote>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="http://ww3.sinaimg.cn/large/006tNc79ly1g469wd667cj31am0u0gs3.jpg"
+        data-srcset="http://ww3.sinaimg.cn/large/006tNc79ly1g469wd667cj31am0u0gs3.jpg, http://ww3.sinaimg.cn/large/006tNc79ly1g469wd667cj31am0u0gs3.jpg 1.5x, http://ww3.sinaimg.cn/large/006tNc79ly1g469wd667cj31am0u0gs3.jpg 2x"
+        data-sizes="auto"
+        alt="http://ww3.sinaimg.cn/large/006tNc79ly1g469wd667cj31am0u0gs3.jpg"
+        title="image-20190619104940343" /></p>
+<h2 id="三xposed代码编写">三、Xposed代码编写</h2>
+<blockquote>
+<p>新建项目，选择<code>empty activity</code>，创建成功后，在<code>AndroidManifest.xml</code>中添加如下代码</p>
+</blockquote>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span><span class="lnt">8
+</span><span class="lnt">9
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-xml" data-lang="xml"><span class="nt">&lt;meta-data</span>
+    <span class="na">android:name=</span><span class="s">&#34;xposedmodule&#34;</span>
+    <span class="na">android:value=</span><span class="s">&#34;true&#34;</span> <span class="nt">/&gt;</span>   <span class="c">&lt;!--告诉xposed框架这是一个xposed模块--&gt;</span>
+<span class="nt">&lt;meta-data</span>
+    <span class="na">android:name=</span><span class="s">&#34;xposeddescription&#34;</span>
+    <span class="na">android:value=</span><span class="s">&#34;这是一个Xposed例程&#34;</span> <span class="nt">/&gt;</span> <span class="c">&lt;!--模块描述--&gt;</span>
+<span class="nt">&lt;meta-data</span>
+    <span class="na">android:name=</span><span class="s">&#34;xposedminversion&#34;</span> <span class="err">&lt;!--模块支持的最低版本--</span><span class="nt">&gt;</span>
+    android:value=&#34;30&#34; /&gt;
+</code></pre></td></tr></table>
+</div>
+</div><blockquote>
+<p>在gradle中配置XposedbridgeApi，build.gradle中配置</p>
+</blockquote>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span><span class="lnt">8
+</span><span class="lnt">9
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-gradle" data-lang="gradle"><span class="n">repositories</span> <span class="o">{</span>
+    <span class="n">jcenter</span><span class="o">()</span>
+<span class="o">}</span>
+<span class="n">dependencies</span> <span class="o">{</span>
+		<span class="o">...</span>
+    <span class="n">compileOnly</span> <span class="s1">&#39;de.robv.android.xposed:api:82&#39;</span>
+    <span class="n">compileOnly</span> <span class="s1">&#39;de.robv.android.xposed:api:82:sources&#39;</span>
+    <span class="o">...</span>
+<span class="o">}</span>
+</code></pre></td></tr></table>
+</div>
+</div><blockquote>
+<p>这是在网络通畅的情况下进行的， 网络不通畅的话，可以手动下载XposedBridgeApi-82.jar，拖动到/app/libs中，删除上述gradle中配置的 <code>jcenter</code>，右键&quot;Add As Library&quot;添加这个jar包。</p>
+</blockquote>
+<blockquote>
+<p>在界面上画个按钮，并在<code>MainAcitiviy</code>中编写如下代码(单纯写hook的话前面新建项目的时候可以add no activity)</p>
+</blockquote>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-java" data-lang="java"><span class="kn">package</span> <span class="nn">com.example.myapplication</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">android.support.v7.app.AppCompatActivity</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">android.os.Bundle</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">android.widget.Button</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">android.widget.Toast</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">android.view.View</span><span class="o">;</span>
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">MainActivity2</span> <span class="kd">extends</span> <span class="n">AppCompatActivity</span> <span class="o">{</span>
+    <span class="kd">private</span> <span class="n">Button</span> <span class="n">button</span><span class="o">;</span>
+    <span class="nd">@Override</span>
+    <span class="kd">protected</span> <span class="kt">void</span> <span class="nf">onCreate</span><span class="o">(</span><span class="n">Bundle</span> <span class="n">savedInstanceState</span><span class="o">)</span> <span class="o">{</span>
+        <span class="kd">super</span><span class="o">.</span><span class="na">onCreate</span><span class="o">(</span><span class="n">savedInstanceState</span><span class="o">);</span>
+        <span class="n">setContentView</span><span class="o">(</span><span class="n">R</span><span class="o">.</span><span class="na">layout</span><span class="o">.</span><span class="na">activity_main</span><span class="o">);</span>
+        <span class="n">button</span> <span class="o">=</span> <span class="o">(</span><span class="n">Button</span><span class="o">)</span> <span class="n">findViewById</span><span class="o">(</span><span class="n">R</span><span class="o">.</span><span class="na">id</span><span class="o">.</span><span class="na">button</span><span class="o">);</span>
+        <span class="n">button</span><span class="o">.</span><span class="na">setOnClickListener</span><span class="o">(</span><span class="k">new</span> <span class="n">View</span><span class="o">.</span><span class="na">OnClickListener</span><span class="o">()</span> <span class="o">{</span>
+            <span class="kd">public</span> <span class="kt">void</span> <span class="nf">onClick</span><span class="o">(</span><span class="n">View</span> <span class="n">v</span><span class="o">)</span> <span class="o">{</span>
+                <span class="n">Toast</span><span class="o">.</span><span class="na">makeText</span><span class="o">(</span><span class="n">MainActivity2</span><span class="o">.</span><span class="na">this</span><span class="o">,</span> <span class="n">toastMessage</span><span class="o">(),</span> <span class="n">Toast</span><span class="o">.</span><span class="na">LENGTH_SHORT</span><span class="o">).</span><span class="na">show</span><span class="o">();</span>
+            <span class="o">}</span>
+        <span class="o">});</span>
+    <span class="o">}</span>
+    <span class="kd">public</span> <span class="n">String</span> <span class="nf">toastMessage</span><span class="o">()</span> <span class="o">{</span>
+        <span class="k">return</span> <span class="s">&#34;我未被劫持&#34;</span><span class="o">;</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+</code></pre></td></tr></table>
+</div>
+</div><blockquote>
+<p>编写Hook代码，在<code>MainActivity</code>同级目录下新建<code>HookTest.java</code>，并且继承接口IXposedHookLoadPackage和重写handleLoadPackage方法</p>
+</blockquote>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span><span class="lnt">29
+</span><span class="lnt">30
+</span><span class="lnt">31
+</span><span class="lnt">32
+</span><span class="lnt">33
+</span><span class="lnt">34
+</span><span class="lnt">35
+</span><span class="lnt">36
+</span><span class="lnt">37
+</span><span class="lnt">38
+</span><span class="lnt">39
+</span><span class="lnt">40
+</span><span class="lnt">41
+</span><span class="lnt">42
+</span><span class="lnt">43
+</span><span class="lnt">44
+</span><span class="lnt">45
+</span><span class="lnt">46
+</span><span class="lnt">47
+</span><span class="lnt">48
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-java" data-lang="java"><span class="kn">package</span> <span class="nn">com.example.myapplication</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">java.lang.reflect.Array</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">java.security.PublicKey</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">java.util.Arrays</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">java.util.Map</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">de.robv.android.xposed.IXposedHookLoadPackage</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">de.robv.android.xposed.XC_MethodHook</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">de.robv.android.xposed.XposedBridge</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">de.robv.android.xposed.XposedHelpers</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">de.robv.android.xposed.callbacks.XC_LoadPackage</span><span class="o">;</span>
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">HookTest</span> <span class="kd">implements</span> <span class="n">IXposedHookLoadPackage</span> <span class="o">{</span>
+
+    <span class="kd">private</span> <span class="kd">static</span> <span class="kd">final</span> <span class="n">String</span> <span class="n">HOOK_APP_NAME</span> <span class="o">=</span> <span class="s">&#34;APP名字&#34;</span><span class="o">;</span>
+
+    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">handleLoadPackage</span><span class="o">(</span><span class="n">XC_LoadPackage</span><span class="o">.</span><span class="na">LoadPackageParam</span> <span class="n">lpparam</span><span class="o">)</span> <span class="kd">throws</span> <span class="n">Throwable</span> <span class="o">{</span>
+
+        <span class="c1">//性能优化，避免操作无关app
+</span><span class="c1"></span>        <span class="k">if</span> <span class="o">(!</span><span class="n">lpparam</span><span class="o">.</span><span class="na">packageName</span><span class="o">.</span><span class="na">equals</span><span class="o">(</span><span class="n">HOOK_APP_NAME</span><span class="o">))</span>
+            <span class="k">return</span><span class="o">;</span>
+        <span class="k">if</span> <span class="o">(</span><span class="n">lpparam</span><span class="o">.</span><span class="na">packageName</span><span class="o">.</span><span class="na">equals</span><span class="o">(</span><span class="s">&#34;HOOK_APP_NAME&#34;</span><span class="o">))</span> <span class="o">{</span>
+            <span class="n">XposedBridge</span><span class="o">.</span><span class="na">log</span><span class="o">(</span><span class="s">&#34; 劫持成功！！!&#34;</span><span class="o">);</span>
+          
+        <span class="n">XposedBridge</span><span class="o">.</span><span class="na">log</span><span class="o">(</span><span class="s">&#34;XposedMainInit handleLoadPackage 执行&#34;</span><span class="o">);</span>
+        <span class="n">XposedBridge</span><span class="o">.</span><span class="na">log</span><span class="o">(</span><span class="s">&#34;Loaded app: &#34;</span> <span class="o">+</span> <span class="n">lpparam</span><span class="o">.</span><span class="na">packageName</span><span class="o">);</span>            <span class="n">XposedHelpers</span><span class="o">.</span><span class="na">findAndHookMethod</span><span class="o">(</span><span class="s">&#34;APP名字.MainActivity&#34;</span><span class="o">,</span><span class="c1">//hook的类
+</span><span class="c1"></span>                    <span class="n">lpparam</span><span class="o">.</span><span class="na">classLoader</span><span class="o">,</span>
+                    <span class="s">&#34;toastMessage&#34;</span><span class="o">,</span> <span class="c1">// 被Hook的函数
+</span><span class="c1"></span>                    <span class="c1">//Map.class, 被Hook函数的第一个参数  (此处没有，只是举个例子)
+</span><span class="c1"></span>                    <span class="c1">//String.class, 被Hook函数的第二个参数String
+</span><span class="c1"></span>                    <span class="k">new</span> <span class="n">XC_MethodHook</span><span class="o">()</span> <span class="o">{</span>
+                        <span class="kd">protected</span> <span class="kt">void</span> <span class="nf">beforeHookedMethod</span><span class="o">(</span><span class="n">MethodHookParam</span> <span class="n">param</span><span class="o">)</span> <span class="kd">throws</span> <span class="n">Throwable</span> <span class="o">{</span>
+                            <span class="kd">super</span><span class="o">.</span><span class="na">beforeHookedMethod</span><span class="o">(</span><span class="n">param</span><span class="o">);</span>
+                            <span class="c1">// 参数获取
+</span><span class="c1"></span>                            <span class="n">XposedBridge</span><span class="o">.</span><span class="na">log</span><span class="o">(</span><span class="s">&#34;入口函数执行&#34;</span><span class="o">);</span>
+                            <span class="c1">//参数1
+</span><span class="c1"></span>                            <span class="n">XposedBridge</span><span class="o">.</span><span class="na">log</span><span class="o">(</span><span class="s">&#34;beforeHookedMethod map:&#34;</span> <span class="o">+</span> <span class="n">param</span><span class="o">.</span><span class="na">args</span><span class="o">[</span><span class="n">0</span><span class="o">]);</span>
+                            <span class="c1">//参数2
+</span><span class="c1"></span>                            <span class="n">XposedBridge</span><span class="o">.</span><span class="na">log</span><span class="o">(</span><span class="s">&#34;beforeHookedMethod hash_key:&#34;</span> <span class="o">+</span> <span class="n">param</span><span class="o">.</span><span class="na">args</span><span class="o">[</span><span class="n">1</span><span class="o">]);</span>
+                            <span class="c1">//函数返回值
+</span><span class="c1"></span>                            <span class="n">XposedBridge</span><span class="o">.</span><span class="na">log</span><span class="o">(</span><span class="s">&#34;beforeHookedMethod result:&#34;</span> <span class="o">+</span> <span class="n">param</span><span class="o">.</span><span class="na">getResult</span><span class="o">());</span>
+                        <span class="o">}</span>
+                        <span class="kd">protected</span> <span class="kt">void</span> <span class="nf">afterHookedMethod</span><span class="o">(</span><span class="n">MethodHookParam</span> <span class="n">param</span><span class="o">)</span> <span class="kd">throws</span> <span class="n">Throwable</span> <span class="o">{</span>
+                            <span class="n">XposedBridge</span><span class="o">.</span><span class="na">log</span><span class="o">(</span><span class="s">&#34;afterHookedMethod result:&#34;</span> <span class="o">+</span> <span class="n">param</span><span class="o">.</span><span class="na">getResult</span><span class="o">());</span>
+                          <span class="n">param</span><span class="o">.</span><span class="na">setResult</span><span class="o">(</span><span class="s">&#34;你已被劫持&#34;</span><span class="o">);</span>
+                        <span class="o">}</span>
+                    <span class="o">});</span>        
+        <span class="o">}</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+</code></pre></td></tr></table>
+</div>
+</div><blockquote>
+<p>在src/mian目录下添加一个assets目录，目录下添加一个xposed_init文件，里面的代码是你的Hook类的包名+类名。</p>
+<p><code>com.example.myapplication.HookTest</code></p>
+</blockquote>
+<blockquote>
+<p>最后选择禁用 Instant Run： 单击 File -&gt; Settings -&gt; Build, Execution, Deployment -&gt; Instant Run，把勾全部去掉。</p>
+</blockquote>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="http://ww3.sinaimg.cn/large/006tNc79ly1g46em60th9j30s40jcjt2.jpg"
+        data-srcset="http://ww3.sinaimg.cn/large/006tNc79ly1g46em60th9j30s40jcjt2.jpg, http://ww3.sinaimg.cn/large/006tNc79ly1g46em60th9j30s40jcjt2.jpg 1.5x, http://ww3.sinaimg.cn/large/006tNc79ly1g46em60th9j30s40jcjt2.jpg 2x"
+        data-sizes="auto"
+        alt="http://ww3.sinaimg.cn/large/006tNc79ly1g46em60th9j30s40jcjt2.jpg"
+        title="image-20190619133257899" /></p>
+<blockquote>
+<p>这个时候钩子已经执行了，具体想钩什么，就看自己的需求了。</p>
+</blockquote>
+<p>注：实际操作中，需要对APP先进行反编译(反编译了才能知道要钩那个函数)，反编译工具有很多，这里就不细说了。</p>
+<h2 id="四面对加了壳的app">四、面对加了壳的APP</h2>
+<blockquote>
+<p>直接用反编译工具打开apk，查看加的是哪种壳，寻找对应的函数，类似<code>attachBaseContext</code>这样的方法。</p>
+<p>参考链接：https://www.cnblogs.com/xiaobaiyey/p/6442417.html</p>
+</blockquote>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span><span class="lnt">29
+</span><span class="lnt">30
+</span><span class="lnt">31
+</span><span class="lnt">32
+</span><span class="lnt">33
+</span><span class="lnt">34
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-java" data-lang="java"><span class="kd">public</span> <span class="kd">class</span> <span class="nc">EncryptHook</span> <span class="kd">implements</span> <span class="n">IXposedHookLoadPackage</span> <span class="o">{</span>
+
+    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">handleLoadPackage</span><span class="o">(</span><span class="n">LoadPackageParam</span> <span class="n">loadPackageParam</span><span class="o">)</span> <span class="kd">throws</span> <span class="n">Throwable</span> <span class="o">{</span>
+        <span class="k">if</span> <span class="o">(!</span><span class="n">loadPackageParam</span><span class="o">.</span><span class="na">packageName</span><span class="o">.</span><span class="na">equals</span><span class="o">(</span><span class="s">&#34;app包名&#34;</span><span class="o">))</span> <span class="o">{</span> <span class="k">return</span><span class="o">;</span> <span class="o">}</span>
+        <span class="n">XposedBridge</span><span class="o">.</span><span class="na">log</span><span class="o">(</span><span class="s">&#34;Start hook &#34;</span> <span class="o">+</span> <span class="n">loadPackageParam</span><span class="o">.</span><span class="na">packageName</span><span class="o">);</span>
+
+        <span class="n">XposedHelpers</span><span class="o">.</span><span class="na">findAndHookMethod</span><span class="o">(</span><span class="s">&#34;com.stub.StubApp&#34;</span><span class="o">,</span> <span class="n">loadPackageParam</span><span class="o">.</span><span class="na">classLoader</span><span class="o">,</span>
+                 <span class="c1">//com.stub.StubApp 加壳的类
+</span><span class="c1"></span>                <span class="s">&#34;attachBaseContext&#34;</span><span class="o">,</span> <span class="n">Context</span><span class="o">.</span><span class="na">class</span><span class="o">,</span> <span class="k">new</span> <span class="n">XC_MethodHook</span><span class="o">()</span> <span class="o">{</span>
+                 <span class="c1">// attachBaseContext 加壳的方法 
+</span><span class="c1"></span>                <span class="nd">@Override</span>
+                <span class="kd">protected</span> <span class="kt">void</span> <span class="nf">afterHookedMethod</span><span class="o">(</span><span class="n">MethodHookParam</span> <span class="n">param</span><span class="o">)</span> <span class="kd">throws</span> <span class="n">Throwable</span> <span class="o">{</span>
+                    <span class="kd">super</span><span class="o">.</span><span class="na">afterHookedMethod</span><span class="o">(</span><span class="n">param</span><span class="o">);</span>
+                    <span class="n">Context</span> <span class="n">context</span> <span class="o">=</span> <span class="o">(</span><span class="n">Context</span><span class="o">)</span> <span class="n">param</span><span class="o">.</span><span class="na">args</span><span class="o">[</span><span class="n">0</span><span class="o">];</span>
+                    <span class="n">ClassLoader</span> <span class="n">classLoader</span> <span class="o">=</span> <span class="n">context</span><span class="o">.</span><span class="na">getClassLoader</span><span class="o">();</span>
+                    <span class="n">XposedBridge</span><span class="o">.</span><span class="na">log</span><span class="o">(</span><span class="s">&#34;Enter stubApp&#34;</span><span class="o">);</span>
+
+                    <span class="n">XposedHelpers</span><span class="o">.</span><span class="na">findAndHookMethod</span><span class="o">(</span><span class="s">&#34;com.huijiemanager.utils.t&#34;</span><span class="o">,</span> <span class="n">classLoader</span><span class="o">,</span>
+                        <span class="s">&#34;a&#34;</span><span class="o">,</span> <span class="kt">byte</span><span class="o">[].</span><span class="na">class</span><span class="o">,</span> <span class="n">PublicKey</span><span class="o">.</span><span class="na">class</span><span class="o">,</span> <span class="k">new</span> <span class="n">XC_MethodHook</span><span class="o">()</span> <span class="o">{</span>
+                            <span class="nd">@Override</span>
+                            <span class="kd">protected</span> <span class="kt">void</span> <span class="nf">beforeHookedMethod</span><span class="o">(</span><span class="n">MethodHookParam</span> <span class="n">param</span><span class="o">)</span> <span class="kd">throws</span> <span class="n">Throwable</span> <span class="o">{</span>
+                                <span class="n">XposedBridge</span><span class="o">.</span><span class="na">log</span><span class="o">(</span><span class="s">&#34;rsa before params: &#34;</span> <span class="o">+</span> <span class="k">new</span> <span class="n">String</span><span class="o">(</span>
+                                    <span class="o">(</span><span class="kt">byte</span><span class="o">[])</span> <span class="n">param</span><span class="o">.</span><span class="na">args</span><span class="o">[</span><span class="n">0</span><span class="o">])</span> <span class="o">+</span> <span class="s">&#34;,&#34;</span> <span class="o">+</span> <span class="n">param</span><span class="o">.</span><span class="na">args</span><span class="o">[</span><span class="n">1</span><span class="o">]);</span>
+                            <span class="o">}</span>
+                            <span class="nd">@Override</span>
+                            <span class="kd">protected</span> <span class="kt">void</span> <span class="nf">afterHookedMethod</span><span class="o">(</span><span class="n">MethodHookParam</span> <span class="n">param</span><span class="o">)</span> <span class="kd">throws</span> <span class="n">Throwable</span> <span class="o">{</span>
+                                <span class="n">XposedBridge</span><span class="o">.</span><span class="na">log</span><span class="o">(</span><span class="s">&#34;rsa after params: &#34;</span> <span class="o">+</span> <span class="k">new</span> <span class="n">String</span><span class="o">(</span>
+                                    <span class="o">(</span><span class="kt">byte</span><span class="o">[])</span> <span class="n">param</span><span class="o">.</span><span class="na">args</span><span class="o">[</span><span class="n">0</span><span class="o">])</span> <span class="o">+</span> <span class="s">&#34;,&#34;</span> <span class="o">+</span> <span class="n">param</span><span class="o">.</span><span class="na">args</span><span class="o">[</span><span class="n">1</span><span class="o">]);</span>
+                            <span class="o">}</span>
+                        <span class="o">});</span>
+                <span class="o">}</span>
+            <span class="o">});</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+</code></pre></td></tr></table>
+</div>
+</div><blockquote>
+<p>注：反编译的代码不一定准确，逆向的时候最好对每个关键函数都挂上钩子，查看参数是否正确。</p>
+</blockquote>
+<p>附上xposedAPI文档：https://api.xposed.info/reference/packages.html</p>
+</div><div class="post-footer" id="post-footer">
+    <div class="post-info">
+        <div class="post-info-line">
+            <div class="post-info-mod">
+                <span>更新于 2019-06-19</span>
+            </div>
+            <div class="post-info-license"></div>
+        </div>
+        <div class="post-info-line">
+            <div class="post-info-md"><span>
+                            <a class="link-to-markdown" href="/xposed%E7%9A%84%E5%9F%BA%E6%9C%AC%E4%BD%BF%E7%94%A8/index.md" target="_blank">阅读原始文档</a>
+                        </span></div>
+            <div class="post-info-share">
+                <span><a href="javascript:void(0);" title="分享到 Twitter" data-sharer="twitter" data-url="http://101.35.190.67/xposed%E7%9A%84%E5%9F%BA%E6%9C%AC%E4%BD%BF%E7%94%A8/" data-title="xposed的基本使用" data-via="xxxx" data-hashtags="逆向"><i class="fab fa-twitter fa-fw"></i></a><a href="javascript:void(0);" title="分享到 Facebook" data-sharer="facebook" data-url="http://101.35.190.67/xposed%E7%9A%84%E5%9F%BA%E6%9C%AC%E4%BD%BF%E7%94%A8/" data-hashtag="逆向"><i class="fab fa-facebook-square fa-fw"></i></a><a href="javascript:void(0);" title="分享到 WhatsApp" data-sharer="whatsapp" data-url="http://101.35.190.67/xposed%E7%9A%84%E5%9F%BA%E6%9C%AC%E4%BD%BF%E7%94%A8/" data-title="xposed的基本使用" data-web><i class="fab fa-whatsapp fa-fw"></i></a><a href="javascript:void(0);" title="分享到 Line" data-sharer="line" data-url="http://101.35.190.67/xposed%E7%9A%84%E5%9F%BA%E6%9C%AC%E4%BD%BF%E7%94%A8/" data-title="xposed的基本使用"><i data-svg-src="/lib/simple-icons/icons/line.min.svg"></i></a><a href="javascript:void(0);" title="分享到 微博" data-sharer="weibo" data-url="http://101.35.190.67/xposed%E7%9A%84%E5%9F%BA%E6%9C%AC%E4%BD%BF%E7%94%A8/" data-title="xposed的基本使用"><i class="fab fa-weibo fa-fw"></i></a><a href="javascript:void(0);" title="分享到 Myspace" data-sharer="myspace" data-url="http://101.35.190.67/xposed%E7%9A%84%E5%9F%BA%E6%9C%AC%E4%BD%BF%E7%94%A8/" data-title="xposed的基本使用" data-description=""><i data-svg-src="/lib/simple-icons/icons/myspace.min.svg"></i></a><a href="javascript:void(0);" title="分享到 Blogger" data-sharer="blogger" data-url="http://101.35.190.67/xposed%E7%9A%84%E5%9F%BA%E6%9C%AC%E4%BD%BF%E7%94%A8/" data-title="xposed的基本使用" data-description=""><i class="fab fa-blogger fa-fw"></i></a><a href="javascript:void(0);" title="分享到 Evernote" data-sharer="evernote" data-url="http://101.35.190.67/xposed%E7%9A%84%E5%9F%BA%E6%9C%AC%E4%BD%BF%E7%94%A8/" data-title="xposed的基本使用"><i class="fab fa-evernote fa-fw"></i></a></span>
+            </div>
+        </div>
+    </div>
+
+    <div class="post-info-more">
+        <section class="post-tags"><i class="fas fa-tags fa-fw"></i>&nbsp;<a href="/tags/%E9%80%86%E5%90%91/">逆向</a></section>
+        <section>
+            <span><a href="javascript:void(0);" onclick="window.history.back();">返回</a></span>&nbsp;|&nbsp;<span><a href="/">主页</a></span>
+        </section>
+    </div>
+
+    <div class="post-nav"><a href="/scrapy%E5%8F%91%E9%80%81%E9%82%AE%E4%BB%B6/" class="prev" rel="prev" title="scrapy发送邮件"><i class="fas fa-angle-left fa-fw"></i>scrapy发送邮件</a>
+            <a href="/mac%E5%A4%9Assh-key%E9%85%8D%E7%BD%AE/" class="next" rel="next" title="Mac多SSH Key配置">Mac多SSH Key配置<i class="fas fa-angle-right fa-fw"></i></a></div>
+</div>
+<div id="comments"><div id="valine" class="comment"></div><noscript>
+                Please enable JavaScript to view the comments powered by <a href="https://valine.js.org/">Valine</a>.
+            </noscript></div></article></div>
+            </main><footer class="footer">
+        <div class="footer-container"><div class="footer-line">由 <a href="https://gohugo.io/" target="_blank" rel="noopener noreffer" title="Hugo 0.68.3">Hugo</a> 强力驱动 | 主题 - <a href="https://github.com/dillonzq/LoveIt" target="_blank" rel="noopener noreffer" title="LoveIt 0.2.10"><i class="far fa-kiss-wink-heart fa-fw"></i> LoveIt</a>
+                </div><div class="footer-line"><i class="far fa-copyright fa-fw"></i><span itemprop="copyrightYear">2019 - 2022</span><span class="author" itemprop="copyrightHolder">&nbsp;<a href="/" target="_blank">bone</a></span>&nbsp;|&nbsp;<span class="license"><a rel="license external nofollow noopener noreffer" href="https://creativecommons.org/licenses/by-nc/4.0/" target="_blank">CC BY-NC 4.0</a></span></div>
+        </div>
+    </footer></div>
+
+        <div id="fixed-buttons"><a href="#" id="back-to-top" class="fixed-button" title="回到顶部">
+                <i class="fas fa-arrow-up fa-fw"></i>
+            </a><a href="#" id="view-comments" class="fixed-button" title="查看评论">
+                <i class="fas fa-comment fa-fw"></i>
+            </a>
+        </div><link rel="stylesheet" href="/lib/valine/valine.min.css"><link rel="stylesheet" href="/lib/katex/katex.min.css"><link rel="stylesheet" href="/lib/katex/copy-tex.min.css"><link rel="stylesheet" href="/lib/cookieconsent/cookieconsent.min.css"><script type="text/javascript" src="/lib/valine/Valine.min.js"></script><script type="text/javascript" src="/lib/smooth-scroll/smooth-scroll.min.js"></script><script type="text/javascript" src="/lib/autocomplete/autocomplete.min.js"></script><script type="text/javascript" src="/lib/lunr/lunr.min.js"></script><script type="text/javascript" src="/lib/lunr/lunr.stemmer.support.min.js"></script><script type="text/javascript" src="/lib/lunr/lunr.zh.min.js"></script><script type="text/javascript" src="/lib/lazysizes/lazysizes.min.js"></script><script type="text/javascript" src="/lib/twemoji/twemoji.min.js"></script><script type="text/javascript" src="/lib/clipboard/clipboard.min.js"></script><script type="text/javascript" src="/lib/sharer/sharer.min.js"></script><script type="text/javascript" src="/lib/typeit/typeit.min.js"></script><script type="text/javascript" src="/lib/katex/katex.min.js"></script><script type="text/javascript" src="/lib/katex/auto-render.min.js"></script><script type="text/javascript" src="/lib/katex/copy-tex.min.js"></script><script type="text/javascript" src="/lib/katex/mhchem.min.js"></script><script type="text/javascript" src="/lib/cookieconsent/cookieconsent.min.js"></script><script type="text/javascript">window.config={"code":{"copyTitle":"复制到剪贴板","maxShownLines":10},"comment":{"valine":{"appId":"","appKey":"","avatar":"mp","el":"#valine","emojiCDN":"https://cdn.jsdelivr.net/npm/emoji-datasource-google@5.0.1/img/google/64/","emojiMaps":{"100":"1f4af.png","alien":"1f47d.png","anger":"1f4a2.png","angry":"1f620.png","anguished":"1f627.png","astonished":"1f632.png","black_heart":"1f5a4.png","blue_heart":"1f499.png","blush":"1f60a.png","bomb":"1f4a3.png","boom":"1f4a5.png","broken_heart":"1f494.png","brown_heart":"1f90e.png","clown_face":"1f921.png","cold_face":"1f976.png","cold_sweat":"1f630.png","confounded":"1f616.png","confused":"1f615.png","cry":"1f622.png","crying_cat_face":"1f63f.png","cupid":"1f498.png","dash":"1f4a8.png","disappointed":"1f61e.png","disappointed_relieved":"1f625.png","dizzy":"1f4ab.png","dizzy_face":"1f635.png","drooling_face":"1f924.png","exploding_head":"1f92f.png","expressionless":"1f611.png","face_vomiting":"1f92e.png","face_with_cowboy_hat":"1f920.png","face_with_hand_over_mouth":"1f92d.png","face_with_head_bandage":"1f915.png","face_with_monocle":"1f9d0.png","face_with_raised_eyebrow":"1f928.png","face_with_rolling_eyes":"1f644.png","face_with_symbols_on_mouth":"1f92c.png","face_with_thermometer":"1f912.png","fearful":"1f628.png","flushed":"1f633.png","frowning":"1f626.png","ghost":"1f47b.png","gift_heart":"1f49d.png","green_heart":"1f49a.png","grimacing":"1f62c.png","grin":"1f601.png","grinning":"1f600.png","hankey":"1f4a9.png","hear_no_evil":"1f649.png","heart":"2764-fe0f.png","heart_decoration":"1f49f.png","heart_eyes":"1f60d.png","heart_eyes_cat":"1f63b.png","heartbeat":"1f493.png","heartpulse":"1f497.png","heavy_heart_exclamation_mark_ornament":"2763-fe0f.png","hole":"1f573-fe0f.png","hot_face":"1f975.png","hugging_face":"1f917.png","hushed":"1f62f.png","imp":"1f47f.png","innocent":"1f607.png","japanese_goblin":"1f47a.png","japanese_ogre":"1f479.png","joy":"1f602.png","joy_cat":"1f639.png","kiss":"1f48b.png","kissing":"1f617.png","kissing_cat":"1f63d.png","kissing_closed_eyes":"1f61a.png","kissing_heart":"1f618.png","kissing_smiling_eyes":"1f619.png","laughing":"1f606.png","left_speech_bubble":"1f5e8-fe0f.png","love_letter":"1f48c.png","lying_face":"1f925.png","mask":"1f637.png","money_mouth_face":"1f911.png","nauseated_face":"1f922.png","nerd_face":"1f913.png","neutral_face":"1f610.png","no_mouth":"1f636.png","open_mouth":"1f62e.png","orange_heart":"1f9e1.png","partying_face":"1f973.png","pensive":"1f614.png","persevere":"1f623.png","pleading_face":"1f97a.png","pouting_cat":"1f63e.png","purple_heart":"1f49c.png","rage":"1f621.png","relaxed":"263a-fe0f.png","relieved":"1f60c.png","revolving_hearts":"1f49e.png","right_anger_bubble":"1f5ef-fe0f.png","robot_face":"1f916.png","rolling_on_the_floor_laughing":"1f923.png","scream":"1f631.png","scream_cat":"1f640.png","see_no_evil":"1f648.png","shushing_face":"1f92b.png","skull":"1f480.png","skull_and_crossbones":"2620-fe0f.png","sleeping":"1f634.png","sleepy":"1f62a.png","slightly_frowning_face":"1f641.png","slightly_smiling_face":"1f642.png","smile":"1f604.png","smile_cat":"1f638.png","smiley":"1f603.png","smiley_cat":"1f63a.png","smiling_face_with_3_hearts":"1f970.png","smiling_imp":"1f608.png","smirk":"1f60f.png","smirk_cat":"1f63c.png","sneezing_face":"1f927.png","sob":"1f62d.png","space_invader":"1f47e.png","sparkling_heart":"1f496.png","speak_no_evil":"1f64a.png","speech_balloon":"1f4ac.png","star-struck":"1f929.png","stuck_out_tongue":"1f61b.png","stuck_out_tongue_closed_eyes":"1f61d.png","stuck_out_tongue_winking_eye":"1f61c.png","sunglasses":"1f60e.png","sweat":"1f613.png","sweat_drops":"1f4a6.png","sweat_smile":"1f605.png","thinking_face":"1f914.png","thought_balloon":"1f4ad.png","tired_face":"1f62b.png","triumph":"1f624.png","two_hearts":"1f495.png","unamused":"1f612.png","upside_down_face":"1f643.png","weary":"1f629.png","white_frowning_face":"2639-fe0f.png","white_heart":"1f90d.png","wink":"1f609.png","woozy_face":"1f974.png","worried":"1f61f.png","yawning_face":"1f971.png","yellow_heart":"1f49b.png","yum":"1f60b.png","zany_face":"1f92a.png","zipper_mouth_face":"1f910.png","zzz":"1f4a4.png"},"enableQQ":true,"highlight":true,"lang":"zh-cn","pageSize":10,"placeholder":"你的评论 ...","recordIP":true,"visitor":true}},"cookieconsent":{"content":{"dismiss":"同意","link":"了解更多","message":"本网站使用 Cookies 来改善您的浏览体验."},"enable":true,"palette":{"button":{"background":"#f0f0f0"},"popup":{"background":"#1aa3ff"}},"theme":"edgeless"},"data":{"id-1":"bone的博客","id-2":"bone的博客"},"math":{"delimiters":[{"display":true,"left":"$$","right":"$$"},{"display":true,"left":"\\[","right":"\\]"},{"display":false,"left":"$","right":"$"},{"display":false,"left":"\\(","right":"\\)"}],"strict":false},"search":{"highlightTag":"em","lunrIndexURL":"/index.json","lunrLanguageCode":"zh","lunrSegmentitURL":"/lib/lunr/lunr.segmentit.js","maxResultLength":10,"noResultsFound":"没有找到结果","snippetLength":50,"type":"lunr"},"twemoji":true,"typeit":{"cursorChar":"|","cursorSpeed":1000,"data":{"id-1":["id-1"],"id-2":["id-2"]},"duration":-1,"speed":100}};</script><script type="text/javascript" src="/js/theme.min.js"></script></body>
+</html>

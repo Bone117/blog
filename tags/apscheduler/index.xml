@@ -1,0 +1,15 @@
+<rss xmlns:atom="http://www.w3.org/2005/Atom" version="2.0">
+    <channel>
+        <title>APScheduler - 标签 - mine blog</title>
+        <link>http://101.35.190.67/tags/apscheduler/</link>
+        <description>APScheduler - 标签 - mine blog</description>
+        <generator>Hugo -- gohugo.io</generator><language>zh-CN</language><managingEditor>soufj17857@gmail.com (bone)</managingEditor>
+            <webMaster>soufj17857@gmail.com (bone)</webMaster><lastBuildDate>Mon, 15 Jul 2019 01:20:00 &#43;0000</lastBuildDate><atom:link href="http://101.35.190.67/tags/apscheduler/" rel="self" type="application/rss+xml" /><item>
+    <title>python定时任务APScheduler</title>
+    <link>http://101.35.190.67/python%E5%AE%9A%E6%97%B6%E4%BB%BB%E5%8A%A1apscheduler/</link>
+    <pubDate>Mon, 15 Jul 2019 01:20:00 &#43;0000</pubDate>
+    <author>作者</author>
+    <guid>http://101.35.190.67/python%E5%AE%9A%E6%97%B6%E4%BB%BB%E5%8A%A1apscheduler/</guid>
+    <description><![CDATA[APScheduler定时任务 APScheduler 支持三种调度任务：固定时间间隔，固定时间点（日期），Linux 下的 Crontab 命令。同时，它还支持异步执行、后台执行调]]></description>
+</item></channel>
+</rss>
